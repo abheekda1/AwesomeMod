@@ -49,7 +49,7 @@ client.on('channelCreate', channel => {
     const channelName = channel.name;
     const channelID = channel.id;
     let channelCategory;
-    if (channel.parent.name) {
+    if (channel.parent) {
       channelCategory = channel.parent.name;
     } else {
       channelCategory = "None";
