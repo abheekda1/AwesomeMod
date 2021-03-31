@@ -26,7 +26,7 @@ client.on('messageDelete', message => {
     .setFooter("ID: " + message.id)
     .setTimestamp()
     .setColor('ff0000');
-  client.guilds.get("826506878976000030").channels.cache.get("826876551756513314").send(deleteEmbed).catch(console.error);
+  client.guilds.cache.get("826506878976000030").channels.cache.get("826876551756513314").send(deleteEmbed).catch(console.error);
 });
 
 client.on('messageUpdate', (originalMessage, editedMessage) => {
@@ -41,7 +41,7 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
     .setFooter("ID: " + editedMessage.id)
     .setTimestamp()
     .setColor('006699');
-  client.guilds.get("826506878976000030").channels.cache.get("826876551756513314").send(editEmbed).catch(console.error);
+  client.guilds.cache.get("826506878976000030").channels.cache.get("826876551756513314").send(editEmbed).catch(console.error);
 });
 
 client.on('channelCreate', channel => {
@@ -53,7 +53,7 @@ client.on('channelCreate', channel => {
       .setFooter("ID: " + channel.id)
       .setTimestamp()
       .setColor('006699');
-    client.guilds.get("826506878976000030").channels.cache.get("826876551756513314").send(channelCreateEmbed).catch(console.error);
+    client.guilds.cache.get("826506878976000030").channels.cache.get("826876551756513314").send(channelCreateEmbed).catch(console.error);
   }
 });
 
