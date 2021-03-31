@@ -26,7 +26,7 @@ client.on('messageDelete', message => {
     .setFooter("ID: " + message.id)
     .setTimestamp()
     .setColor('ff0000');
-  message.guild.channels.cache.get("826876551756513314").send(deleteEmbed).catch(console.error);
+  client.guilds.get("826506878976000030").channels.cache.get("826876551756513314").send(deleteEmbed).catch(console.error);
 });
 
 client.on('messageUpdate', (originalMessage, editedMessage) => {
@@ -41,18 +41,20 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
     .setFooter("ID: " + editedMessage.id)
     .setTimestamp()
     .setColor('006699');
-  editedMessage.guild.channels.cache.get("826876551756513314").send(editEmbed).catch(console.error);
+  client.guilds.get("826506878976000030").channels.cache.get("826876551756513314").send(editEmbed).catch(console.error);
 });
 
 client.on('channelCreate', channel => {
-  const channelCreateEmbed = new Discord.MessageEmbed()
-    .setTitle("Channel Created #️⃣")
-    .addField("Name", channel.name)
-    .addField("Category", channel.category)
-    .setFooter("ID: " + channel.id)
-    .setTimestamp()
-    .setColor('006699');
-  channel.guild.channels.cache.get("826876551756513314").send(channelCreateEmbed).catch(console.error);
+  if (channel.guild.id = "826506878976000030") {
+    const channelCreateEmbed = new Discord.MessageEmbed()
+      .setTitle("Channel Created #️⃣")
+      .addField("Name", channel.name)
+      .addField("Category", channel.category)
+      .setFooter("ID: " + channel.id)
+      .setTimestamp()
+      .setColor('006699');
+    client.guilds.get("826506878976000030").channels.cache.get("826876551756513314").send(channelCreateEmbed).catch(console.error);
+  }
 });
 
 client.login(process.env.BOT_TOKEN);
