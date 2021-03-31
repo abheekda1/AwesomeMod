@@ -46,13 +46,21 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
 
 client.on('channelCreate', channel => {
   if (channel.guild.id = "826506878976000030") {
+    const channelName = channel.name;
+    const channelID = channel.id;
+    let channelCategory;
+    if (channel.parent.name) {
+      channelCategory = channel.parent.name;
+    } else {
+      channelCategory = "None";
+    }
     const channelCreateEmbed = new Discord.MessageEmbed()
-      .setTitle("Channel Created #️⃣")
-      .addField("Name", channel.name)
-      .addField("Category", channel.parent.name)
-      .setFooter("ID: " + channel.id)
+      .setTitle("#️⃣Channel Created")
+      .addField("Name", channelName)
+      .addField("Category", channelCategory)
+      .setFooter("ID: " + channelID)
       .setTimestamp()
-      .setColor('006699');
+      .setColor('00aaff');
     client.guilds.cache.get("826506878976000030").channels.cache.get("826876551756513314").send(channelCreateEmbed).catch(console.error);
   }
 });
