@@ -36,12 +36,23 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
   const editEmbed = new Discord.MessageEmbed()
     .setTitle("Message Edited")
     .addField("Author", editedMessage.author.tag)
-    .addField("Message", `<${originalMessage}\n>${editedMessage}`)
+    .addField("Message", `<< ${originalMessage}\n>> ${editedMessage}`)
     .setThumbnail(editedMessage.author.avatarURL())
     .setFooter("ID: " + editedMessage.id)
     .setTimestamp()
-    .setColor('004444');
-    editedMessage.guild.channels.cache.get("826876551756513314").send(editEmbed).catch(console.error);
+    .setColor('006699');
+  editedMessage.guild.channels.cache.get("826876551756513314").send(editEmbed).catch(console.error);
+});
+
+client.on('channelCreate', channel => {
+  const editEmbed = new Discord.MessageEmbed()
+    .setTitle("Channel Created #️⃣")
+    .addField("Name", channel.name)
+    .addField("Category", channel.category)
+    .setFooter("ID: " + channel.id)
+    .setTimestamp()
+    .setColor('006699');
+  editedMessage.guild.channels.cache.get("826876551756513314").send(editEmbed).catch(console.error);
 });
 
 client.login(process.env.BOT_TOKEN);
