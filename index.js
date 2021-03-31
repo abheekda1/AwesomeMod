@@ -22,10 +22,12 @@ client.on('messageDelete', message => {
   const messageAvatar = message.author.avatarURL();
   const messageID = message.id;
   let messageAuthor;
-  if (message.author) {
+  if (message) {
     messageAuthor = message.author.tag;
   } else {
-    messageAuthor = "Someone else deleted this message"
+    messageAuthor = "Someone else deleted this message";
+    messageContent = "Unknown";
+    messageID = "Unknown";
   }
   const deleteEmbed = new Discord.MessageEmbed()
     .setTitle('Message Deleted')
