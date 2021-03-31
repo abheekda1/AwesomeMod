@@ -18,9 +18,9 @@ client.on("guildMemberAdd", member => {
 });
 
 client.on('messageDelete', message => {
-  const messageContent;
-  const messageAvatar;
-  const messageID;
+  let messageContent;
+  let messageAvatar;
+  let messageID;
   let messageAuthor;
   if (message) {
     messageAuthor = message.author.tag;
