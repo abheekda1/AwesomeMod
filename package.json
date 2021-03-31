@@ -1,0 +1,16 @@
+{
+  "name": "meesebot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "Abheek",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "nodemon": "^2.0.7"
+  }
+}
