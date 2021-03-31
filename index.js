@@ -45,14 +45,14 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
 });
 
 client.on('channelCreate', channel => {
-  const editEmbed = new Discord.MessageEmbed()
+  const channelCreateEmbed = new Discord.MessageEmbed()
     .setTitle("Channel Created #️⃣")
     .addField("Name", channel.name)
     .addField("Category", channel.category)
     .setFooter("ID: " + channel.id)
     .setTimestamp()
     .setColor('006699');
-  editedMessage.guild.channels.cache.get("826876551756513314").send(editEmbed).catch(console.error);
+  channel.guild.channels.cache.get("826876551756513314").send(channelCreateEmbed).catch(console.error);
 });
 
 client.login(process.env.BOT_TOKEN);
