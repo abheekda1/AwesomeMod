@@ -49,7 +49,7 @@ client.on('channelCreate', channel => {
     const channelCreateEmbed = new Discord.MessageEmbed()
       .setTitle("Channel Created #️⃣")
       .addField("Name", channel.name)
-      .addField("Category", channel.category)
+      .addField("Category", channel.parent.name)
       .setFooter("ID: " + channel.id)
       .setTimestamp()
       .setColor('006699');
