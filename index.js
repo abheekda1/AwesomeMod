@@ -25,7 +25,7 @@ client.on('messageDelete', message => {
   if (message) {
     messageAuthor = message.author.tag;
     messageContent = message.content;
-    messageAvatar = message.avatarURL();
+    messageAvatar = message.author.avatarURL();
     messageID = message.id;
   } else {
     messageAuthor = "Someone else deleted this message";
