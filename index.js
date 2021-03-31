@@ -18,14 +18,18 @@ client.on("guildMemberAdd", member => {
 });
 
 client.on('messageDelete', message => {
-  const messageContent = message.content;
-  const messageAvatar = message.author.avatarURL();
-  const messageID = message.id;
+  const messageContent;
+  const messageAvatar;
+  const messageID;
   let messageAuthor;
   if (message) {
     messageAuthor = message.author.tag;
+    messageContent = message.content;
+    messageAvatar = message.avatarURL();
+    messageID = message.id;
   } else {
     messageAuthor = "Someone else deleted this message";
+    messageAvatar = "https://64.media.tumblr.com/db1db81cadcf6211524ce9ef1b89bae7/tumblr_inline_olcfuexwZy1se2zq9_500.png";
     messageContent = "Unknown";
     messageID = "Unknown";
   }
