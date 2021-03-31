@@ -18,12 +18,21 @@ client.on("guildMemberAdd", member => {
 });
 
 client.on('messageDelete', message => {
+  const messageContent = message.content;
+  const messageAvatar = message.author.avatarURL();
+  const messageID = message.id;
+  let messageAuthor;
+  if (message.author) {
+    messageAuthor = message.author.tag;
+  } else {
+    messageAuthor = "Someone else deleted this message"
+  }
   const deleteEmbed = new Discord.MessageEmbed()
     .setTitle('Message Deleted')
-    .addField('Author', message.author.tag)
-    .addField('Message', message.content)
-    .setThumbnail(message.author.avatarURL())
-    .setFooter("ID: " + message.id)
+    .addField('Author', messageAuthor)
+    .addField('Message', messageContent)
+    .setThumbnail(messageAvatar)
+    .setFooter("ID: " + messageID)
     .setTimestamp()
     .setColor('ff0000');
   client.guilds.cache.get("826506878976000030").channels.cache.get("826876551756513314").send(deleteEmbed).catch(console.error);
@@ -48,6 +57,7 @@ client.on('channelCreate', channel => {
   if (channel.guild.id = "826506878976000030") {
     const channelName = channel.name;
     const channelID = channel.id;
+    const channelType = channel.type;
     let channelCategory;
     if (channel.parent) {
       channelCategory = channel.parent.name;
@@ -55,8 +65,9 @@ client.on('channelCreate', channel => {
       channelCategory = "None";
     }
     const channelCreateEmbed = new Discord.MessageEmbed()
-      .setTitle("#️⃣Channel Created")
+      .setTitle("Channel Created")
       .addField("Name", channelName)
+      .addField("Type", channelType)
       .addField("Category", channelCategory)
       .setFooter("ID: " + channelID)
       .setTimestamp()
