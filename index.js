@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const csv = require('csvtojson');
 const Discord = require('discord.js');
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 
@@ -16,6 +17,16 @@ client.on("message", message => {
     case '$membercount':
       memberCount(message);
       break;
+    case '$addroles':
+    csv().fromFile('participants.csv')
+        .then(users => {
+            users.forEach(function (user) {
+                addRoles(user, message);
+            });
+        }).catch(err => {
+           console.log(err);
+        });
+      break;
   }
   if (message.content.toLowerCase().startsWith("$bulkdelete")) {
     bulkDelete(message);
@@ -23,6 +34,35 @@ client.on("message", message => {
     roleRequest(message);
   }
 });
+
+async function addRoles(user, message) {
+    const noviceRole = message.guild.roles.cache.get("827220856983519232");
+    const advancedRole = message.guild.roles.cache.get("827220906908450826");
+    const compRole = message.guild.roles.cache.get("826846965114339419");
+    const botRole = message.guild.roles.cache.get("826871012724441158");
+    console.log(user['What is your discord tag? (Ex: foodboi#9161)']);
+    if (client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)'])) {
+    if (!message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.cache.has(compRole.id)) {
+        message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.add(compRole).catch(console.error);
+    }
+    if (user['Are you playing in the Novice or Advanced division?'] === "Novice") {
+        if (message.guild.members.cache.get(message.author.id).hasPermission("ADMINISTRATOR")) {
+            if (!message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.cache.has(noviceRole.id)) {
+                message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.add(noviceRole).catch(console.error);
+
+            }
+        }
+    }
+
+    if (user['Are you playing in the Novice or Advanced division?'] === "Advanced") {
+        if (message.guild.members.cache.get(message.author.id).hasPermission("ADMINISTRATOR")) {
+            if (!message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.cache.has(advancedRole.id)) {
+                message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.add(advancedRole).catch(console.error);
+            }
+        }
+    }
+    }
+}
 
 async function memberCount(message) {
   const memberCount = message.guild.memberCount;

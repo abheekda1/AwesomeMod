@@ -10,6 +10,7 @@
   "author": "Abheek",
   "license": "Apache-2.0",
   "dependencies": {
+    "csvtojson": "^2.0.10",
     "discord.js": "^12.5.1",
     "nodemon": "^2.0.7"
   }
