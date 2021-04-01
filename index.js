@@ -53,7 +53,7 @@ async function aboutServer(message) {
     .addField("Verification Level", message.guild.verificationLevel)
     .addField("Channels", `Total: ${message.guild.channels.cache.size} ‖ Text: ${textChannelCount} • Voice: ${voiceChannelCount} • Categories: ${categoryChannelCount}`)
     .addField("Members", `Total: ${numHumans + numBots} ‖ Human: ${numHumans} • Bot: ${numBots}`)
-    .addField("Roles", numRoles)j
+    .addField("Roles", numRoles)
     .setThumbnail(message.guild.iconURL())
     .setFooter(`Server ID: ${message.guild.id}`)
     .setTimestamp();
