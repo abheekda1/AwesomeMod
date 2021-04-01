@@ -207,18 +207,20 @@ client.on('messageDelete', message => {
 });
 
 client.on('messageUpdate', (originalMessage, editedMessage) => {
-  if (editedMessage.author.bot) {
-    return;
+  if (editedMessage.author) {
+    if (editedMessage.author.bot) {
+      return;
+    }
+    const editEmbed = new Discord.MessageEmbed()
+      .setTitle("Message Edited")
+      .addField("Author", editedMessage.author.tag)
+      .addField("Message", `<< ${originalMessage}\n>> ${editedMessage}`)
+      .setThumbnail(editedMessage.author.avatarURL())
+      .setFooter("ID: " + editedMessage.id)
+      .setTimestamp()
+      .setColor('006699');
+    client.guilds.cache.get("826506878976000030").channels.cache.get("826876551756513314").send(editEmbed).catch(console.error);
   }
-  const editEmbed = new Discord.MessageEmbed()
-    .setTitle("Message Edited")
-    .addField("Author", editedMessage.author.tag)
-    .addField("Message", `<< ${originalMessage}\n>> ${editedMessage}`)
-    .setThumbnail(editedMessage.author.avatarURL())
-    .setFooter("ID: " + editedMessage.id)
-    .setTimestamp()
-    .setColor('006699');
-  client.guilds.cache.get("826506878976000030").channels.cache.get("826876551756513314").send(editEmbed).catch(console.error);
 });
 
 client.on('channelCreate', channel => {
