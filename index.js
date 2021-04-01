@@ -44,12 +44,13 @@ async function addRoles(user, message) {
     if (client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)'])) {
     if (!message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.cache.has(compRole.id)) {
         message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.add(compRole).catch(console.error);
+        message.channel.send(`Adding "Competitor" role for: \`${user['What is your discord tag? (Ex: foodboi#9161)']}\``).catch(console.error);
     }
     if (user['Are you playing in the Novice or Advanced division?'] === "Novice") {
         if (message.guild.members.cache.get(message.author.id).hasPermission("ADMINISTRATOR")) {
             if (!message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.cache.has(noviceRole.id)) {
                 message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.add(noviceRole).catch(console.error);
-
+                message.channel.send(`Adding "Novice" role for: \`${user['What is your discord tag? (Ex: foodboi#9161)']}\``).catch(console.error);
             }
         }
     }
@@ -58,6 +59,7 @@ async function addRoles(user, message) {
         if (message.guild.members.cache.get(message.author.id).hasPermission("ADMINISTRATOR")) {
             if (!message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.cache.has(advancedRole.id)) {
                 message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.add(advancedRole).catch(console.error);
+                message.channel.send(`Adding "Advanced" role for: \`${user['What is your discord tag? (Ex: foodboi#9161)']}\``).catch(console.error);
             }
         }
     }
