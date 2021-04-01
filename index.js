@@ -36,8 +36,20 @@ client.on("message", async message => {
     bulkDelete(message);
   } else if (message.content.toLowerCase().startsWith("$rolerequest")) {
     roleRequest(message);
+  } else if (message.content.toLowerCase().startsWith("$userswithrole")) {
+    usersWithRole(message);
   }
 });
+
+async function usersWithRole(message) {
+  if (message.content.split(" ")[1].length < 3) {
+    message.reply("Query must contain at least 3 characters!")
+  }
+  const roles = guild.roles.cache.filter(role => role.name.includes(message.content.split(" ")[1]));
+  console.log(message.content.split(" ")[1]);
+  console.log(roles);
+  message.reply(roles);
+}
 
 async function aboutServer(message) {
   const textChannelCount = message.guild.channels.cache.filter(c => c.type === 'text').size;
