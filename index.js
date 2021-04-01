@@ -34,7 +34,7 @@ async function roleRequest(message) {
   const verificationMessage = message.channel.send(`<@&826508679636844574>, <@${message.author.id}> would like the **${role}** role. Are they worthy?`);
   message.react('👍');
   message.react('👎');
-  const filter = (reaction, member) => {
+  const filter = (reaction, user) => {
     return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR');
   };
   message.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
