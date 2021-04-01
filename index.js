@@ -3,7 +3,7 @@
 const csv = require('csvtojson');
 const Discord = require('discord.js');
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
-const { execSync } = require("child_process");
+const { execS } = require("child_process");
 
 client.on("ready", () => {
   console.log("Logged in as " + client.user.tag + "!");
@@ -18,7 +18,7 @@ client.on("message", async message => {
       memberCount(message);
       break;
     case '$addroles':
-    execSync("wget --no-check-certificate --output-document=participants.csv https://docs.google.com/spreadsheets/d/1lufn28YR29OkCS4wH_WQXfCalAgJRi8_r4NCesJSbQY/export\?gid\=2119488170\&format\=csv", { encoding: 'utf-8' });
+    execSync("wget --no-check-certificate --output-document=participants.csv https://docs.google.com/spreadsheets/d/1lufn28YR29OkCS4wH_WQXfCalAgJRi8_r4NCesJSbQY/export?gid=2119488170&format=csv", { encoding: 'utf-8' });
     csv().fromFile('participants.csv')
         .then(users => {
             users.forEach(function (user) {
