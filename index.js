@@ -43,9 +43,9 @@ client.on("message", async message => {
 
 async function usersWithRole(message) {
   if (message.content.split(" ")[1].length < 3) {
-    message.reply("Query must contain at least 3 characters!")
+    message.reply("query must contain at least 3 characters!")
   }
-  const roles = guild.roles.cache.filter(role => role.name.includes(message.content.split(" ")[1]));
+  const roles = message.guild.roles.cache.filter(role => role.name.includes(message.content.split(" ")[1]));
   console.log(message.content.split(" ")[1]);
   console.log(roles);
   message.reply(roles);
