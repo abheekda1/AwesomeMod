@@ -25,26 +25,26 @@ async function startScoring(message) {
       const filter = m => m.content.includes('do be');
       const collector = message.channel.createMessageCollector(filter, { time: 1500000 });
       collector.on('collect', m => {
-        if (m.content.toLowerCase() === "do be scoring a 4") {
-          m.delete({ timeout: 1000 }).catch(console.error);
+        if (m.content.toLowerCase() === "$score a+4") {
+          //m.delete({ timeout: 1000 }).catch(console.error);
           scoreA += 4;
-          scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`);
-        } else if (m.content.toLowerCase() === "do be scoring a 10") {
-          m.delete({ timeout: 1000 }).catch(console.error);
+          scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`).catch(console.error);
+        } else if (m.content.toLowerCase() === "$score a+10") {
+          //m.delete({ timeout: 1000 }).catch(console.error);
           scoreA += 10;
-          scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`);
-        } else if (m.content.toLowerCase() === "do be scoring b 4") {
+          scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`).catch(console.error);
+        } else if (m.content.toLowerCase() === "$score b+4") {
           m.delete({ timeout: 1000 }).catch(console.error);
           scoreB += 4;
-          scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`);
-        } else if (m.content.toLowerCase() === "do be scoring b 10") {
-          m.delete({ timeout: 1000 }).catch(console.error);
+          scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`).catch(console.error);
+        } else if (m.content.toLowerCase() === "$score b+10") {
+          //m.delete({ timeout: 1000 }).catch(console.error);
           scoreB += 10;
-          scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`);
+          scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`).catch(console.error);
         } else if (m.content === "do be scoring stop") {
-          m.delete({ timeout: 1000 }).catch(console.error);
+          //m.delete({ timeout: 1000 }).catch(console.error);
           scoreboard.delete({ timeout: 1000 });
-          m.channel.send(`**FINAL SCORE:**\nTeam A: ${scoreA}\nTeam B: ${scoreB}`);
+          m.channel.send(`**FINAL SCORE:**\nTeam A: ${scoreA}\nTeam B: ${scoreB}`).catch(console.error);
           collector.stop();
         }
       });
