@@ -22,7 +22,7 @@ async function startScoring(message) {
   let scoreB = 0;
   const scoreboard = await message.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`)
     .then((scoreboard) => {
-      const filter = m => m.content.includes('do be');
+      const filter = m => m.content.includes('$score');
       const collector = message.channel.createMessageCollector(filter, { time: 1500000 });
       collector.on('collect', m => {
         if (m.content.toLowerCase() === "$score a+4") {
@@ -41,7 +41,7 @@ async function startScoring(message) {
           //m.delete({ timeout: 1000 }).catch(console.error);
           scoreB += 10;
           scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`).catch(console.error);
-        } else if (m.content === "do be scoring stop") {
+        } else if (m.content === "$score finish") {
           //m.delete({ timeout: 1000 }).catch(console.error);
           scoreboard.delete({ timeout: 1000 });
           m.channel.send(`**FINAL SCORE:**\nTeam A: ${scoreA}\nTeam B: ${scoreB}`).catch(console.error);
