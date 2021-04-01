@@ -2,6 +2,9 @@
 
 const Discord = require('discord.js');
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
+const readerRole = message.guild.roles.cache.get("826840765526835240");
+const specRole = message.guild.roles.cache.get("826849213954523216");
+const writerRole = message.guild.roles.cache.get("826508727855087723");
 
 client.on("ready", () => {
   console.log("Logged in as " + client.user.tag + "!");
@@ -15,8 +18,40 @@ client.on("message", message => {
   }
   if (message.content.toLowerCase().startsWith("$bulkdelete")) {
     bulkDelete(message);
+  } else if (message.content.toLowerCase().startsWith("$rolerequest")) {
+    roleRequest(message);
   }
 });
+
+async function roleRequest(message) {
+  const role = message.content.substring(13).toLowerCase();
+  const possibleRoles = ['spec', 'spectator', 'reader', 'writer'];
+  if (possibleRoles.indexOf(role) === -1) {
+    message.reply("Not a valid role");
+    return;
+  }
+  const verificationMessage = message.channel.send(`<@&826508679636844574>, <@${message.author.id}> would like the **${role}** role. Are they worthy?`);
+  verificationMessage.react('👍');
+  verificationMessage.react('👎');
+  const filter = (reaction, user) => {
+    return ['👍', '👎'].includes(reaction.emoji.name) && user.hasPermission('ADMINISTRATOR');
+  };
+  verificationMessage.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
+    .then(userReaction => {
+      const reaction = userReaction.first();
+      if (reaction.emoji === '👍' {
+        if (role === 'reader') {
+          message.member.roles.add(readerRole).catch(console.error);
+        } else if (role === 'writer') {
+          message.member.roles.add(writerRole).catch(console.error);
+        } else if (role === 'spectator' || role === 'spec') {
+          message.member.roles.add(writerRole).catch(console.error);
+        }
+      } else {
+        message.reply("I guess you won't be getting that role!");
+      }
+    }).catch("Role reaction timeout, I guess the mods don't really care about you and forgot.");
+}
 
 async function bulkDelete(message) {
   if (!message.member.hasPermission('ADMINISTRATOR')) {
