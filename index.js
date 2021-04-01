@@ -40,7 +40,7 @@ client.on('messageDelete', message => {
     .setThumbnail(messageAvatar)
     .setFooter("ID: " + messageID)
     .setTimestamp()
-    .setColor('ff0000');
+    .setColor('ff748c');
   client.guilds.cache.get("826506878976000030").channels.cache.get("826876551756513314").send(deleteEmbed).catch(console.error);
 });
 
@@ -55,7 +55,7 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
     .setThumbnail(editedMessage.author.avatarURL())
     .setFooter("ID: " + editedMessage.id)
     .setTimestamp()
-    .setColor('006699');
+    .setColor('8cbfe9');
   client.guilds.cache.get("826506878976000030").channels.cache.get("826876551756513314").send(editEmbed).catch(console.error);
 });
 
@@ -77,7 +77,7 @@ client.on('channelCreate', channel => {
       .addField("Category", channelCategory)
       .setFooter("ID: " + channelID)
       .setTimestamp()
-      .setColor('00aaff');
+      .setColor('8cbfe9');
     client.guilds.cache.get("826506878976000030").channels.cache.get("826876551756513314").send(channelCreateEmbed).catch(console.error);
   }
 });
