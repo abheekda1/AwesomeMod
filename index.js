@@ -43,7 +43,7 @@ async function startScoring(message) {
           scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`).catch(console.error);
         } else if (m.content === "$score finish") {
           //m.delete({ timeout: 1000 }).catch(console.error);
-          scoreboard.delete({ timeout: 1000 });
+          //scoreboard.delete({ timeout: 1000 });
           m.channel.send(`**FINAL SCORE:**\nTeam A: ${scoreA}\nTeam B: ${scoreB}`).catch(console.error);
           collector.stop();
         }
