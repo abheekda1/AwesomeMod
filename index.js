@@ -46,10 +46,10 @@ async function aboutServer(message) {
   const numHumans = message.guild.members.cache.filter(member => !member.user.bot).size;
   const numBots = message.guild.members.cache.filter(member => member.user.bot).size;
   const numRoles = message.guild.roles.cache.size;
-  const numOnline = message.guild.members.cache.filter(member => member.user.presence === "online");
-  const numOffline = message.guild.members.cache.filter(member => member.user.presence === "offline");
-  const numAway = message.guild.members.cache.filter(member => member.user.presence === "idle");
-  const numDND = message.guild.members.cache.filter(member => member.user.presence === "dnd");
+  const numOnline = message.guild.members.cache.filter(member => member.user.presence === "online").size;
+  const numOffline = message.guild.members.cache.filter(member => member.user.presence === "offline").size;
+  const numAway = message.guild.members.cache.filter(member => member.user.presence === "idle").size;
+  const numDND = message.guild.members.cache.filter(member => member.user.presence === "dnd").size;
   const aboutServerEmbed = new Discord.MessageEmbed()
     .setTitle(`About \`${message.guild.name}\``)
     .addField("Owner", `<@${message.guild.ownerID}>`)
@@ -59,7 +59,7 @@ async function aboutServer(message) {
     .addField("Members", `Total: ${numHumans + numBots} ‖ Human: ${numHumans} • Bot: ${numBots}`)
     .addField("Roles", numRoles)
     .addField("Created", message.guild.createdAt)
-    .addField("User Statuses", `🔵 ${numOnline}\n🟠 ${numAway}\n⚫ ${numOffline}\n🔴 ${numDND}`)
+    .addField("User Statuses", `🟦 ${numOnline}\n\n🟧 ${numAway}\n\n⬛ ${numOffline}\n\n🟥 ${numDND}`)
     .setThumbnail(message.guild.iconURL())
     .setFooter(`Server ID: ${message.guild.id}`)
     .setTimestamp();
