@@ -7,6 +7,50 @@ client.on("ready", () => {
   console.log("Logged in as " + client.user.tag + "!");
 });
 
+client.on("message" () => {
+  switch (message.content.toLowerCase()) {
+    case '$score':
+      startScoring(message);
+      break;
+    default:
+      return;
+  }
+});
+
+async function startScoring(message) {
+  let scoreA = 0;
+  let scoreB = 0;
+  const scoreboard = await message.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`)
+    .then((scoreboard) => {
+      const filter = m => m.content.includes('do be');
+      const collector = message.channel.createMessageCollector(filter, { time: 1500000 });
+      collector.on('collect', m => {
+        if (m.content.toLowerCase() === "do be scoring a 4") {
+          m.delete({ timeout: 1000 }).catch(console.error);
+          scoreA += 4;
+          scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`);
+        } else if (m.content.toLowerCase() === "do be scoring a 10") {
+          m.delete({ timeout: 1000 }).catch(console.error);
+          scoreA += 10;
+          scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`);
+        } else if (m.content.toLowerCase() === "do be scoring b 4") {
+          m.delete({ timeout: 1000 }).catch(console.error);
+          scoreB += 4;
+          scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`);
+        } else if (m.content.toLowerCase() === "do be scoring b 10") {
+          m.delete({ timeout: 1000 }).catch(console.error);
+          scoreB += 10;
+          scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`);
+        } else if (m.content === "do be scoring stop") {
+          m.delete({ timeout: 1000 }).catch(console.error);
+          scoreboard.delete({ timeout: 1000 });
+          m.channel.send(`**FINAL SCORE:**\nTeam A: ${scoreA}\nTeam B: ${scoreB}`);
+          collector.stop();
+        }
+      });
+    })
+}
+
 client.on("guildMemberAdd", member => {
   const compRole = member.guild.roles.cache.get("826846965114339419");
   const botRole = member.guild.roles.cache.get("826871012724441158");
