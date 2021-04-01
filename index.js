@@ -14,7 +14,7 @@ client.on("message", message => {
       startScoring(message);
       break;
     case '$membercount':
-      memberCount(message):
+      memberCount(message);
       break;
   }
   if (message.content.toLowerCase().startsWith("$bulkdelete")) {
