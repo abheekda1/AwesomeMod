@@ -7,7 +7,7 @@ client.on("ready", () => {
   console.log("Logged in as " + client.user.tag + "!");
 });
 
-client.on("message" => {
+client.on("message", () => {
   switch (message.content.toLowerCase()) {
     case '$score':
       startScoring(message);
@@ -84,7 +84,7 @@ client.on('messageDelete', message => {
     .setThumbnail(messageAvatar)
     .setFooter("ID: " + messageID)
     .setTimestamp()
-    .setColor('ff748c');
+    .setColor('ff0000');
   client.guilds.cache.get("826506878976000030").channels.cache.get("826876551756513314").send(deleteEmbed).catch(console.error);
 });
 
@@ -99,7 +99,7 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
     .setThumbnail(editedMessage.author.avatarURL())
     .setFooter("ID: " + editedMessage.id)
     .setTimestamp()
-    .setColor('8cbfe9');
+    .setColor('006699');
   client.guilds.cache.get("826506878976000030").channels.cache.get("826876551756513314").send(editEmbed).catch(console.error);
 });
 
@@ -121,7 +121,7 @@ client.on('channelCreate', channel => {
       .addField("Category", channelCategory)
       .setFooter("ID: " + channelID)
       .setTimestamp()
-      .setColor('8cbfe9');
+      .setColor('00aaff');
     client.guilds.cache.get("826506878976000030").channels.cache.get("826876551756513314").send(channelCreateEmbed).catch(console.error);
   }
 });
