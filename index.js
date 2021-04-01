@@ -13,6 +13,9 @@ client.on("message", message => {
     case '$score':
       startScoring(message);
       break;
+    case '$membercount':
+      memberCount(message):
+      break;
   }
   if (message.content.toLowerCase().startsWith("$bulkdelete")) {
     bulkDelete(message);
@@ -20,6 +23,11 @@ client.on("message", message => {
     roleRequest(message);
   }
 });
+
+async function memberCount(message) {
+  const memberCount = message.guild.memberCount;
+  message.channel.send(`Member count: ${memberCount}`);
+}
 
 async function roleRequest(message) {
   const readerRole = message.guild.roles.cache.get("826840765526835240");
