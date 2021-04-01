@@ -21,8 +21,7 @@ client.on("message", message => {
 });
 
 async function bulkDelete(message) {
-  const args = message.content.split(' ').slice(1);
-  const amount = args.join(' ');
+  const amount = message.content.substring(0, 12);
 
   if (!amount) {
     message.reply('please add the number of messages to be deleted!');
