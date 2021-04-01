@@ -59,7 +59,7 @@ async function aboutServer(message) {
     .addField("Members", `Total: ${numHumans + numBots} ‖ Human: ${numHumans} • Bot: ${numBots}`)
     .addField("Roles", numRoles)
     .addField("Created", message.guild.createdAt)
-    .addField("User Statuses", `\n🟦 • ${numOnline}\n\n🟧 • ${numAway}\n\n⬛ • ${numOffline}\n\n🟥 • ${numDND}`)
+    .addField("User Statuses", `🟦 • ${numOnline} 🟧 • ${numAway} ⬛ • ${numOffline} 🟥 • ${numDND}`)
     .setThumbnail(message.guild.iconURL())
     .setFooter(`Server ID: ${message.guild.id}`)
     .setTimestamp();
