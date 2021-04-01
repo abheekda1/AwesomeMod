@@ -18,7 +18,11 @@ client.on("message", async message => {
       memberCount(message);
       break;
     case '$addroles':
+<<<<<<< HEAD
     execSync("wget --no-check-certificate --output-document=participants.csv https://docs.google.com/spreadsheets/d/1lufn28YR29OkCS4wH_WQXfCalAgJRi8_r4NCesJSbQY/export?gid=2119488170&format=csv", { encoding: 'utf-8' });
+=======
+    execSync("wget --no-check-certificate --output-document=participants.csv https://docs.google.com/spreadsheets/d/1lufn28YR29OkCS4wH_WQXfCalAgJRi8_r4NCesJSbQY/export\?gid\=2119488170\&format\=csv");
+>>>>>>> 3bedb1dfbcc1fdeb578036de4d9aadff3879f57f
     csv().fromFile('participants.csv')
         .then(users => {
             users.forEach(function (user) {
