@@ -7,7 +7,7 @@ client.on("ready", () => {
   console.log("Logged in as " + client.user.tag + "!");
 });
 
-client.on("message", () => {
+client.on("message", message => {
   switch (message.content.toLowerCase()) {
     case '$score':
       startScoring(message);
