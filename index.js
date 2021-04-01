@@ -30,10 +30,12 @@ async function bulkDelete(message) {
 
   if (!Number.isInteger(amount)) {
     message.reply('the number is not an integer!');
+    return;
   }
 
   if (amount > 250 && amount < 1) {
     message.reply('the number is too large! It must be between 1 and 250 inclusive.');
+    return;
   }
 
   await message.channel.fetch( { limit: amount } ).then(messages => {
