@@ -48,7 +48,7 @@ async function aboutServer(message) {
     .addField("Owner", `<@${message.guild.ownerID}>`)
     .addField("Region", message.guild.region)
     .addField("Verification Level", message.guild.verificationLevel)
-    .addField("Channels", `Text: ${textChannelCount} • Voice: ${voiceChannelCount} • Categories ${categoryChannelCount}`)
+    .addField("Channels", `Text: ${textChannelCount} • Voice: ${voiceChannelCount} • Categories: ${categoryChannelCount}`)
     .setThumbnail(message.guild.iconURL())
     .setTimestamp();
   message.channel.send(aboutServerEmbed).catch(console.error);
