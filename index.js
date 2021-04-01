@@ -39,7 +39,7 @@ async function roleRequest(message) {
   verificationMessage.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
     .then(userReaction => {
       const reaction = userReaction.first();
-      if (reaction.emoji === '👍' {
+      if (reaction.emoji === '👍') {
         if (role === 'reader') {
           message.member.roles.add(readerRole).catch(console.error);
         } else if (role === 'writer') {
