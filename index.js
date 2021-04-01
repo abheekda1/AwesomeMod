@@ -50,6 +50,7 @@ async function aboutServer(message) {
     .addField("Verification Level", message.guild.verificationLevel)
     .addField("Channels", `Text: ${textChannelCount} • Voice: ${voiceChannelCount} • Categories: ${categoryChannelCount}`)
     .setThumbnail(message.guild.iconURL())
+    .setFooter(`Server ID: ${message.guild.id}`)
     .setTimestamp();
   message.channel.send(aboutServerEmbed).catch(console.error);
 }
