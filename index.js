@@ -50,8 +50,8 @@ async function aboutServer(message) {
     .addField("Owner", `<@${message.guild.ownerID}>`)
     .addField("Region", message.guild.region)
     .addField("Verification Level", message.guild.verificationLevel)
-    .addField("Channels", `Text: ${textChannelCount} • Voice: ${voiceChannelCount} • Categories: ${categoryChannelCount}`)
-    .addField("Members", `Human: ${numHumans} • Bot: ${numBots}`)
+    .addField("Channels", `Total: ${message.guild.channels.cache.size} ‖ Text: ${textChannelCount} • Voice: ${voiceChannelCount} • Categories: ${categoryChannelCount}`)
+    .addField("Members", `Total: ${numHumans + numBots} ‖ Human: ${numHumans} • Bot: ${numBots}`)
     .setThumbnail(message.guild.iconURL())
     .setFooter(`Server ID: ${message.guild.id}`)
     .setTimestamp();
