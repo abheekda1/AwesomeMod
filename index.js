@@ -32,12 +32,12 @@ async function roleRequest(message) {
     return;
   }
   const verificationMessage = message.channel.send(`<@&826508679636844574>, <@${message.author.id}> would like the **${role}** role. Are they worthy?`);
-  verificationMessage.react('👍');
-  verificationMessage.react('👎');
-  const filter = (reaction, user) => {
-    return ['👍', '👎'].includes(reaction.emoji.name) && user.hasPermission('ADMINISTRATOR');
+  message.react('👍');
+  message.react('👎');
+  const filter = (reaction, member) => {
+    return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.cache.members.get(user.id).hasPermission('ADMINISTRATOR');
   };
-  verificationMessage.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
+  message.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
     .then(userReaction => {
       const reaction = userReaction.first();
       if (reaction.emoji === '👍') {
