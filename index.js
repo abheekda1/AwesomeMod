@@ -46,7 +46,7 @@ async function aboutServer(message) {
   const aboutServerEmbed = new Discord.MessageEmbed()
     .setTitle(`About \`${message.guild.name}\``)
     .addField("Owner", `<@${message.guild.ownerID}>`)
-    .addField("Region", message.guild.region})
+    .addField("Region", message.guild.region)
     .addField("Verification Level", message.guild.verificationLevel)
     .addField("Text Channels", textChannelCount)
     .addField("Voice Channels", voiceChannelCount)
