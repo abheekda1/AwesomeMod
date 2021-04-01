@@ -12,11 +12,11 @@ client.on("message", message => {
     case '$score':
       startScoring(message);
       break;
-    case '$bulkdelete':
-      bulkDelete(message);
-      break;
     default:
       return;
+  }
+  if (message.content.toLowerCase().startsWith("$bulkdelete")) {
+    bulkDelete(message);
   }
 });
 
