@@ -40,9 +40,9 @@ client.on("message", async message => {
 });
 
 async function aboutServer(message) {
-  const textChannelCount = message.guild.cache.channels.filter(c => c.type === 'text').size;
-  const voiceChannelCount = message.guild.cache.channels.filter(c => c.type === 'voice').size;
-  const categoryChannelCount = message.guild.cache.channels.filter(c => c.type === 'category').size;
+  const textChannelCount = message.guild.channels.cache.filter(c => c.type === 'text').size;
+  const voiceChannelCount = message.guild.channels.cache.filter(c => c.type === 'voice').size;
+  const categoryChannelCount = message.guild.channels.cache.filter(c => c.type === 'category').size;
   const aboutServerEmbed = new Discord.MessageEmbed()
     .setTitle(`About \`${message.guild.name}\``)
     .addField("Owner", `<@${message.guild.ownerID}>`)
