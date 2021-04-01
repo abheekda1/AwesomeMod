@@ -19,6 +19,10 @@ client.on("message", message => {
 });
 
 async function bulkDelete(message) {
+  if (!message.author.permissions.toArray().has('ADMINISTRATOR')) {
+    message.reply("you do not have permissions!");
+    return;
+  }
   const amount = parseInt(message.content.substring(12));
 
   if (!amount) {
@@ -36,7 +40,7 @@ async function bulkDelete(message) {
     return;
   }
 
-  await message.channel.fetch( { limit: amount } ).then(messages => {
+  await message.channel.messages.fetch( { limit: amount } ).then(messages => {
     message.channel.bulkDelete(messages).catch(console.error);
   }).catch(console.error);
 }
