@@ -190,6 +190,9 @@ client.on('messageDelete', message => {
     messageContent = "Unknown";
     messageID = "Unknown";
   }
+  if (!messageContent) {
+    messageContent = "[NONE]";
+  }
   const deleteEmbed = new Discord.MessageEmbed()
     .setTitle('Message Deleted')
     .addField('Author', messageAuthor)
