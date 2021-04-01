@@ -40,7 +40,7 @@ async function bulkDelete(message) {
     return;
   }
 
-  await message.channel.messages.fetch( { limit: amount } ).then(messages => {
+  await message.channel.messages.fetch( { limit: amount + 1 } ).then(messages => {
     message.channel.bulkDelete(messages).catch(console.error);
   }).catch(console.error);
 }
