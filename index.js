@@ -47,7 +47,7 @@ async function usersWithRole(message) {
   }
   const roles = message.guild.roles.cache.filter(role => role.name.includes(message.content.split(" ")[1]));
   console.log(message.content.split(" ")[1]);
-  console.log(roles[0].name);
+  console.log(roles);
 }
 
 async function aboutServer(message) {
