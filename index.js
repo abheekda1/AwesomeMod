@@ -33,8 +33,8 @@ async function bulkDelete(message) {
     return;
   }
 
-  if (amount > 250 && amount < 1) {
-    message.reply('the number is too large! It must be between 1 and 250 inclusive.');
+  if (amount > 250 || amount < 1) {
+    message.reply('the number is invalid! It must be between 1 and 250 inclusive.');
     return;
   }
 
