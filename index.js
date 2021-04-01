@@ -44,10 +44,15 @@ client.on("message", async message => {
 async function usersWithRole(message) {
   if (message.content.split(" ")[1].length < 3) {
     message.reply("query must contain at least 3 characters!")
+    return;
   }
-  const roles = message.guild.roles.cache.filter(role => role.name.includes(message.content.split(" ")[1]));
-  console.log(message.content.split(" ")[1]);
-  console.log(roles);
+  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1]));
+  const roleEmbed = new Discord.MessageEmbed()
+    .setTitle(`${roles.array()[0].members.array().length} users with the role \`${roles.array()[0].name}\`:`)
+    .setDescription(" • " + roles.array()[0].members.map(m => m.user.tag).join('\n\n • '))
+    .setFooter(`Role ID: ${roles.array()[0].id}`)
+    .setTimestamp();
+  message.channel.send(roleEmbed);
 }
 
 async function aboutServer(message) {
