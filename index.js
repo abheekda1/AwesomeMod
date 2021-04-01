@@ -41,8 +41,9 @@ client.on("message", async message => {
 
 async function aboutServer(message) {
   const aboutServerEmbed = new Discord.MessageEmbed()
-    .setTitle(`About ${message.guild.name}`)
-    .addField("Owner", `<@${message.guild.ownerID}>`);
+    .setTitle(`About \`${message.guild.name}\``)
+    .addField("Owner", `<@${message.guild.ownerID}>`)
+    .addField("Region", `${message.guild.region}`);
   message.channel.send(aboutServerEmbed).catch(console.error);
 }
 
