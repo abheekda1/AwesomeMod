@@ -19,7 +19,7 @@ client.on("message", message => {
 });
 
 async function bulkDelete(message) {
-  if (!message.author.permissions.toArray().has('ADMINISTRATOR')) {
+  if (!message.member.permissions.toArray().has('ADMINISTRATOR')) {
     message.reply("you do not have permissions!");
     return;
   }
