@@ -12,10 +12,35 @@ client.on("message", message => {
     case '$score':
       startScoring(message);
       break;
+    case '$bulkdelete':
+      bulkDelete(message);
+      break;
     default:
       return;
   }
 });
+
+async function bulkDelete(message) {
+  const args = message.content.split(' ').slice(1);
+  const amount = args.join(' ');
+
+  if (!amount) {
+    message.reply('please add the number of messages to be deleted!');
+    return;
+  }
+
+  if (!Number.isInteger(amount)) {
+    message.reply('the number is not an integer!');
+  }
+
+  if (amount > 250 && amount < 1) {
+    message.reply('the number is too large! It must be between 1 and 250 inclusive.');
+  }
+
+  await message.channel.fetch( { limit: amount } ).then(messages => {
+    message.channel.bulkDelete(messages).catch(console.error);
+  }).catch(console.error);
+}
 
 async function startScoring(message) {
   let scoreA = 0;
