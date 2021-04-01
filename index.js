@@ -35,18 +35,19 @@ async function roleRequest(message) {
   message.react('👍');
   message.react('👎');
   const filter = (reaction, member) => {
-    return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.cache.members.get(user.id).hasPermission('ADMINISTRATOR');
+    return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR');
   };
   message.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
     .then(userReaction => {
       const reaction = userReaction.first();
       if (reaction.emoji === '👍') {
+        message.reply("wow I guess you ARE worthy! ||mods must be real mistaken||");
         if (role === 'reader') {
           message.member.roles.add(readerRole).catch(console.error);
         } else if (role === 'writer') {
           message.member.roles.add(writerRole).catch(console.error);
         } else if (role === 'spectator' || role === 'spec') {
-          message.member.roles.add(writerRole).catch(console.error);
+          message.member.roles.add(specRole).catch(console.error);
         }
       } else {
         message.reply("I guess you won't be getting that role!");
