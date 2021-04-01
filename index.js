@@ -28,6 +28,9 @@ client.on("message", async message => {
            console.log(err);
         });
       break;
+    case '$aboutserver':
+      aboutServer(message);
+      break;
   }
   if (message.content.toLowerCase().startsWith("$bulkdelete")) {
     bulkDelete(message);
@@ -35,6 +38,13 @@ client.on("message", async message => {
     roleRequest(message);
   }
 });
+
+async function aboutServer(message) {
+  const aboutServerEmbed = new Discord.MessageEmbed()
+    .setTitle(`About ${message.guild.name}`)
+    .addField("Owner", `<@${message.guild.ownerID}>`);
+  message.channel.send(aboutServerEmbed).catch(console.error);
+}
 
 async function addRoles(user, message) {
     const noviceRole = message.guild.roles.cache.get("827220856983519232");
