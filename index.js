@@ -2,9 +2,7 @@
 
 const Discord = require('discord.js');
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
-const readerRole = message.guild.roles.cache.get("826840765526835240");
-const specRole = message.guild.roles.cache.get("826849213954523216");
-const writerRole = message.guild.roles.cache.get("826508727855087723");
+
 
 client.on("ready", () => {
   console.log("Logged in as " + client.user.tag + "!");
@@ -24,6 +22,9 @@ client.on("message", message => {
 });
 
 async function roleRequest(message) {
+  const readerRole = message.guild.roles.cache.get("826840765526835240");
+  const specRole = message.guild.roles.cache.get("826849213954523216");
+  const writerRole = message.guild.roles.cache.get("826508727855087723");
   const role = message.content.substring(13).toLowerCase();
   const possibleRoles = ['spec', 'spectator', 'reader', 'writer'];
   if (possibleRoles.indexOf(role) === -1) {
