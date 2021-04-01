@@ -43,12 +43,15 @@ async function aboutServer(message) {
   const textChannelCount = message.guild.channels.cache.filter(c => c.type === 'text').size;
   const voiceChannelCount = message.guild.channels.cache.filter(c => c.type === 'voice').size;
   const categoryChannelCount = message.guild.channels.cache.filter(c => c.type === 'category').size;
+  const numHumans = message.guild.members.cache.filter(member => !member.user.bot).size;
+  const numBots = message.guild.members.cache.filter(member => member.user.bot).size;
   const aboutServerEmbed = new Discord.MessageEmbed()
     .setTitle(`About \`${message.guild.name}\``)
     .addField("Owner", `<@${message.guild.ownerID}>`)
     .addField("Region", message.guild.region)
     .addField("Verification Level", message.guild.verificationLevel)
     .addField("Channels", `Text: ${textChannelCount} • Voice: ${voiceChannelCount} • Categories: ${categoryChannelCount}`)
+    .addField("Members", `Human: ${numHumans} • Bot: ${numBots}`)
     .setThumbnail(message.guild.iconURL())
     .setFooter(`Server ID: ${message.guild.id}`)
     .setTimestamp();
