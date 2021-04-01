@@ -3,7 +3,7 @@
 const csv = require('csvtojson');
 const Discord = require('discord.js');
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
-const { execS } = require("child_process");
+const { execSync } = require("child_process");
 
 client.on("ready", () => {
   console.log("Logged in as " + client.user.tag + "!");
