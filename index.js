@@ -277,6 +277,27 @@ client.on('messageDelete', message => {
   });
 });
 
+client.on('messageDeleteBulk', messages => {
+  const numMessages = messages.array().length;
+  const messagesChannel = messages.array()[0].channel;
+  const deleteEmbed = new Discord.MessageEmbed()
+    .setTitle(`${numMessages} Messages Bulk Deleted`)
+    .addField(`Channel`, messagesChannel.name)
+    .setFooter("Channel ID: " + messagesChannel.id)
+    .setTimestamp()
+    .setColor('e7778b');
+
+  collection.findOne({ guild_id: message.guild.id}, (error, result) => {
+    if(error) {
+      console.error;
+    }
+    botLogsChannel = result.bot_logs_id;
+    if (message.guild.channels.cache.get(botLogsChannel)) {
+      message.guild.channels.cache.get(botLogsChannel).send(deleteEmbed).catch(console.error);
+    }
+  });
+});
+
 client.on('messageUpdate', (originalMessage, editedMessage) => {
   if (editedMessage.author) {
     if (editedMessage.author.bot) {
