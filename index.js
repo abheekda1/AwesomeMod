@@ -171,7 +171,7 @@ async function roleRequest(message) {
       }
       roleChannel = result.role_requests_id;
       if (message.channel.id !== roleChannel) {
-        message.reply("wrong channel!");
+        message.reply(`wrong channel! Roles can only be requested in <#${roleChannel}>.`);
         return;
       }
 
@@ -219,39 +219,19 @@ async function bulkDelete(message) {
   await message.channel.messages.fetch( { limit: amount + 1 } ).then(messages => {
     message.channel.bulkDelete(messages).catch(console.error);
   }).catch(console.error);
-}/*
-
-client.on("guildMemberAdd", member => {
-//  const compRole = member.guild.roles.cache.get("826846965114339419");
-  const botRole = member.guild.roles.cache.get("826871012724441158");
-  if (member.bot) {
-    member.roles.add(botRole).catch(console.error);
-  } else {
-    //member.roles.add(compRole).catch(console.error);
-    const welcomeDM = new Discord.MessageEmbed()
-      .setTitle(`Welcome to ${member.guild.name}!`)
-      .setDescription("Please take a look at <#826510368620413018> for information about roles and registration!")
-      .setFooter(`Guild ID: ${member.guild.id}`)
-      .setTimestamp();
-    client.users.cache.get(member.user.id).send(welcomeDM).catch(console.error);
-  }
-});
+}
 
 client.on('messageDelete', message => {
-  let messageContent;
+  let messageContent = message.content;
   let messageAvatar;
-  let messageID;
+  const messageID = message.id;
   let messageAuthor;
-  if (message) {
+  if (message.author) {
     messageAuthor = message.author.tag;
-    messageContent = message.content;
     messageAvatar = message.author.avatarURL();
-    messageID = message.id;
   } else {
     messageAuthor = "Someone else deleted this message";
-    messageAvatar = "https://64.media.tumblr.com/db1db81cadcf6211524ce9ef1b89bae7/tumblr_inline_olcfuexwZy1se2zq9_500.png";
-    messageContent = "Unknown";
-    messageID = "Unknown";
+    messageAvatar = "https://www.myhowtoonline.com/wp-content/uploads/2020/10/discord-512x474.png";
   }
   if (!messageContent) {
     messageContent = "[NONE]";
@@ -264,7 +244,14 @@ client.on('messageDelete', message => {
     .setFooter("ID: " + messageID)
     .setTimestamp()
     .setColor('ff0000');
-  client.guilds.cache.get("826506878976000030").channels.cache.get("826876551756513314").send(deleteEmbed).catch(console.error);
+
+  collection.findOne({ guild_id: message.guild.id}, (error, result) => {
+    if(error) {
+      console.error;
+    }
+    botLogsChannel = result.bot_logs_id;
+    message.guild.channels.cache.get(botLogsChannel).send(deleteEmbed).catch(console.error);
+  });
 });
 
 client.on('messageUpdate', (originalMessage, editedMessage) => {
@@ -280,12 +267,17 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
       .setFooter("ID: " + editedMessage.id)
       .setTimestamp()
       .setColor('006699');
-    client.guilds.cache.get("826506878976000030").channels.cache.get("826876551756513314").send(editEmbed).catch(console.error);
+    collection.findOne({ guild_id: message.guild.id}, (error, result) => {
+      if(error) {
+        console.error;
+      }
+      botLogsChannel = result.bot_logs_id;
+      message.guild.channels.cache.get(botLogsChannel).send(editEmbed).catch(console.error);
+    });
   }
 });
 
 client.on('channelCreate', channel => {
-  if (channel.guild.id = "826506878976000030") {
     const channelName = channel.name;
     const channelID = channel.id;
     const channelType = channel.type;
@@ -303,8 +295,13 @@ client.on('channelCreate', channel => {
       .setFooter("ID: " + channelID)
       .setTimestamp()
       .setColor('00aaff');
-    client.guilds.cache.get("826506878976000030").channels.cache.get("826876551756513314").send(channelCreateEmbed).catch(console.error);
-  }
-});*/
+    collection.findOne({ guild_id: channel.guild.id}, (error, result) => {
+      if(error) {
+        console.error;
+      }
+      botLogsChannel = result.bot_logs_id;
+      channel.guild.channels.cache.get(botLogsChannel).send(channelCreateEmbed).catch(console.error);
+    });
+});
 
 client.login(process.env.BOT_TOKEN);
