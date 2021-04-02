@@ -355,8 +355,8 @@ client.on('userUpdate', (oldUser, newUser) => {
         console.error;
       }
       botLogsChannel = result.bot_logs_id;
-      if (channel.guild.channels.cache.get(botLogsChannel)) {
-        channel.guild.channels.cache.get(botLogsChannel).send(userUpdateEmbed).catch(console.error);
+      if (client.channels.cache.get(botLogsChannel)) {
+        client.channels.cache.get(botLogsChannel).send(userUpdateEmbed).catch(console.error);
       }
     });
 });
