@@ -1,10 +1,8 @@
 #!/usr/bin/env node
 
-const csv = require('csvtojson');
 const Discord = require('discord.js');
 const MongoClient = require('mongodb').MongoClient;
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
-const { execSync } = require("child_process");
 
 var database, collection;
 const DATABASE_NAME = process.env.DATABASE_NAME;
