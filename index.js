@@ -400,7 +400,7 @@ client.on('messageReactionRemove', (messageReaction, user) => {
 });
 
 client.on('roleCreate', role => {
-    const messageReactionRemoveEmbed = new Discord.MessageEmbed()
+    const roleCreateEmbed = new Discord.MessageEmbed()
       .setTitle("Role Added")
       .addField("Name", role.name)
       .addField("Permissions", role.permissions.bitfield)
@@ -414,7 +414,47 @@ client.on('roleCreate', role => {
       }
       botLogsChannel = result.bot_logs_id;
       if (role.guild.channels.cache.get(botLogsChannel)) {
+        role.guild.channels.cache.get(botLogsChannel).send(roleCreateEmbed).catch(console.error);
+      }
+    });
+});
+
+client.on('roleDelete', role => {
+    const roleDeleteEmbed = new Discord.MessageEmbed()
+      .setTitle("Role Removed")
+      .addField("Name", role.name)
+      .addField("Permissions", role.permissions.bitfield)
+      .addField("Mentionable", role.mentionable)
+      .setFooter("Role ID: " + role.id)
+      .setTimestamp()
+      .setColor(role.color);
+    collection.findOne({ guild_id: role.guild.id}, (error, result) => {
+      if(error) {
+        console.error;
+      }
+      botLogsChannel = result.bot_logs_id;
+      if (role.guild.channels.cache.get(botLogsChannel)) {
         role.guild.channels.cache.get(botLogsChannel).send(messageReactionRemoveEmbed).catch(console.error);
+      }
+    });
+});
+
+client.on('roleUpdate', (oldRole, newRole) => {
+    const messageReactionRemoveEmbed = new Discord.MessageEmbed()
+      .setTitle("Role Added")
+      .addField("Name", `${oldRole.name} >> ${newRole.name}`)
+      .addField("Permissions", `${oldRole.permissions.bitfield} >> ${newRole.permissions.bitfield}`)
+      .addField("Mentionable", `${oldRole.mentionable} >> ${newRole.mentionable}`)
+      .setFooter("Role ID: " + newRole.id)
+      .setTimestamp()
+      .setColor(newRole.color);
+    collection.findOne({ guild_id: newRole.guild.id}, (error, result) => {
+      if(error) {
+        console.error;
+      }
+      botLogsChannel = result.bot_logs_id;
+      if (newRole.guild.channels.cache.get(botLogsChannel)) {
+        newRole.guild.channels.cache.get(botLogsChannel).send(messageReactionRemoveEmbed).catch(console.error);
       }
     });
 });
