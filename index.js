@@ -128,7 +128,22 @@ async function roleRequest(message) {
     message.reply("not a valid role!");
     return;
   }
-  if (role === "reader" && message.member.roles.cache.has(readerRole)) {
+  if (role === "reader" && message.member.roles.cache.has(readerRole.id)) {
+    message.reply("you already have that role!");
+    return;
+  }
+
+  if (role === "spectator" && message.member.roles.cache.has(specRole.id)) {
+    message.reply("you already have that role!");
+    return;
+  }
+
+  if (role === "spec" && message.member.roles.cache.has(specRole.id)) {
+    message.reply("you already have that role!");
+    return;
+  }
+
+  if (role === "writer" && message.member.roles.cache.has(writerRole.id)) {
     message.reply("you already have that role!");
     return;
   }
