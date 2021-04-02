@@ -109,7 +109,7 @@ client.on("message", async message => {
     bulkDelete(message);
   } /*else if (message.content.toLowerCase().startsWith("$rolerequest")) {
     roleRequest(message);
-  } else if (message.content.toLowerCase().startsWith("$userswithrole")) {
+  }*/ else if (message.content.toLowerCase().startsWith("$userswithrole")) {
     usersWithRole(message);
   }
 });
@@ -126,7 +126,7 @@ async function usersWithRole(message) {
     .setFooter(`Role ID: ${roles.array()[0].id}`)
     .setTimestamp();
   message.channel.send(roleEmbed);
-}
+}/*
 
 async function aboutServer(message) {
   const textChannelCount = message.guild.channels.cache.filter(c => c.type === 'text').size;
@@ -197,7 +197,7 @@ async function roleRequest(message) {
     return;
   }
   if (possibleRoles.indexOf(role) === -1) {
-    message.reply("not a valid role!");
+    message.reply("no roles found with that name!");
     return;
   }
   if (role === "reader" && message.member.roles.cache.has(readerRole.id)) {
@@ -219,7 +219,7 @@ async function roleRequest(message) {
     message.reply("you already have that role!");
     return;
   }
-  const verificationMessage = message.channel.send(`<@&826508679636844574>, <@${message.author.id}> would like the **${role}** role. Are they worthy?`);
+  const verificationMessage = message.channel.send(`<@${message.author.id}> would like the **${role}** role. Are they worthy?`);
   message.react('👍');
   message.react('👎');
   const filter = (reaction, user) => {
@@ -268,7 +268,7 @@ async function roleRequest(message) {
   await message.channel.messages.fetch( { limit: amount + 1 } ).then(messages => {
     message.channel.bulkDelete(messages).catch(console.error);
   }).catch(console.error);
-}
+}/*
 
 async function startScoring(message) {
   let scoreA = 0;
@@ -302,7 +302,7 @@ async function startScoring(message) {
         }
       });
     })
-}/*
+}
 
 client.on("guildMemberAdd", member => {
 //  const compRole = member.guild.roles.cache.get("826846965114339419");
