@@ -78,6 +78,7 @@ client.on("guildDelete", async guild => {
 
 client.on("ready", () => {
   console.log("Logged in as " + client.user.tag + "!");
+  client.user.setActivity(`for \`${prefix}help\` | Add me to your own server: adat.link/awesomemod`, { type: "WATCHING" });
 });
 
 client.on("message", async message => {
