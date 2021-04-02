@@ -243,7 +243,7 @@ client.on('messageDelete', message => {
     .setThumbnail(messageAvatar)
     .setFooter("ID: " + messageID)
     .setTimestamp()
-    .setColor('ff0000');
+    .setColor('e7778b');
 
   collection.findOne({ guild_id: message.guild.id}, (error, result) => {
     if(error) {
@@ -266,7 +266,7 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
       .setThumbnail(editedMessage.author.avatarURL())
       .setFooter("ID: " + editedMessage.id)
       .setTimestamp()
-      .setColor('006699');
+      .setColor('c9ff00');
     collection.findOne({ guild_id: message.guild.id}, (error, result) => {
       if(error) {
         console.error;
