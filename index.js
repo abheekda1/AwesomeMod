@@ -248,7 +248,9 @@ client.on('messageDelete', message => {
       console.error;
     }
     botLogsChannel = result.bot_logs_id;
-    message.guild.channels.cache.get(botLogsChannel).send(deleteEmbed).catch(console.error);
+    if (channel.guild.channels.cache.get(botLogsChannel)) {
+      channel.guild.channels.cache.get(botLogsChannel).send(deleteEmbed).catch(console.error);
+    }
   });
 });
 
@@ -270,7 +272,9 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
         console.error;
       }
       botLogsChannel = result.bot_logs_id;
-      message.guild.channels.cache.get(botLogsChannel).send(editEmbed).catch(console.error);
+      if (channel.guild.channels.cache.get(botLogsChannel)) {
+        channel.guild.channels.cache.get(botLogsChannel).send(editEmbed).catch(console.error);
+      }
     });
   }
 });
@@ -298,7 +302,9 @@ client.on('channelCreate', channel => {
         console.error;
       }
       botLogsChannel = result.bot_logs_id;
-      channel.guild.channels.cache.get(botLogsChannel).send(channelCreateEmbed).catch(console.error);
+      if (channel.guild.channels.cache.get(botLogsChannel)) {
+        channel.guild.channels.cache.get(botLogsChannel).send(channelCreateEmbed).catch(console.error);
+      }
     });
 });
 
