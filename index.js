@@ -358,7 +358,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
     const numEmoji = messageReaction.count;
     const messageContent = messageReaction.message.content;
     let channelCategory;
-    const channelCreateEmbed = new Discord.MessageEmbed()
+    const messageReactionAddEmbed = new Discord.MessageEmbed()
       .setTitle("Reaction Added")
       .addField("Message", messageContent)
       .addField("Reactions", `${userTag} reacted with ${emoji}, along with ${numEmoji} other people in #${messageReaction.message.channel.name}.`)
@@ -371,7 +371,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       }
       botLogsChannel = result.bot_logs_id;
       if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
-        messageReaction.message.guild.channels.cache.get(botLogsChannel).send(channelCreateEmbed).catch(console.error);
+        messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionAddEmbed).catch(console.error);
       }
     });
 });
