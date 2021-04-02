@@ -382,7 +382,7 @@ client.on('messageReactionRemove', (messageReaction, user) => {
     const messageContent = messageReaction.message.content;
     let channelCategory;
     const messageReactionRemoveEmbed = new Discord.MessageEmbed()
-      .setTitle("Reaction Added")
+      .setTitle("Reaction Removed")
       .addField("Message", messageContent)
       .addField("Reactions", `${userTag} removed their reaction ${emoji} in #${messageReaction.message.channel.name}.`)
       .setFooter("Message ID: " + messageReaction.message.id)
@@ -395,6 +395,30 @@ client.on('messageReactionRemove', (messageReaction, user) => {
       botLogsChannel = result.bot_logs_id;
       if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
         messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionRemoveEmbed).catch(console.error);
+      }
+    });
+});
+
+client.on('roleCreate', role => {
+    const userTag = user.tag;
+    const emoji = messageReaction.emoji.name;
+    const messageContent = messageReaction.message.content;
+    let channelCategory;
+    const messageReactionRemoveEmbed = new Discord.MessageEmbed()
+      .setTitle("Role Added")
+      .addField("Name", role.name)
+      .addField("Permissions", role.permissions)
+      .addField("Mentionable", role.mentionable)
+      .setFooter("Role ID: " + role.id)
+      .setTimestamp()
+      .setColor(role.color);
+    collection.findOne({ guild_id: role.guild.id}, (error, result) => {
+      if(error) {
+        console.error;
+      }
+      botLogsChannel = result.bot_logs_id;
+      if (role.guild.channels.cache.get(botLogsChannel)) {
+        role.guild.channels.cache.get(botLogsChannel).send(messageReactionRemoveEmbed).catch(console.error);
       }
     });
 });
