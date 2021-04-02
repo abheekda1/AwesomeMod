@@ -112,7 +112,7 @@ async function helpMessage(message) {
     .addField(`View users with role`, `${prefix}usersWithRole [role]`)
     .setThumbnail(client.user.avatarURL())
     .setFooter(`Bot ID: ${client.user.id}`)
-    .setColor("b8f2eb")
+    .setColor("00c5ff")
     .setTimestamp();
   message.channel.send(helpEmbed).catch(console.error);
 }
@@ -155,7 +155,7 @@ async function aboutServer(message) {
     .addField("User Statuses", `🟦 • ${numOnline} online\n\n🟧 • ${numAway} away\n\n⬛ • ${numOffline} offline\n\n🟥 • ${numDND} DND`)
     .setThumbnail(message.guild.iconURL())
     .setFooter(`Server ID: ${message.guild.id}`)
-    .setColor("b8f2eb")
+    .setColor("00c5ff")
     .setTimestamp();
   message.channel.send(aboutServerEmbed).catch(console.error);
 }
