@@ -128,7 +128,7 @@ async function roleRequest(message) {
     message.reply("not a valid role!");
     return;
   }
-  if (role === "reader" && message.member.hasRole(readerRole)) {
+  if (role === "reader" && message.member.roles.cache.has(readerRole)) {
     message.reply("you already have that role!");
     return;
   }
