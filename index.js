@@ -125,7 +125,8 @@ async function roleRequest(message) {
   const role = message.content.substring(13).toLowerCase();
   const possibleRoles = ['spec', 'spectator', 'reader', 'writer'];
   if (message.channel.id !== "826904255012667452") {
-    message.reply("wrong channel!")
+    message.reply("wrong channel!");
+    return;
   }
   if (possibleRoles.indexOf(role) === -1) {
     message.reply("not a valid role!");
