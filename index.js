@@ -62,10 +62,10 @@ async function aboutServer(message) {
   const numHumans = message.guild.members.cache.filter(member => !member.user.bot).size;
   const numBots = message.guild.members.cache.filter(member => member.user.bot).size;
   const numRoles = message.guild.roles.cache.size;
-  const numOnline = message.guild.members.cache.filter(member => member.user.presence.status === "online").size;
-  const numOffline = message.guild.members.cache.filter(member => member.user.presence.status === "offline").size;
-  const numAway = message.guild.members.cache.filter(member => member.user.presence.status === "idle").size;
-  const numDND = message.guild.members.cache.filter(member => member.user.presence.status === "dnd").size;
+  const numOnline = message.guild.members.cache.filter(member => member.user.presence.status === "online" && !member.user.bot).size;
+  const numOffline = message.guild.members.cache.filter(member => member.user.presence.status === "offline" && !member.user.bot).size;
+  const numAway = message.guild.members.cache.filter(member => member.user.presence.status === "idle" && !member.user.bot).size;
+  const numDND = message.guild.members.cache.filter(member => member.user.presence.status === "dnd" && !member.user.bot).size;
   const aboutServerEmbed = new Discord.MessageEmbed()
     .setTitle(`About \`${message.guild.name}\``)
     .addField("Owner", `<@${message.guild.ownerID}>`)
@@ -214,12 +214,12 @@ async function startScoring(message) {
 }
 
 client.on("guildMemberAdd", member => {
-  const compRole = member.guild.roles.cache.get("826846965114339419");
+//  const compRole = member.guild.roles.cache.get("826846965114339419");
   const botRole = member.guild.roles.cache.get("826871012724441158");
   if (member.bot) {
     member.roles.add(botRole).catch(console.error);
-  } else {
-    member.roles.add(compRole).catch(console.error);
+  /*} else {
+    member.roles.add(compRole).catch(console.error);*/
   }
 });
 
