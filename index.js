@@ -362,7 +362,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       .setTitle("Reaction Added")
       .addField("Message", messageContent)
       .addField("Reactions", `${userTag} reacted with ${emoji}, along with ${numEmoji - 1} other people in ${messageReaction.message.channel.name}.`)
-      .setFooter("ID: " + channelID)
+      .setFooter("Emoji ID: " + messageReaction.emoji.id)
       .setTimestamp()
       .setColor('00aaff');
     collection.findOne({ guild_id: messageReaction.message.guild.id}, (error, result) => {
