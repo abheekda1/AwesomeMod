@@ -362,7 +362,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       .setTitle("Reaction Added")
       .addField("Message", messageContent)
       .addField("Reactions", `${userTag} reacted with ${emoji}, along with ${numEmoji} other people in #${messageReaction.message.channel.name}.`)
-      .setFooter("Emoji ID: " + messageReaction.emoji.id)
+      .setFooter("Message ID: " + messageReaction.message.id)
       .setTimestamp()
       .setColor('00aaff');
     collection.findOne({ guild_id: messageReaction.message.guild.id}, (error, result) => {
@@ -385,7 +385,7 @@ client.on('messageReactionRemove', (messageReaction, user) => {
       .setTitle("Reaction Added")
       .addField("Message", messageContent)
       .addField("Reactions", `${userTag} removed their reaction ${emoji} in #${messageReaction.message.channel.name}.`)
-      .setFooter("Emoji ID: " + messageReaction.emoji.id)
+      .setFooter("Message ID: " + messageReaction.message.id)
       .setTimestamp()
       .setColor('00aaff');
     collection.findOne({ guild_id: messageReaction.message.guild.id}, (error, result) => {
