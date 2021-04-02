@@ -90,9 +90,9 @@ client.on("message", async message => {
 
   if (message.content.toLowerCase().startsWith("$bulkdelete")) {
     bulkDelete(message);
-  } /*else if (message.content.toLowerCase().startsWith("$rolerequest")) {
+  } else if (message.content.toLowerCase().startsWith("$rolerequest")) {
     roleRequest(message);
-  }*/ else if (message.content.toLowerCase().startsWith("$userswithrole")) {
+  } else if (message.content.toLowerCase().startsWith("$userswithrole")) {
     usersWithRole(message);
   }
 });
@@ -103,10 +103,11 @@ async function usersWithRole(message) {
     return;
   }
   const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1]));
+  const role = roles.array()[0];
   const roleEmbed = new Discord.MessageEmbed()
-    .setTitle(`${roles.array()[0].members.array().length} user(s) with the role \`${roles.array()[0].name}\`:`)
+    .setTitle(`${role.members.array().length} user(s) with the role \`${role.name}\`:`)
     .setDescription(" • " + roles.array()[0].members.map(m => m.user.tag).join('\n\n • '))
-    .setFooter(`Role ID: ${roles.array()[0].id}`)
+    .setFooter(`Role ID: ${role.id}`)
     .setTimestamp();
   message.channel.send(roleEmbed);
 }
@@ -136,97 +137,64 @@ async function aboutServer(message) {
     .setFooter(`Server ID: ${message.guild.id}`)
     .setTimestamp();
   message.channel.send(aboutServerEmbed).catch(console.error);
-}/*
-
-async function addRoles(user, message) {
-    const noviceRole = message.guild.roles.cache.get("827220856983519232");
-    const advancedRole = message.guild.roles.cache.get("827220906908450826");
-    const compRole = message.guild.roles.cache.get("826846965114339419");
-    const botRole = message.guild.roles.cache.get("826871012724441158");
-    console.log(user['What is your discord tag? (Ex: foodboi#9161)']);
-    if (client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)'])) {
-    if (!message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.cache.has(compRole.id)) {
-        message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.add(compRole).catch(console.error);
-        message.channel.send(`Adding "Competitor" role for: \`${user['What is your discord tag? (Ex: foodboi#9161)']}\``).catch(console.error);
-    }
-    if (user['Are you playing in the Novice or Advanced division?'] === "Novice") {
-        if (message.guild.members.cache.get(message.author.id).hasPermission("ADMINISTRATOR")) {
-            if (!message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.cache.has(noviceRole.id)) {
-                message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.add(noviceRole).catch(console.error);
-                message.channel.send(`Adding "Novice" role for: \`${user['What is your discord tag? (Ex: foodboi#9161)']}\``).catch(console.error);
-            }
-        }
-    }
-
-    if (user['Are you playing in the Novice or Advanced division?'] === "Advanced") {
-        if (message.guild.members.cache.get(message.author.id).hasPermission("ADMINISTRATOR")) {
-            if (!message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.cache.has(advancedRole.id)) {
-                message.guild.members.cache.get(client.users.cache.find(u => u.tag === user['What is your discord tag? (Ex: foodboi#9161)']).id).roles.add(advancedRole).catch(console.error);
-                message.channel.send(`Adding "Advanced" role for: \`${user['What is your discord tag? (Ex: foodboi#9161)']}\``).catch(console.error);
-            }
-        }
-    }
-    }
 }
 
 async function roleRequest(message) {
-  const readerRole = message.guild.roles.cache.get("826840765526835240");
-  const specRole = message.guild.roles.cache.get("826849213954523216");
-  const writerRole = message.guild.roles.cache.get("826508727855087723");
-  const role = message.content.substring(13).toLowerCase();
-  const possibleRoles = ['spec', 'spectator', 'reader', 'writer'];
-  if (message.channel.id !== "826904255012667452") {
-    message.reply("wrong channel!");
+  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1]));
+  let roleChannel;
+
+  if (!message.content.split(" ")[1]) {
+    message.reply("query must contain at least 3 characters!")
     return;
   }
-  if (possibleRoles.indexOf(role) === -1) {
+
+  if (message.content.split(" ")[1].length < 3) {
+    message.reply("query must contain at least 3 characters!")
+    return;
+  }
+
+  if (roles.array().length < 1) {
     message.reply("no roles found with that name!");
     return;
   }
-  if (role === "reader" && message.member.roles.cache.has(readerRole.id)) {
+
+  const role = roles.array()[0];
+
+  if (message.member.roles.cache.has(role.id)) {
     message.reply("you already have that role!");
     return;
   }
 
-  if (role === "spectator" && message.member.roles.cache.has(specRole.id)) {
-    message.reply("you already have that role!");
-    return;
-  }
-
-  if (role === "spec" && message.member.roles.cache.has(specRole.id)) {
-    message.reply("you already have that role!");
-    return;
-  }
-
-  if (role === "writer" && message.member.roles.cache.has(writerRole.id)) {
-    message.reply("you already have that role!");
-    return;
-  }
-  const verificationMessage = message.channel.send(`<@${message.author.id}> would like the **${role}** role. Are they worthy?`);
-  message.react('👍');
-  message.react('👎');
-  const filter = (reaction, user) => {
-    return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
-  };
-  message.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
-    .then(userReaction => {
-      const reaction = userReaction.first();
-      if (reaction.emoji.name === '👍') {
-        message.reply("wow I guess you ARE worthy! ||mods must be real mistaken||");
-        if (role === 'reader') {
-          message.member.roles.add(readerRole).catch(console.error);
-        } else if (role === 'writer') {
-          message.member.roles.add(writerRole).catch(console.error);
-        } else if (role === 'spectator' || role === 'spec') {
-          message.member.roles.add(specRole).catch(console.error);
-        }
-      } else {
-        message.reply("I guess you won't be getting that role!");
+  collection.findOne({ guild_id: message.guild.id}, (error, result) => {
+      if(error) {
+        console.error;
       }
-    }).catch("Role reaction timeout, I guess the mods don't really care about you and forgot.");
+      roleChannel = result.role_requests_id;
+      if (message.channel.id !== roleChannel) {
+        message.reply("wrong channel!");
+        return;
+      }
+
+      const verificationMessage = message.channel.send(`<@${message.author.id}> would like the **${role}** role. Are they worthy?`);
+      message.react('👍');
+      message.react('👎');
+      const filter = (reaction, user) => {
+        return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+      };
+      message.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
+        .then(userReaction => {
+          const reaction = userReaction.first();
+          if (reaction.emoji.name === '👍') {
+            message.reply("wow I guess you ARE worthy! ||mods must be real mistaken||");
+            message.member.roles.add(role).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
+          } else {
+            message.reply("I guess you won't be getting that role!");
+          }
+        }).catch("Role reaction timeout, I guess the mods don't really care about you and forgot.");
+  });
 }
 
-*/async function bulkDelete(message) {
+async function bulkDelete(message) {
   if (!message.member.hasPermission('ADMINISTRATOR')) {
     message.reply("you do not have high enough permissions!");
     return;
@@ -252,40 +220,6 @@ async function roleRequest(message) {
     message.channel.bulkDelete(messages).catch(console.error);
   }).catch(console.error);
 }/*
-
-async function startScoring(message) {
-  let scoreA = 0;
-  let scoreB = 0;
-  const scoreboard = await message.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`)
-    .then((scoreboard) => {
-      const filter = m => m.content.includes('$score');
-      const collector = message.channel.createMessageCollector(filter, { time: 1500000 });
-      collector.on('collect', m => {
-        if (m.content.toLowerCase() === "$score a+4") {
-          //m.delete({ timeout: 1000 }).catch(console.error);
-          scoreA += 4;
-          scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`).catch(console.error);
-        } else if (m.content.toLowerCase() === "$score a+10") {
-          //m.delete({ timeout: 1000 }).catch(console.error);
-          scoreA += 10;
-          scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`).catch(console.error);
-        } else if (m.content.toLowerCase() === "$score b+4") {
-          m.delete({ timeout: 1000 }).catch(console.error);
-          scoreB += 4;
-          scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`).catch(console.error);
-        } else if (m.content.toLowerCase() === "$score b+10") {
-          //m.delete({ timeout: 1000 }).catch(console.error);
-          scoreB += 10;
-          scoreboard.channel.send(`Here's the score:\nTeam A: ${scoreA}\nTeam B: ${scoreB}`).catch(console.error);
-        } else if (m.content === "$score finish") {
-          //m.delete({ timeout: 1000 }).catch(console.error);
-          //scoreboard.delete({ timeout: 1000 });
-          m.channel.send(`**FINAL SCORE:**\nTeam A: ${scoreA}\nTeam B: ${scoreB}`).catch(console.error);
-          collector.stop();
-        }
-      });
-    })
-}
 
 client.on("guildMemberAdd", member => {
 //  const compRole = member.guild.roles.cache.get("826846965114339419");
