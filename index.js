@@ -132,7 +132,7 @@ async function roleRequest(message) {
   message.react('👍');
   message.react('👎');
   const filter = (reaction, user) => {
-    return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR');
+    return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !message.author.bot;
   };
   message.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
     .then(userReaction => {
