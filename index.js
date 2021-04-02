@@ -81,8 +81,8 @@ client.on("ready", () => {
   console.log("Logged in as " + client.user.tag + "!");
 });
 
-/*client.on("message", async message => {
-  switch (message.content.toLowerCase()) {
+client.on("message", async message => {
+/*  switch (message.content.toLowerCase()) {
     case '$score':
       startScoring(message);
       break;
@@ -103,10 +103,11 @@ client.on("ready", () => {
     case '$aboutserver':
       aboutServer(message);
       break;
-  }
+  }*/
+
   if (message.content.toLowerCase().startsWith("$bulkdelete")) {
     bulkDelete(message);
-  } else if (message.content.toLowerCase().startsWith("$rolerequest")) {
+  } /*else if (message.content.toLowerCase().startsWith("$rolerequest")) {
     roleRequest(message);
   } else if (message.content.toLowerCase().startsWith("$userswithrole")) {
     usersWithRole(message);
@@ -185,11 +186,6 @@ async function addRoles(user, message) {
     }
 }
 
-async function memberCount(message) {
-  const memberCount = message.guild.memberCount;
-  message.channel.send(`Member count: ${memberCount}`);
-}
-
 async function roleRequest(message) {
   const readerRole = message.guild.roles.cache.get("826840765526835240");
   const specRole = message.guild.roles.cache.get("826849213954523216");
@@ -247,9 +243,9 @@ async function roleRequest(message) {
     }).catch("Role reaction timeout, I guess the mods don't really care about you and forgot.");
 }
 
-async function bulkDelete(message) {
+*/async function bulkDelete(message) {
   if (!message.member.hasPermission('ADMINISTRATOR')) {
-    message.reply("you do not have permissions!");
+    message.reply("you do not have high enough permissions!");
     return;
   }
   const amount = parseInt(message.content.substring(12));
@@ -306,7 +302,7 @@ async function startScoring(message) {
         }
       });
     })
-}
+}/*
 
 client.on("guildMemberAdd", member => {
 //  const compRole = member.guild.roles.cache.get("826846965114339419");
