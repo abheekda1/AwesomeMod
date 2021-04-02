@@ -103,12 +103,16 @@ client.on("message", async message => {
 async function helpMessage(message) {
   const helpEmbed = new Discord.MessageEmbed()
     .setTitle(`Helping \`${message.author.tag}\``)
+    .setURL('https://adat.link/awesomemod')
+    .addField(`Creator`, `ADawesomeguy#2235`)
     .addField(`Prefix`, prefix)
     .addField(`Using the bot`, "Once <@780562707254083584> joins the server, it will create a category called `Awesome Mod` and two channels within it. One is for regular members to request roles (called `#role-requests`) and the other is for bot logs (`#bot-logs`). These can be renamed and moved around but should not be deleted. <@780562707254083584> also comes with a ton of handy commands to analyze and manage your server.")
     .addField(`Bulk delete command`, `${prefix}bulkDelete`)
     .addField(`Role request command`, `${prefix}roleRequest [role]`)
     .addField(`View users with role`, `${prefix}usersWithRole [role]`)
+    .setThumbnail(client.user.avatarURL())
     .setFooter(`Bot ID: ${client.user.id}`)
+    .setColor("b8f2eb")
     .setTimestamp();
   message.channel.send(helpEmbed).catch(console.error);
 }
@@ -151,6 +155,7 @@ async function aboutServer(message) {
     .addField("User Statuses", `🟦 • ${numOnline} online\n\n🟧 • ${numAway} away\n\n⬛ • ${numOffline} offline\n\n🟥 • ${numDND} DND`)
     .setThumbnail(message.guild.iconURL())
     .setFooter(`Server ID: ${message.guild.id}`)
+    .setColor("b8f2eb")
     .setTimestamp();
   message.channel.send(aboutServerEmbed).catch(console.error);
 }
