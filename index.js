@@ -403,7 +403,7 @@ client.on('roleCreate', role => {
     const messageReactionRemoveEmbed = new Discord.MessageEmbed()
       .setTitle("Role Added")
       .addField("Name", role.name)
-      .addField("Permissions", role.permissions.toArray())
+      .addField("Permissions", role.permissions.bitfield)
       .addField("Mentionable", role.mentionable)
       .setFooter("Role ID: " + role.id)
       .setTimestamp()
