@@ -376,6 +376,29 @@ client.on('messageReactionAdd', (messageReaction, user) => {
     });
 });
 
+client.on('messageReactionRemove', (messageReaction, user) => {
+    const userTag = user.tag;
+    const emoji = messageReaction.emoji.name;
+    const messageContent = messageReaction.message.content;
+    let channelCategory;
+    const messageReactionRemoveEmbed = new Discord.MessageEmbed()
+      .setTitle("Reaction Added")
+      .addField("Message", messageContent)
+      .addField("Reactions", `${userTag} removed their reaction ${emoji} in #${messageReaction.message.channel.name}.`)
+      .setFooter("Emoji ID: " + messageReaction.emoji.id)
+      .setTimestamp()
+      .setColor('00aaff');
+    collection.findOne({ guild_id: messageReaction.message.guild.id}, (error, result) => {
+      if(error) {
+        console.error;
+      }
+      botLogsChannel = result.bot_logs_id;
+      if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
+        messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionRemoveEmbed).catch(console.error);
+      }
+    });
+});
+
 /*client.on('userUpdate', (oldUser, newUser) => {
   if (oldUser.bot) {
     return;
