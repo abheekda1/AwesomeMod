@@ -10,20 +10,20 @@ const CONNECTION_URL = "localhost:27017";
 const prefix = '$';
 
 MongoClient.connect("mongodb://" + CONNECTION_URL, { useNewUrlParser: true }, (error, client) => {
-    if(error) {
-        throw error;
-    }
-    database = client.db(DATABASE_NAME);
-    collection = database.collection("awesome_mod");
-    console.log("Connected to `" + DATABASE_NAME + "`!");
+  if (error) {
+    throw error;
+  }
+  database = client.db(DATABASE_NAME);
+  collection = database.collection("awesome_mod");
+  console.log("Connected to `" + DATABASE_NAME + "`!");
 });
 
 client.on("guildCreate", async guild => {
   let awesomeModCatID, botLogID, roleReqID;
   collection.insertOne({ guild_id: guild.id }, (error, result) => {
-      if(error) {
-        console.error;
-      }
+    if (error) {
+      console.error;
+    }
   });
   // Create "Awesome Mod" category for other channels to reside in
   guild.channels.create('Awesome Mod', {
@@ -35,44 +35,45 @@ client.on("guildCreate", async guild => {
       deny: ['VIEW_CHANNEL'],
     }]
   })
-  .then(channel => {
-    // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
-    guild.channels.create('bot-logs', {
-      type: 'text',
-      parent: channel.id,
-      // Remove view permissions from "@everyone"
-      permissionOverwrites: [{
-        id: guild.id,
-        deny: ['VIEW_CHANNEL'],
-      }]
-    }).then(channel => {
-      // Add the ID of the "#bot-logs" channel to the database
-      collection.updateOne({ guild_id: guild.id }, { $set: { "bot_logs_id": `${channel.id}` }});
-    });
-    // Create "#role-requests" text channel to have people request roles
-    guild.channels.create('role-requests', {
-      type: 'text',
-      parent: channel.id,
-      // Remove view permissions from "@everyone"
-      permissionOverwrites: [{
-        id: guild.id,
-        allow: ['VIEW_CHANNEL'],
-      }]
-    }).then(channel => {
-      // Add the ID of the "#bot-logs" channel to the database
-      collection.updateOne({ guild_id: guild.id }, { $set: { "role_requests_id": `${channel.id}` }});
-      // Add slowmode
-      channel.setRateLimitPerUser(60);
-    });
+    .then(channel => {
+      // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
+      guild.channels.create('bot-logs', {
+        type: 'text',
+        parent: channel.id,
+        // Remove view permissions from "@everyone"
+        permissionOverwrites: [{
+          id: guild.id,
+          deny: ['VIEW_CHANNEL'],
+        }]
+      }).then(channel => {
+        // Add the ID of the "#bot-logs" channel to the database
+        collection.updateOne({ guild_id: guild.id }, { $set: { "bot_logs_id": `${channel.id}` } });
+      });
+      // Create "#role-requests" text channel to have people request roles
+      guild.channels.create('role-requests', {
+        type: 'text',
+        parent: channel.id,
+        // Remove view permissions from "@everyone"
+        permissionOverwrites: [{
+          id: guild.id,
+          allow: ['VIEW_CHANNEL'],
+        }]
+      }).then(channel => {
+        // Add the ID of the "#bot-logs" channel to the database
+        collection.updateOne({ guild_id: guild.id }, { $set: { "role_requests_id": `${channel.id}` } });
+        // Add slowmode
+        channel.setRateLimitPerUser(60);
+      });
 
-  });
+    });
 });
 
 client.on("guildDelete", async guild => {
+  // If the bot is removed from a guild or the guild is deleted, the bot deletes the old data
   collection.deleteOne({ "guild_id": `${guild.id}` }, (error, result) => {
-      if(error) {
-        console.error;
-      }
+    if (error) {
+      console.error;
+    }
   });
 });
 
@@ -186,32 +187,32 @@ async function roleRequest(message) {
     return;
   }
 
-  collection.findOne({ guild_id: message.guild.id}, (error, result) => {
-      if(error) {
-        console.error;
-      }
-      roleChannel = result.role_requests_id;
-      if (message.channel.id !== roleChannel) {
-        message.reply(`wrong channel! Roles can only be requested in <#${roleChannel}>.`);
-        return;
-      }
+  collection.findOne({ guild_id: message.guild.id }, (error, result) => {
+    if (error) {
+      console.error;
+    }
+    roleChannel = result.role_requests_id;
+    if (message.channel.id !== roleChannel) {
+      message.reply(`wrong channel! Roles can only be requested in <#${roleChannel}>.`);
+      return;
+    }
 
-      const verificationMessage = message.channel.send(`<@${message.author.id}> would like the **${role}** role. Are they worthy?`);
-      message.react('👍');
-      message.react('👎');
-      const filter = (reaction, user) => {
-        return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
-      };
-      message.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
-        .then(userReaction => {
-          const reaction = userReaction.first();
-          if (reaction.emoji.name === '👍') {
-            message.reply("wow I guess you ARE worthy! ||mods must be real mistaken||");
-            message.member.roles.add(role).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
-          } else {
-            message.reply("I guess you won't be getting that role!");
-          }
-        }).catch("Role reaction timeout, I guess the mods don't really care about you and forgot.");
+    const verificationMessage = message.channel.send(`<@${message.author.id}> would like the **${role}** role. Are they worthy?`);
+    message.react('👍');
+    message.react('👎');
+    const filter = (reaction, user) => {
+      return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+    };
+    message.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
+      .then(userReaction => {
+        const reaction = userReaction.first();
+        if (reaction.emoji.name === '👍') {
+          message.reply("wow I guess you ARE worthy! ||mods must be real mistaken||");
+          message.member.roles.add(role).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
+        } else {
+          message.reply("I guess you won't be getting that role!");
+        }
+      }).catch("Role reaction timeout, I guess the mods don't really care about you and forgot.");
   });
 }
 
@@ -237,7 +238,7 @@ async function bulkDelete(message) {
     return;
   }
 
-  await message.channel.messages.fetch( { limit: amount + 1 } ).then(messages => {
+  await message.channel.messages.fetch({ limit: amount + 1 }).then(messages => {
     message.channel.bulkDelete(messages).catch(console.error);
   }).catch(console.error);
 }
@@ -266,8 +267,8 @@ client.on('messageDelete', message => {
     .setTimestamp()
     .setColor('e7778b');
 
-  collection.findOne({ guild_id: message.guild.id}, (error, result) => {
-    if(error) {
+  collection.findOne({ guild_id: message.guild.id }, (error, result) => {
+    if (error) {
       console.error;
     }
     botLogsChannel = result.bot_logs_id;
@@ -287,8 +288,8 @@ client.on('messageDeleteBulk', messages => {
     .setTimestamp()
     .setColor('e7778b');
 
-  collection.findOne({ guild_id: messagesChannel.guild.id}, (error, result) => {
-    if(error) {
+  collection.findOne({ guild_id: messagesChannel.guild.id }, (error, result) => {
+    if (error) {
       console.error;
     }
     botLogsChannel = result.bot_logs_id;
@@ -311,8 +312,8 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
       .setFooter("ID: " + editedMessage.id)
       .setTimestamp()
       .setColor('c9ff00');
-    collection.findOne({ guild_id: message.guild.id}, (error, result) => {
-      if(error) {
+    collection.findOne({ guild_id: message.guild.id }, (error, result) => {
+      if (error) {
         console.error;
       }
       botLogsChannel = result.bot_logs_id;
@@ -324,139 +325,139 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
 });
 
 client.on('channelCreate', channel => {
-    const channelName = channel.name;
-    const channelID = channel.id;
-    const channelType = channel.type;
-    let channelCategory;
-    if (channel.parent) {
-      channelCategory = channel.parent.name;
-    } else {
-      channelCategory = "None";
+  const channelName = channel.name;
+  const channelID = channel.id;
+  const channelType = channel.type;
+  let channelCategory;
+  if (channel.parent) {
+    channelCategory = channel.parent.name;
+  } else {
+    channelCategory = "None";
+  }
+  const channelCreateEmbed = new Discord.MessageEmbed()
+    .setTitle("Channel Created")
+    .addField("Name", channelName)
+    .addField("Type", channelType)
+    .addField("Category", channelCategory)
+    .setFooter("ID: " + channelID)
+    .setTimestamp()
+    .setColor('00aaff');
+  collection.findOne({ guild_id: channel.guild.id }, (error, result) => {
+    if (error) {
+      console.error;
     }
-    const channelCreateEmbed = new Discord.MessageEmbed()
-      .setTitle("Channel Created")
-      .addField("Name", channelName)
-      .addField("Type", channelType)
-      .addField("Category", channelCategory)
-      .setFooter("ID: " + channelID)
-      .setTimestamp()
-      .setColor('00aaff');
-    collection.findOne({ guild_id: channel.guild.id}, (error, result) => {
-      if(error) {
-        console.error;
-      }
-      botLogsChannel = result.bot_logs_id;
-      if (channel.guild.channels.cache.get(botLogsChannel)) {
-        channel.guild.channels.cache.get(botLogsChannel).send(channelCreateEmbed).catch(console.error);
-      }
-    });
+    botLogsChannel = result.bot_logs_id;
+    if (channel.guild.channels.cache.get(botLogsChannel)) {
+      channel.guild.channels.cache.get(botLogsChannel).send(channelCreateEmbed).catch(console.error);
+    }
+  });
 });
 
 client.on('messageReactionAdd', (messageReaction, user) => {
-    const userTag = user.tag;
-    const emoji = messageReaction.emoji.name;
-    const numEmoji = messageReaction.count;
-    const messageContent = messageReaction.message.content;
-    let channelCategory;
-    const messageReactionAddEmbed = new Discord.MessageEmbed()
-      .setTitle("Reaction Added")
-      .addField("Message", messageContent)
-      .addField("Reactions", `${userTag} reacted with ${emoji}, along with ${numEmoji} other people in #${messageReaction.message.channel.name}.`)
-      .setFooter("Message ID: " + messageReaction.message.id)
-      .setTimestamp()
-      .setColor('00aaff');
-    collection.findOne({ guild_id: messageReaction.message.guild.id}, (error, result) => {
-      if(error) {
-        console.error;
-      }
-      botLogsChannel = result.bot_logs_id;
-      if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
-        messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionAddEmbed).catch(console.error);
-      }
-    });
+  const userTag = user.tag;
+  const emoji = messageReaction.emoji.name;
+  const numEmoji = messageReaction.count;
+  const messageContent = messageReaction.message.content;
+  let channelCategory;
+  const messageReactionAddEmbed = new Discord.MessageEmbed()
+    .setTitle("Reaction Added")
+    .addField("Message", messageContent)
+    .addField("Reactions", `${userTag} reacted with ${emoji}, along with ${numEmoji} other people in #${messageReaction.message.channel.name}.`)
+    .setFooter("Message ID: " + messageReaction.message.id)
+    .setTimestamp()
+    .setColor('00aaff');
+  collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
+    if (error) {
+      console.error;
+    }
+    botLogsChannel = result.bot_logs_id;
+    if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
+      messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionAddEmbed).catch(console.error);
+    }
+  });
 });
 
 client.on('messageReactionRemove', (messageReaction, user) => {
-    const userTag = user.tag;
-    const emoji = messageReaction.emoji.name;
-    const messageContent = messageReaction.message.content;
-    let channelCategory;
-    const messageReactionRemoveEmbed = new Discord.MessageEmbed()
-      .setTitle("Reaction Removed")
-      .addField("Message", messageContent)
-      .addField("Reactions", `${userTag} removed their reaction ${emoji} in #${messageReaction.message.channel.name}.`)
-      .setFooter("Message ID: " + messageReaction.message.id)
-      .setTimestamp()
-      .setColor('e7778b');
-    collection.findOne({ guild_id: messageReaction.message.guild.id}, (error, result) => {
-      if(error) {
-        console.error;
-      }
-      botLogsChannel = result.bot_logs_id;
-      if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
-        messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionRemoveEmbed).catch(console.error);
-      }
-    });
+  const userTag = user.tag;
+  const emoji = messageReaction.emoji.name;
+  const messageContent = messageReaction.message.content;
+  let channelCategory;
+  const messageReactionRemoveEmbed = new Discord.MessageEmbed()
+    .setTitle("Reaction Removed")
+    .addField("Message", messageContent)
+    .addField("Reactions", `${userTag} removed their reaction ${emoji} in #${messageReaction.message.channel.name}.`)
+    .setFooter("Message ID: " + messageReaction.message.id)
+    .setTimestamp()
+    .setColor('e7778b');
+  collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
+    if (error) {
+      console.error;
+    }
+    botLogsChannel = result.bot_logs_id;
+    if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
+      messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionRemoveEmbed).catch(console.error);
+    }
+  });
 });
 
 client.on('roleCreate', role => {
-    const roleCreateEmbed = new Discord.MessageEmbed()
-      .setTitle("Role Added")
-      .addField("Name", role.name)
-      .addField("Permissions", role.permissions.bitfield)
-      .addField("Mentionable", role.mentionable)
-      .setFooter("Role ID: " + role.id)
-      .setTimestamp()
-      .setColor('00aaff');
-    collection.findOne({ guild_id: role.guild.id}, (error, result) => {
-      if(error) {
-        console.error;
-      }
-      botLogsChannel = result.bot_logs_id;
-      if (role.guild.channels.cache.get(botLogsChannel)) {
-        role.guild.channels.cache.get(botLogsChannel).send(roleCreateEmbed).catch(console.error);
-      }
-    });
+  const roleCreateEmbed = new Discord.MessageEmbed()
+    .setTitle("Role Added")
+    .addField("Name", role.name)
+    .addField("Permissions", role.permissions.bitfield)
+    .addField("Mentionable", role.mentionable)
+    .setFooter("Role ID: " + role.id)
+    .setTimestamp()
+    .setColor('00aaff');
+  collection.findOne({ guild_id: role.guild.id }, (error, result) => {
+    if (error) {
+      console.error;
+    }
+    botLogsChannel = result.bot_logs_id;
+    if (role.guild.channels.cache.get(botLogsChannel)) {
+      role.guild.channels.cache.get(botLogsChannel).send(roleCreateEmbed).catch(console.error);
+    }
+  });
 });
 
 client.on('roleDelete', role => {
-    const roleDeleteEmbed = new Discord.MessageEmbed()
-      .setTitle("Role Removed")
-      .addField("Name", role.name)
-      .addField("Permissions", role.permissions.bitfield)
-      .addField("Mentionable", role.mentionable)
-      .setFooter("Role ID: " + role.id)
-      .setTimestamp()
-      .setColor('e7778b');
-    collection.findOne({ guild_id: role.guild.id}, (error, result) => {
-      if(error) {
-        console.error;
-      }
-      botLogsChannel = result.bot_logs_id;
-      if (role.guild.channels.cache.get(botLogsChannel)) {
-        role.guild.channels.cache.get(botLogsChannel).send(roleDeleteEmbed).catch(console.error);
-      }
-    });
+  const roleDeleteEmbed = new Discord.MessageEmbed()
+    .setTitle("Role Removed")
+    .addField("Name", role.name)
+    .addField("Permissions", role.permissions.bitfield)
+    .addField("Mentionable", role.mentionable)
+    .setFooter("Role ID: " + role.id)
+    .setTimestamp()
+    .setColor('e7778b');
+  collection.findOne({ guild_id: role.guild.id }, (error, result) => {
+    if (error) {
+      console.error;
+    }
+    botLogsChannel = result.bot_logs_id;
+    if (role.guild.channels.cache.get(botLogsChannel)) {
+      role.guild.channels.cache.get(botLogsChannel).send(roleDeleteEmbed).catch(console.error);
+    }
+  });
 });
 
 client.on('roleUpdate', (oldRole, newRole) => {
-    const roleUpdateEmbed = new Discord.MessageEmbed()
-      .setTitle("Role Updated")
-      .addField("Name", `${oldRole.name} >> ${newRole.name}`)
-      .addField("Permissions", `${oldRole.permissions.bitfield} >> ${newRole.permissions.bitfield}`)
-      .addField("Mentionable", `${oldRole.mentionable} >> ${newRole.mentionable}`)
-      .setFooter("Role ID: " + newRole.id)
-      .setTimestamp()
-      .setColor('c9ff00');
-    collection.findOne({ guild_id: newRole.guild.id}, (error, result) => {
-      if(error) {
-        console.error;
-      }
-      botLogsChannel = result.bot_logs_id;
-      if (newRole.guild.channels.cache.get(botLogsChannel)) {
-        newRole.guild.channels.cache.get(botLogsChannel).send(roleUpdateEmbed).catch(console.error);
-      }
-    });
+  const roleUpdateEmbed = new Discord.MessageEmbed()
+    .setTitle("Role Updated")
+    .addField("Name", `${oldRole.name} >> ${newRole.name}`)
+    .addField("Permissions", `${oldRole.permissions.bitfield} >> ${newRole.permissions.bitfield}`)
+    .addField("Mentionable", `${oldRole.mentionable} >> ${newRole.mentionable}`)
+    .setFooter("Role ID: " + newRole.id)
+    .setTimestamp()
+    .setColor('c9ff00');
+  collection.findOne({ guild_id: newRole.guild.id }, (error, result) => {
+    if (error) {
+      console.error;
+    }
+    botLogsChannel = result.bot_logs_id;
+    if (newRole.guild.channels.cache.get(botLogsChannel)) {
+      newRole.guild.channels.cache.get(botLogsChannel).send(roleUpdateEmbed).catch(console.error);
+    }
+  });
 });
 
 /*client.on('userUpdate', (oldUser, newUser) => {
