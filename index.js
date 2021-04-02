@@ -121,7 +121,7 @@ async function usersWithRole(message) {
   }
   const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1]));
   const roleEmbed = new Discord.MessageEmbed()
-    .setTitle(`${roles.array()[0].members.array().length} users with the role \`${roles.array()[0].name}\`:`)
+    .setTitle(`${roles.array()[0].members.array().length} user(s) with the role \`${roles.array()[0].name}\`:`)
     .setDescription(" • " + roles.array()[0].members.map(m => m.user.tag).join('\n\n • '))
     .setFooter(`Role ID: ${roles.array()[0].id}`)
     .setTimestamp();
