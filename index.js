@@ -387,7 +387,7 @@ client.on('messageReactionRemove', (messageReaction, user) => {
       .addField("Reactions", `${userTag} removed their reaction ${emoji} in #${messageReaction.message.channel.name}.`)
       .setFooter("Message ID: " + messageReaction.message.id)
       .setTimestamp()
-      .setColor('00aaff');
+      .setColor('e7778b');
     collection.findOne({ guild_id: messageReaction.message.guild.id}, (error, result) => {
       if(error) {
         console.error;
@@ -407,7 +407,7 @@ client.on('roleCreate', role => {
       .addField("Mentionable", role.mentionable)
       .setFooter("Role ID: " + role.id)
       .setTimestamp()
-      .setColor(role.color);
+      .setColor('00aaff');
     collection.findOne({ guild_id: role.guild.id}, (error, result) => {
       if(error) {
         console.error;
@@ -427,7 +427,7 @@ client.on('roleDelete', role => {
       .addField("Mentionable", role.mentionable)
       .setFooter("Role ID: " + role.id)
       .setTimestamp()
-      .setColor(role.color);
+      .setColor('e7778b');
     collection.findOne({ guild_id: role.guild.id}, (error, result) => {
       if(error) {
         console.error;
@@ -447,7 +447,7 @@ client.on('roleUpdate', (oldRole, newRole) => {
       .addField("Mentionable", `${oldRole.mentionable} >> ${newRole.mentionable}`)
       .setFooter("Role ID: " + newRole.id)
       .setTimestamp()
-      .setColor(newRole.color);
+      .setColor('c9ff00');
     collection.findOne({ guild_id: newRole.guild.id}, (error, result) => {
       if(error) {
         console.error;
