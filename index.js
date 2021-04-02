@@ -128,6 +128,10 @@ async function roleRequest(message) {
     message.reply("not a valid role!");
     return;
   }
+  if (role === "reader" && message.member.hasRole(readerRole)) {
+    message.reply("you already have that role!");
+    return;
+  }
   const verificationMessage = message.channel.send(`<@&826508679636844574>, <@${message.author.id}> would like the **${role}** role. Are they worthy?`);
   message.react('👍');
   message.react('👎');
