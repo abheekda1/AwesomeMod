@@ -352,7 +352,7 @@ client.on('channelCreate', channel => {
     });
 });
 
-client.on('messageReactionAdd', messageReaction, user => {
+client.on('messageReactionAdd', (messageReaction, user) => {
     const userTag = user.tag;
     const emoji = messageReaction.emoji.name;
     const numEmoji = messageReaction.emoji.count;
