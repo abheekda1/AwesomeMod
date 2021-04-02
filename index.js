@@ -241,9 +241,15 @@ client.on("guildMemberAdd", member => {
   const botRole = member.guild.roles.cache.get("826871012724441158");
   if (member.bot) {
     member.roles.add(botRole).catch(console.error);
-  } /*else {
-    member.roles.add(compRole).catch(console.error);
-  }*/
+  } else {
+    //member.roles.add(compRole).catch(console.error);
+    const welcomeDM = new Discord.MessageEmbed()
+      .setTitle(`Welcome to ${member.guild.name}!`)
+      .setDescription("Please take a look at <#826510368620413018> for information about roles and registration!")
+      .setFooter(`Guild ID: ${member.guild.id}`)
+      .setTimestamp();
+    client.users.cache.get(member.user.id).send(welcomeDM).catch(console.error);
+  }
 });
 
 client.on('messageDelete', message => {
