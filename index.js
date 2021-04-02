@@ -287,13 +287,13 @@ client.on('messageDeleteBulk', messages => {
     .setTimestamp()
     .setColor('e7778b');
 
-  collection.findOne({ guild_id: message.guild.id}, (error, result) => {
+  collection.findOne({ guild_id: messagesChannel.guild.id}, (error, result) => {
     if(error) {
       console.error;
     }
     botLogsChannel = result.bot_logs_id;
-    if (message.guild.channels.cache.get(botLogsChannel)) {
-      message.guild.channels.cache.get(botLogsChannel).send(deleteEmbed).catch(console.error);
+    if (messagesChannel.guild.channels.cache.get(botLogsChannel)) {
+      messagesChannel.guild.channels.cache.get(botLogsChannel).send(deleteEmbed).catch(console.error);
     }
   });
 });
