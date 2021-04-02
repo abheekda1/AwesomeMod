@@ -331,7 +331,7 @@ client.on('channelCreate', channel => {
     });
 });
 
-client.on('userUpdate', (oldUser, newUser) => {
+/*client.on('userUpdate', (oldUser, newUser) => {
   if (oldUser.bot) {
     return;
   }
@@ -359,6 +359,6 @@ client.on('userUpdate', (oldUser, newUser) => {
         client.channels.cache.get(botLogsChannel).send(userUpdateEmbed).catch(console.error);
       }
     });
-});
+});*/
 
 client.login(process.env.BOT_TOKEN);
