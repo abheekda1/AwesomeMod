@@ -434,7 +434,7 @@ client.on('roleDelete', role => {
       }
       botLogsChannel = result.bot_logs_id;
       if (role.guild.channels.cache.get(botLogsChannel)) {
-        role.guild.channels.cache.get(botLogsChannel).send(messageReactionRemoveEmbed).catch(console.error);
+        role.guild.channels.cache.get(botLogsChannel).send(roleDeleteEmbed).catch(console.error);
       }
     });
 });
