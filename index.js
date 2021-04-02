@@ -331,4 +331,34 @@ client.on('channelCreate', channel => {
     });
 });
 
+client.on('userUpdate', (oldUser, newUser) => {
+  if (oldUser.bot) {
+    return;
+  }
+    const oldUserTag = oldUser.tag;
+    const newUserTag = newUser.tag;
+    const oldUserStatus = oldUser.presence.status;
+    const newUserStatus = newUser.presence.status;
+    const oldAvatarURL = oldUser.avatarURL();
+    const newAvatarURL = newUser.avatarURL();
+
+    const userUpdateEmbed = new Discord.MessageEmbed()
+      .setTitle("Channel Created")
+      .addField("Tag", `${oldUserTag} >> ${newUserTag}`)
+      .addField("Status", `${oldUserStatus} >> ${newUserStatus}`)
+      .setThumbnail(oldAvatarURL)
+      .setImage(newAvatarURL)
+      .setTimestamp()
+      .setColor('00aaff');
+    collection.findOne({ guild_id: channel.guild.id}, (error, result) => {
+      if(error) {
+        console.error;
+      }
+      botLogsChannel = result.bot_logs_id;
+      if (channel.guild.channels.cache.get(botLogsChannel)) {
+        channel.guild.channels.cache.get(botLogsChannel).send(userUpdateEmbed).catch(console.error);
+      }
+    });
+});
+
 client.login(process.env.BOT_TOKEN);
