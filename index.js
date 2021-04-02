@@ -7,6 +7,7 @@ const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 var database, collection;
 const DATABASE_NAME = process.env.DATABASE_NAME;
 const CONNECTION_URL = "localhost:27017";
+const prefix = '$';
 
 MongoClient.connect("mongodb://" + CONNECTION_URL, { useNewUrlParser: true }, (error, client) => {
     if(error) {
@@ -81,19 +82,35 @@ client.on("ready", () => {
 
 client.on("message", async message => {
   switch (message.content.toLowerCase()) {
-    case '$aboutserver':
+    case `${prefix}aboutserver`:
       aboutServer(message);
+      break;
+    case `${prefix}help`:
+      helpMessage(message);
       break;
   }
 
-  if (message.content.toLowerCase().startsWith("$bulkdelete")) {
+  if (message.content.toLowerCase().startsWith(`${prefix}bulkdelete`)) {
     bulkDelete(message);
-  } else if (message.content.toLowerCase().startsWith("$rolerequest")) {
+  } else if (message.content.toLowerCase().startsWith(`${prefix}rolerequest`)) {
     roleRequest(message);
-  } else if (message.content.toLowerCase().startsWith("$userswithrole")) {
+  } else if (message.content.toLowerCase().startsWith(`${prefix}userswithrole`)) {
     usersWithRole(message);
   }
 });
+
+async function helpMessage(message) {
+  const helpEmbed = new Discord.MessageEmbed()
+    .setTitle(`Helping \`${message.author.tag}\``)
+    .addField(`Prefix`, prefix)
+    .addField(`Using the bot`, "Once <@780562707254083584> joins the server, it will create a category called `Awesome Mod` and two channels within it. One is for regular members to request roles (called `#role-requests`) and the other is for bot logs (`#bot-logs`). These can be renamed and moved around but should not be deleted. <@780562707254083584> also comes with a ton of handy commands to analyze and manage your server.")
+    .addField(`Bulk delete command`, `${prefix}bulkDelete`)
+    .addField(`Role request command`, `${prefix}roleRequest [role]`)
+    .addField(`View users with role`, `${prefix}usersWithRole [role]`)
+    .setFooter(`Bot ID: ${client.user.id}`)
+    .setTimestamp();
+  message.channel.send(helpEmbed).catch(console.error);
+}
 
 async function usersWithRole(message) {
   if (message.content.split(" ")[1].length < 3) {
