@@ -98,8 +98,14 @@ client.on("message", async message => {
     roleRequest(message);
   } else if (message.content.toLowerCase().startsWith(`${prefix}userswithrole`)) {
     usersWithRole(message);
+  } else if (message.content.toLowerCase().startsWith(`${prefix}ban`)) {
+    ban(message);
   }
 });
+
+async function ban() {
+
+}
 
 async function helpMessage(message) {
   const helpEmbed = new Discord.MessageEmbed()
@@ -162,8 +168,6 @@ async function aboutServer(message) {
 }
 
 async function roleRequest(message) {
-  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1]));
-  let roleChannel;
 
   if (!message.content.split(" ")[1]) {
     message.reply("query must contain at least 3 characters!")
@@ -174,6 +178,9 @@ async function roleRequest(message) {
     message.reply("query must contain at least 3 characters!")
     return;
   }
+
+  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1]));
+  let roleChannel;
 
   if (roles.array().length < 1) {
     message.reply("no roles found with that name!");
