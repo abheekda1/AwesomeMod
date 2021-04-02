@@ -2,14 +2,86 @@
 
 const csv = require('csvtojson');
 const Discord = require('discord.js');
+const MongoClient = require('mongodb').MongoClient;
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 const { execSync } = require("child_process");
+
+var database, collection;
+const DATABASE_NAME = process.env.DATABASE_NAME;
+const CONNECTION_URL = "localhost:27017";
+
+MongoClient.connect("mongodb://" + CONNECTION_URL, { useNewUrlParser: true }, (error, client) => {
+    if(error) {
+        throw error;
+    }
+    database = client.db(DATABASE_NAME);
+    collection = database.collection("awesome_mod");
+    console.log("Connected to `" + DATABASE_NAME + "`!");
+});
+
+client.on("guildCreate", async guild => {
+  let awesomeModCatID, botLogID, roleReqID;
+  collection.insertOne({ guild_id: guild.id }, (error, result) => {
+      if(error) {
+        console.error;
+      }
+  });
+  // Create "Awesome Mod" category for other channels to reside in
+  guild.channels.create('Awesome Mod', {
+    type: 'category',
+    position: 1,
+    // Remove view permissions from "@everyone"
+    permissionOverwrites: [{
+      id: guild.id,
+      deny: ['VIEW_CHANNEL'],
+    }]
+  })
+  .then(channel => {
+    // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
+    guild.channels.create('bot-logs', {
+      type: 'text',
+      parent: channel.id,
+      // Remove view permissions from "@everyone"
+      permissionOverwrites: [{
+        id: guild.id,
+        deny: ['VIEW_CHANNEL'],
+      }]
+    }).then(channel => {
+      // Add the ID of the "#bot-logs" channel to the database
+      collection.updateOne({ guild_id: guild.id }, { $set: { "bot_logs_id": `${channel.id}` }});
+    });
+    // Create "#role-requests" text channel to have people request roles
+    guild.channels.create('role-requests', {
+      type: 'text',
+      parent: channel.id,
+      // Remove view permissions from "@everyone"
+      permissionOverwrites: [{
+        id: guild.id,
+        allow: ['VIEW_CHANNEL'],
+      }]
+    }).then(channel => {
+      // Add the ID of the "#bot-logs" channel to the database
+      collection.updateOne({ guild_id: guild.id }, { $set: { "role_requests_id": `${channel.id}` }});
+      // Add slowmode
+      channel.setRateLimitPerUser(60);
+    });
+
+  });
+});
+
+client.on("guildDelete", async guild => {
+  collection.deleteOne({ "guild_id": `${guild.id}` }, (error, result) => {
+      if(error) {
+        console.error;
+      }
+  });
+});
 
 client.on("ready", () => {
   console.log("Logged in as " + client.user.tag + "!");
 });
 
-client.on("message", async message => {
+/*client.on("message", async message => {
   switch (message.content.toLowerCase()) {
     case '$score':
       startScoring(message);
@@ -320,6 +392,6 @@ client.on('channelCreate', channel => {
       .setColor('00aaff');
     client.guilds.cache.get("826506878976000030").channels.cache.get("826876551756513314").send(channelCreateEmbed).catch(console.error);
   }
-});
+});*/
 
 client.login(process.env.BOT_TOKEN);
