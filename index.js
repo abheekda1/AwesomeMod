@@ -82,28 +82,11 @@ client.on("ready", () => {
 });
 
 client.on("message", async message => {
-/*  switch (message.content.toLowerCase()) {
-    case '$score':
-      startScoring(message);
-      break;
-    case '$membercount':
-      memberCount(message);
-      break;
-    case '$addroles':
-    execSync("wget --no-check-certificate --output-document=participants.csv https://docs.google.com/spreadsheets/d/1lufn28YR29OkCS4wH_WQXfCalAgJRi8_r4NCesJSbQY/export\\?gid\\=2119488170\\&format\\=csv", { encoding: 'utf-8' });
-    csv().fromFile('participants.csv')
-        .then(users => {
-            users.forEach(function (user) {
-                addRoles(user, message);
-            });
-        }).catch(err => {
-           console.log(err);
-        });
-      break;
+  switch (message.content.toLowerCase()) {
     case '$aboutserver':
       aboutServer(message);
       break;
-  }*/
+  }
 
   if (message.content.toLowerCase().startsWith("$bulkdelete")) {
     bulkDelete(message);
@@ -126,7 +109,7 @@ async function usersWithRole(message) {
     .setFooter(`Role ID: ${roles.array()[0].id}`)
     .setTimestamp();
   message.channel.send(roleEmbed);
-}/*
+}
 
 async function aboutServer(message) {
   const textChannelCount = message.guild.channels.cache.filter(c => c.type === 'text').size;
@@ -153,7 +136,7 @@ async function aboutServer(message) {
     .setFooter(`Server ID: ${message.guild.id}`)
     .setTimestamp();
   message.channel.send(aboutServerEmbed).catch(console.error);
-}
+}/*
 
 async function addRoles(user, message) {
     const noviceRole = message.guild.roles.cache.get("827220856983519232");
