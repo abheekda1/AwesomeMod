@@ -400,10 +400,6 @@ client.on('messageReactionRemove', (messageReaction, user) => {
 });
 
 client.on('roleCreate', role => {
-    const userTag = user.tag;
-    const emoji = messageReaction.emoji.name;
-    const messageContent = messageReaction.message.content;
-    let channelCategory;
     const messageReactionRemoveEmbed = new Discord.MessageEmbed()
       .setTitle("Role Added")
       .addField("Name", role.name)
