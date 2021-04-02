@@ -125,7 +125,7 @@ async function roleRequest(message) {
   const role = message.content.substring(13).toLowerCase();
   const possibleRoles = ['spec', 'spectator', 'reader', 'writer'];
   if (possibleRoles.indexOf(role) === -1) {
-    message.reply("Not a valid role");
+    message.reply("not a valid role!");
     return;
   }
   const verificationMessage = message.channel.send(`<@&826508679636844574>, <@${message.author.id}> would like the **${role}** role. Are they worthy?`);
