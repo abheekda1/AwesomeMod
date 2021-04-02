@@ -454,7 +454,7 @@ client.on('roleUpdate', (oldRole, newRole) => {
       }
       botLogsChannel = result.bot_logs_id;
       if (newRole.guild.channels.cache.get(botLogsChannel)) {
-        newRole.guild.channels.cache.get(botLogsChannel).send(messageReactionRemoveEmbed).catch(console.error);
+        newRole.guild.channels.cache.get(botLogsChannel).send(roleUpdateEmbed).catch(console.error);
       }
     });
 });
