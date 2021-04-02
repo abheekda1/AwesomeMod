@@ -280,7 +280,7 @@ client.on('messageDelete', message => {
 client.on('messageDeleteBulk', messages => {
   const numMessages = messages.array().length;
   const messagesChannel = messages.array()[0].channel;
-  const deleteEmbed = new Discord.MessageEmbed()
+  const bulkDeleteEmbed = new Discord.MessageEmbed()
     .setTitle(`${numMessages} Messages Bulk Deleted`)
     .addField(`Channel`, messagesChannel.name)
     .setFooter("Channel ID: " + messagesChannel.id)
@@ -293,7 +293,7 @@ client.on('messageDeleteBulk', messages => {
     }
     botLogsChannel = result.bot_logs_id;
     if (messagesChannel.guild.channels.cache.get(botLogsChannel)) {
-      messagesChannel.guild.channels.cache.get(botLogsChannel).send(deleteEmbed).catch(console.error);
+      messagesChannel.guild.channels.cache.get(botLogsChannel).send(bulkDeleteEmbed).catch(console.error);
     }
   });
 });
@@ -348,6 +348,30 @@ client.on('channelCreate', channel => {
       botLogsChannel = result.bot_logs_id;
       if (channel.guild.channels.cache.get(botLogsChannel)) {
         channel.guild.channels.cache.get(botLogsChannel).send(channelCreateEmbed).catch(console.error);
+      }
+    });
+});
+
+client.on('messageReactionAdd', messageReaction, user => {
+    const userTag = user.tag;
+    const emoji = messageReaction.emoji.name;
+    const numEmoji = messageReaction.emoji.count;
+    const messageContent = messageReaction.message.content;
+    let channelCategory;
+    const channelCreateEmbed = new Discord.MessageEmbed()
+      .setTitle("Reaction Added")
+      .addField("Message", messageContent)
+      .addField("Reactions", `${userTag} reacted with ${emoji}, along with ${numEmoji - 1} other people in ${messageReaction.message.channel.name}.`)
+      .setFooter("ID: " + channelID)
+      .setTimestamp()
+      .setColor('00aaff');
+    collection.findOne({ guild_id: messageReaction.message.guild.id}, (error, result) => {
+      if(error) {
+        console.error;
+      }
+      botLogsChannel = result.bot_logs_id;
+      if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
+        messageReaction.message.guild.channels.cache.get(botLogsChannel).send(channelCreateEmbed).catch(console.error);
       }
     });
 });
