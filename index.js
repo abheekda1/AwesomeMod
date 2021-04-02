@@ -440,8 +440,8 @@ client.on('roleDelete', role => {
 });
 
 client.on('roleUpdate', (oldRole, newRole) => {
-    const messageReactionRemoveEmbed = new Discord.MessageEmbed()
-      .setTitle("Role Added")
+    const roleUpdateEmbed = new Discord.MessageEmbed()
+      .setTitle("Role Updated")
       .addField("Name", `${oldRole.name} >> ${newRole.name}`)
       .addField("Permissions", `${oldRole.permissions.bitfield} >> ${newRole.permissions.bitfield}`)
       .addField("Mentionable", `${oldRole.mentionable} >> ${newRole.mentionable}`)
