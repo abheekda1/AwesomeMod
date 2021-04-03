@@ -136,6 +136,7 @@ async function ban(message) {
       .setThumbnail(member.user.avatarURL())
       .setColor("fda172")
       .setTimestamp();
+    message.channel.send(verificationEmbed).catch(console.error);
     message.react('👍');
     message.react('👎');
     const filter = (reaction, user) => {
