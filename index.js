@@ -25,47 +25,6 @@ client.on("guildCreate", async guild => {
       console.error;
     }
   });
-  // Create "Awesome Mod" category for other channels to reside in
-  guild.channels.create('Awesome Mod', {
-    type: 'category',
-    position: 1,
-    // Remove view permissions from "@everyone"
-    permissionOverwrites: [{
-      id: guild.id,
-      deny: ['VIEW_CHANNEL'],
-    }]
-  })
-    .then(channel => {
-      // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
-      guild.channels.create('bot-logs', {
-        type: 'text',
-        parent: channel.id,
-        // Remove view permissions from "@everyone"
-        permissionOverwrites: [{
-          id: guild.id,
-          deny: ['VIEW_CHANNEL'],
-        }]
-      }).then(channel => {
-        // Add the ID of the "#bot-logs" channel to the database
-        collection.updateOne({ guild_id: guild.id }, { $set: { "bot_logs_id": `${channel.id}` } });
-      });
-      // Create "#role-requests" text channel to have people request roles
-      guild.channels.create('role-requests', {
-        type: 'text',
-        parent: channel.id,
-        // Remove view permissions from "@everyone"
-        permissionOverwrites: [{
-          id: guild.id,
-          allow: ['VIEW_CHANNEL'],
-        }]
-      }).then(channel => {
-        // Add the ID of the "#bot-logs" channel to the database
-        collection.updateOne({ guild_id: guild.id }, { $set: { "role_requests_id": `${channel.id}` } });
-        // Add slowmode
-        channel.setRateLimitPerUser(60);
-      });
-
-    });
 });
 
 client.on("guildDelete", async guild => {
@@ -94,6 +53,9 @@ client.on("message", async message => {
     case `${prefix}help`:
       helpMessage(message);
       break;
+    case `${prefix}startlogs`:
+      startLogs(message);
+      break;
   }
 
   if (message.content.toLowerCase().startsWith(`${prefix}bulkdelete`)) {
@@ -112,6 +74,38 @@ client.on("message", async message => {
     userInfo(message);
   }
 });
+
+async function startLogs(message) {
+  if (!message.member.hasPermission("ADMINISTRATOR") {
+    message.reply("you do not have admin permissions!");
+    return;
+  })
+  collection.findOne({ guild_id: message.guild.id }, (error, result) => {
+    if (error) {
+      console.error;
+    }
+    if (result.botLogsChannel) {
+      botLogsChannel = result.bot_logs_id;
+      if (message.guild.channels.cache.get(botLogsChannel)) {
+        message.reply('bot logs channel already exists!');
+      } else {
+        // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
+        message.guild.channels.create('bot-logs', {
+          type: 'text',
+          parent: channel.id,
+          // Remove view permissions from "@everyone"
+          permissionOverwrites: [{
+            id: guild.id,
+            deny: ['VIEW_CHANNEL'],
+          }]
+        }).then(channel => {
+          // Add the ID of the "#bot-logs" channel to the database
+          collection.updateOne({ guild_id: guild.id }, { $set: { "bot_logs_id": `${channel.id}` } });
+        });
+      }
+    }
+  });
+}
 
 async function userInfo(message) {
   if (!message.content.split(" ")[1]) {
@@ -422,40 +416,29 @@ async function roleRequest(message) {
     return;
   }
 
-  collection.findOne({ guild_id: message.guild.id }, (error, result) => {
-    if (error) {
-      console.error;
-    }
-    roleChannel = result.role_requests_id;
-    if (message.channel.id !== roleChannel) {
-      message.reply(`wrong channel! Roles can only be requested in <#${roleChannel}>.`);
-      return;
-    }
-
-    const verificationEmbed = new Discord.MessageEmbed()
-      .setTitle(`\`${message.author.tag}\` would like the **${role.name}** role. Are they worthy?`)
-      .setDescription("React to this message to verify")
-      .setThumbnail(message.author.avatarURL())
-      .setColor("fda172")
-      .setTimestamp();
-    message.channel.send(verificationEmbed)
-    .then(verificationEmbed => {
-      verificationEmbed.react('👍');
-      verificationEmbed.react('👎');
-      const filter = (reaction, user) => {
-        return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
-      };
-      verificationEmbed.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
-        .then(userReaction => {
-          const reaction = userReaction.first();
-          if (reaction.emoji.name === '👍') {
-            message.member.roles.add(role).then(message.reply("wow I guess you ARE worthy! ||mods must be real mistaken||")).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
-          } else {
-            message.reply("I guess you won't be getting that role!");
-          }
-        }).catch(verificationEmbed => { verificationEmbed.edit("TIMEOUT") });
-    }).catch(console.error);
-  });
+  const verificationEmbed = new Discord.MessageEmbed()
+    .setTitle(`\`${message.author.tag}\` would like the **${role.name}** role. Are they worthy?`)
+    .setDescription("React to this message to verify")
+    .setThumbnail(message.author.avatarURL())
+    .setColor("fda172")
+    .setTimestamp();
+  message.channel.send(verificationEmbed)
+  .then(verificationEmbed => {
+    verificationEmbed.react('👍');
+    verificationEmbed.react('👎');
+    const filter = (reaction, user) => {
+      return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+    };
+    verificationEmbed.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
+      .then(userReaction => {
+        const reaction = userReaction.first();
+        if (reaction.emoji.name === '👍') {
+          message.member.roles.add(role).then(message.reply("wow I guess you ARE worthy! ||mods must be real mistaken||")).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
+        } else {
+          message.reply("I guess you won't be getting that role!");
+        }
+      }).catch(verificationEmbed => { verificationEmbed.edit("TIMEOUT") });
+  }).catch(console.error);
 }
 
 async function bulkDelete(message) {
@@ -513,9 +496,11 @@ client.on('messageDelete', message => {
     if (error) {
       console.error;
     }
-    botLogsChannel = result.bot_logs_id;
-    if (message.guild.channels.cache.get(botLogsChannel)) {
-      message.guild.channels.cache.get(botLogsChannel).send(deleteEmbed).catch(console.error);
+    if (result.bot_logs_id) {
+      botLogsChannel = result.bot_logs_id;
+      if (message.guild.channels.cache.get(botLogsChannel)) {
+        message.guild.channels.cache.get(botLogsChannel).send(deleteEmbed).catch(console.error);
+      }
     }
   });
 });
@@ -534,9 +519,11 @@ client.on('messageDeleteBulk', messages => {
     if (error) {
       console.error;
     }
-    botLogsChannel = result.bot_logs_id;
-    if (messagesChannel.guild.channels.cache.get(botLogsChannel)) {
-      messagesChannel.guild.channels.cache.get(botLogsChannel).send(bulkDeleteEmbed).catch(console.error);
+    if (result.bot_logs_id) {
+      botLogsChannel = result.bot_logs_id;
+      if (messagesChannel.guild.channels.cache.get(botLogsChannel)) {
+        messagesChannel.guild.channels.cache.get(botLogsChannel).send(bulkDeleteEmbed).catch(console.error);
+      }
     }
   });
 });
@@ -558,9 +545,11 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
       if (error) {
         console.error;
       }
-      botLogsChannel = result.bot_logs_id;
-      if (editedMessage.guild.channels.cache.get(botLogsChannel)) {
-        editedMessage.guild.channels.cache.get(botLogsChannel).send(editEmbed).catch(console.error);
+      if (result.bot_logs_id) {
+        botLogsChannel = result.bot_logs_id;
+        if (editedMessage.guild.channels.cache.get(botLogsChannel)) {
+          editedMessage.guild.channels.cache.get(botLogsChannel).send(editEmbed).catch(console.error);
+        }
       }
     });
   }
@@ -588,9 +577,11 @@ client.on('channelCreate', channel => {
     if (error) {
       console.error;
     }
-    botLogsChannel = result.bot_logs_id;
-    if (channel.guild.channels.cache.get(botLogsChannel)) {
-      channel.guild.channels.cache.get(botLogsChannel).send(channelCreateEmbed).catch(console.error);
+    if (result.bot_logs_id) {
+      botLogsChannel = result.bot_logs_id;
+      if (channel.guild.channels.cache.get(botLogsChannel)) {
+        channel.guild.channels.cache.get(botLogsChannel).send(channelCreateEmbed).catch(console.error);
+      }
     }
   });
 });
@@ -615,10 +606,11 @@ client.on('messageReactionAdd', (messageReaction, user) => {
     if (error) {
       console.error;
     }
-    botLogsChannel = result.bot_logs_id;
-    if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
-      messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionAddEmbed).catch(console.error);
-    }
+    if (result.bot_logs_id)
+      botLogsChannel = result.bot_logs_id;
+      if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
+        messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionAddEmbed).catch(console.error);
+      }
   });
 });
 
@@ -641,9 +633,11 @@ client.on('messageReactionRemove', (messageReaction, user) => {
     if (error) {
       console.error;
     }
-    botLogsChannel = result.bot_logs_id;
-    if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
-      messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionRemoveEmbed).catch(console.error);
+    if (result.bot_logs_id) {
+      botLogsChannel = result.bot_logs_id;
+      if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
+        messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionRemoveEmbed).catch(console.error);
+      }
     }
   });
 });
@@ -661,9 +655,11 @@ client.on('roleCreate', role => {
     if (error) {
       console.error;
     }
-    botLogsChannel = result.bot_logs_id;
-    if (role.guild.channels.cache.get(botLogsChannel)) {
-      role.guild.channels.cache.get(botLogsChannel).send(roleCreateEmbed).catch(console.error);
+    if (result.bot_logs_id) {
+      botLogsChannel = result.bot_logs_id;
+      if (role.guild.channels.cache.get(botLogsChannel)) {
+        role.guild.channels.cache.get(botLogsChannel).send(roleCreateEmbed).catch(console.error);
+      }
     }
   });
 });
@@ -681,9 +677,11 @@ client.on('roleDelete', role => {
     if (error) {
       console.error;
     }
-    botLogsChannel = result.bot_logs_id;
-    if (role.guild.channels.cache.get(botLogsChannel)) {
-      role.guild.channels.cache.get(botLogsChannel).send(roleDeleteEmbed).catch(console.error);
+    if (result.botLogsChannel) {
+      botLogsChannel = result.bot_logs_id;
+      if (role.guild.channels.cache.get(botLogsChannel)) {
+        role.guild.channels.cache.get(botLogsChannel).send(roleDeleteEmbed).catch(console.error);
+      }
     }
   });
 });
@@ -701,9 +699,11 @@ client.on('roleUpdate', (oldRole, newRole) => {
     if (error) {
       console.error;
     }
-    botLogsChannel = result.bot_logs_id;
-    if (newRole.guild.channels.cache.get(botLogsChannel)) {
-      newRole.guild.channels.cache.get(botLogsChannel).send(roleUpdateEmbed).catch(console.error);
+    if (result.bot_logs_id) {
+      botLogsChannel = result.bot_logs_id;
+      if (newRole.guild.channels.cache.get(botLogsChannel)) {
+        newRole.guild.channels.cache.get(botLogsChannel).send(roleUpdateEmbed).catch(console.error);
+      }
     }
   });
 });
