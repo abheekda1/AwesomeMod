@@ -485,6 +485,7 @@ client.on('messageDelete', message => {
   }
   const deleteEmbed = new Discord.MessageEmbed()
     .setTitle('Message Deleted')
+    .setURL(message.url)
     .addField('Author', messageAuthor)
     .addField('Message', messageContent)
     .setThumbnail(messageAvatar)
@@ -535,6 +536,7 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
     }
     const editEmbed = new Discord.MessageEmbed()
       .setTitle("Message Edited")
+      .setURL(editedMessage.url)
       .addField("Author", editedMessage.author.tag)
       .addField("Message", `<< ${originalMessage}\n>> ${editedMessage}`)
       .setThumbnail(editedMessage.author.avatarURL())
@@ -597,6 +599,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
   let channelCategory;
   const messageReactionAddEmbed = new Discord.MessageEmbed()
     .setTitle("Reaction Added")
+    .setURL(messageReaction.message.url)
     .addField("Message", messageContent)
     .addField("Reactions", `${userTag} reacted with ${emoji}, along with ${numEmoji - 1} other people in #${messageReaction.message.channel.name}.`)
     .setFooter("Message ID: " + messageReaction.message.id)
@@ -624,6 +627,7 @@ client.on('messageReactionRemove', (messageReaction, user) => {
   let channelCategory;
   const messageReactionRemoveEmbed = new Discord.MessageEmbed()
     .setTitle("Reaction Removed")
+    .setURL(messageReaction.message.url)
     .addField("Message", messageContent)
     .addField("Reactions", `${userTag} removed their reaction ${emoji} in #${messageReaction.message.channel.name}.`)
     .setFooter("Message ID: " + messageReaction.message.id)
