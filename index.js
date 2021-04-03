@@ -308,9 +308,9 @@ async function addRole(message) {
   message.channel.send(verificationEmbed)
   .then(verificationEmbed => {
     verificationEmbed.react('<a:anim_check:827985495295655988>');
-    verificationEmbed.react('👎');
+    verificationEmbed.react('<a:anim_cross:827985495295655988>');
     const filter = (reaction, user) => {
-      return ['anim_check', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+      return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
     };
     verificationEmbed.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
       .then(userReaction => {
@@ -360,9 +360,9 @@ async function ban(message) {
     message.channel.send(verificationEmbed)
     .then(verificationEmbed => {
       verificationEmbed.react('<a:anim_check:827985495295655988>');
-      verificationEmbed.react('👎');
+      verificationEmbed.react('<a:anim_cross:827985495295655988>');
       const filter = (reaction, user) => {
-        return ['anim_check', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+        return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
       };
       verificationEmbed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
         .then(userReaction => {
@@ -412,9 +412,9 @@ async function kick(message) {
     message.channel.send(verificationEmbed)
     .then( verificationEmbed => {
       verificationEmbed.react('<a:anim_check:827985495295655988>');
-      verificationEmbed.react('👎');
+      verificationEmbed.react('<a:anim_cross:827985495295655988>');
       const filter = (reaction, user) => {
-        return ['anim_check', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+        return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
       };
       verificationEmbed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
         .then(userReaction => {
@@ -525,9 +525,9 @@ async function roleRequest(message) {
   message.channel.send(verificationEmbed)
   .then(verificationEmbed => {
     verificationEmbed.react('<a:anim_check:827985495295655988>');
-    verificationEmbed.react('👎');
+    verificationEmbed.react('<a:anim_cross:827985495295655988>');
     const filter = (reaction, user) => {
-      return ['anim_check', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+      return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
     };
     verificationEmbed.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
       .then(userReaction => {
