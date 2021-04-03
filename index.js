@@ -108,8 +108,45 @@ client.on("message", async message => {
     kick(message);
   } else if (message.content.toLowerCase().startsWith(`${prefix}addrole`)) {
     addRole(message);
+  } else if (message.content.toLowerCase().startsWith(`${prefix}userinfo`)) {
+    userInfo(message);
   }
 });
+
+async function userInfo(message) {
+  if (!message.content.split(" ")[1]) {
+    message.reply("query must contain at least 3 characters!")
+    return;
+  }
+
+  if (message.content.split(" ")[1].length < 3) {
+    message.reply("query must contain at least 3 characters!")
+    return;
+  }
+
+  const members = message.guild.members.cache.filter(member => {
+    if (member.nickname) {
+      return member.user.username.toLowerCase().includes(message.content.split(" ")[1].toLowerCase()) || member.nickname.toLowerCase().includes(message.content.split(" ")[1].toLowerCase());
+    } else {
+      return member.user.username.toLowerCase().includes(message.content.split(" ")[1].toLowerCase())
+    }
+  });
+
+  if (members.array().length < 1) {
+    message.reply("no members found with that name!");
+    return;
+  }
+
+  const member = members.array()[0];
+
+  const userInfoEmbed = new Discord.MessageEmbed()
+    .setAuthor(member.user.tag, member.user.avatarURL())
+    .addField("Roles", member.roles.map(r => `${r}`).join(' • '))
+    .setColor("00c5ff")
+    .setFooter("User ID: ", member.user.id)
+    .setTimestamp();
+  message.channel.send(userInfoEmbed);
+}
 
 async function addRole(message) {
   if (!message.member.hasPermission('ADMINISTRATOR')) {
