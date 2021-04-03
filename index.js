@@ -90,7 +90,7 @@ async function locateISS(message) {
     .then(request => request.json())
     .then(data => {
       const issEmbed = new Discord.MessageEmbed()
-        .setTitle()
+        .setTitle("The current location of the ISS!")
         .setURL('https://spotthestation.nasa.gov/tracking_map.cfm')
         .setImage(`https://api.mapbox.com/styles/v1/mapbox/light-v10/static/pin-s+000(${data.iss_position.longitude},${data.iss_position.latitude})/-87.0186,20,1/1000x1000?access_token=pk.eyJ1IjoiYWRhd2Vzb21lZ3V5IiwiYSI6ImNrbGpuaWdrYzJ0bGYydXBja2xsNmd2YTcifQ.Ude0UFOf9lFcQ-3BANWY5A`)
         .setColor("00c5ff")
