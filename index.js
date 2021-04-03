@@ -380,7 +380,7 @@ async function aboutServer(message) {
     .addField("Channels", `Total: ${message.guild.channels.cache.size} ‖ Text: ${textChannelCount} • Voice: ${voiceChannelCount} • Categories: ${categoryChannelCount}`)
     .addField("Members", `Total: ${numHumans + numBots} ‖ Human: ${numHumans} • Bot: ${numBots}`)
     .addField("Roles", numRoles)
-    .addField("Created", `${new Date(member.guild.createdTimestamp).toLocaleString("en-US", {timeZoneName: "short"})}`)
+    .addField("Created", `${new Date(message.guild.createdTimestamp).toLocaleString("en-US", {timeZoneName: "short"})}`)
     .addField("User Statuses", `🟦 • ${numOnline} online\n\n🟧 • ${numAway} away\n\n⬛ • ${numOffline} offline\n\n🟥 • ${numDND} DND`)
     .setThumbnail(message.guild.iconURL())
     .setFooter(`Server ID: ${message.guild.id}`)
