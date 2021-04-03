@@ -117,7 +117,7 @@ async function ban(message) {
 
   const members = message.guild.members.cache.filter(member => {
     if (member.nickname) {
-      return member.user.username.toLowerCase().includes(message.content.split(" ")[1].toLowerCase() || member.nickname.toLowerCase().includes(message.content.split(" ")[1].toLowerCase());
+      return member.user.username.toLowerCase().includes(message.content.split(" ")[1].toLowerCase()) || member.nickname.toLowerCase().includes(message.content.split(" ")[1].toLowerCase());
     } else {
       return member.user.username.toLowerCase().includes(message.content.split(" ")[1].toLowerCase())
     }
