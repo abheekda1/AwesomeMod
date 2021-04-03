@@ -192,21 +192,23 @@ async function kick(message) {
       .setThumbnail(member.user.avatarURL())
       .setColor("fda172")
       .setTimestamp();
-    message.channel.send(verificationEmbed).catch(console.error);
-    message.react('👍');
-    message.react('👎');
-    const filter = (reaction, user) => {
-      return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
-    };
-    message.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
-      .then(userReaction => {
-        const reaction = userReaction.first();
-        if (reaction.emoji.name === '👍') {
-          member.kick().then(user => message.reply(`<@${user.id}> has been kicked!`)).catch(() => message.channel.send(`Unfortunately, I don't have the ability to kick ${member.user.username}, likely because their role is higher than mine.`));
-        } else {
-          message.reply(`phew! ${member}'s safe!`);
-        }
-      }).catch(verificationEmbed => { verificationEmbed.edit("TIMEOUT") });
+    message.channel.send(verificationEmbed)
+    .then( verificationEmbed => {
+      verificationEmbed.react('👍');
+      verificationEmbed.react('👎');
+      const filter = (reaction, user) => {
+        return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+      };
+      verificationEmbed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+        .then(userReaction => {
+          const reaction = userReaction.first();
+          if (reaction.emoji.name === '👍') {
+            member.kick().then(user => message.reply(`<@${user.id}> has been kicked!`)).catch(() => message.channel.send(`Unfortunately, I don't have the ability to kick ${member.user.username}, likely because their role is higher than mine.`));
+          } else {
+            message.reply(`phew! ${member}'s safe!`);
+          }
+        }).catch(verificationEmbed => { verificationEmbed.edit("TIMEOUT") });
+      }).catch(console.error);
 }
 
 async function helpMessage(message) {
