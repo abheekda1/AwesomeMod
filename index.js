@@ -142,7 +142,7 @@ async function ban(message) {
     const filter = (reaction, user) => {
       return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
     };
-    message.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
+    message.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
       .then(userReaction => {
         const reaction = userReaction.first();
         if (reaction.emoji.name === '👍') {
@@ -150,7 +150,57 @@ async function ban(message) {
         } else {
           message.reply("phew! ${member}'s safe!");
         }
-      }).catch("Role reaction timeout, I guess the mods don't really care about you and forgot.");
+      }).catch(verificationEmbed.edit("TIMEOUT"));
+}
+
+async function kick(message) {
+
+  if (!message.content.split(" ")[1]) {
+    message.reply("query must contain at least 3 characters!")
+    return;
+  }
+
+  if (message.content.split(" ")[1].length < 3) {
+    message.reply("query must contain at least 3 characters!")
+    return;
+  }
+
+  const members = message.guild.members.cache.filter(member => {
+    if (member.nickname) {
+      return member.user.username.toLowerCase().includes(message.content.split(" ")[1].toLowerCase()) || member.nickname.toLowerCase().includes(message.content.split(" ")[1].toLowerCase());
+    } else {
+      return member.user.username.toLowerCase().includes(message.content.split(" ")[1].toLowerCase())
+    }
+  });
+
+  if (members.array().length < 1) {
+    message.reply("no members found with that name!");
+    return;
+  }
+
+  const member = members.array()[0];
+
+    const verificationEmbed = new Discord.MessageEmbed()
+      .setTitle(`Are you sure you would like to kick \`${member.user.tag}\`?`)
+      .setDescription("React to your message to verify")
+      .setThumbnail(member.user.avatarURL())
+      .setColor("fda172")
+      .setTimestamp();
+    message.channel.send(verificationEmbed).catch(console.error);
+    message.react('👍');
+    message.react('👎');
+    const filter = (reaction, user) => {
+      return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+    };
+    message.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+      .then(userReaction => {
+        const reaction = userReaction.first();
+        if (reaction.emoji.name === '👍') {
+          member.kick().then(user => message.reply(`<@${user.id}> has been kicked!`)).catch(() => message.channel.send(`Unfortunately, I don't have the ability to kick ${member.user.username}, likely because their role is higher than mine.`));
+        } else {
+          message.reply("phew! ${member}'s safe!");
+        }
+      }).catch(verificationEmbed.edit("TIMEOUT"));
 }
 
 async function helpMessage(message) {
@@ -265,7 +315,7 @@ async function roleRequest(message) {
         } else {
           message.reply("I guess you won't be getting that role!");
         }
-      }).catch("Role reaction timeout, I guess the mods don't really care about you and forgot.");
+      }).catch(verificationMessage.edit("TIMEOUT"));
   });
 }
 
