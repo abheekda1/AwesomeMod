@@ -302,23 +302,24 @@ async function roleRequest(message) {
       return;
     }
 
-    const verificationMessage = message.channel.send(`<@${message.author.id}> would like the **${role}** role. Are they worthy?`);
-    message.react('👍');
-    message.react('👎');
-    const filter = (reaction, user) => {
-      return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
-    };
-    message.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
-      .then(userReaction => {
-        const reaction = userReaction.first();
-        if (reaction.emoji.name === '👍') {
-          message.reply("wow I guess you ARE worthy! ||mods must be real mistaken||");
-          message.member.roles.add(role).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
-        } else {
-          message.reply("I guess you won't be getting that role!");
-        }
-      }).catch(verificationMessage => { verificationMessage.edit("TIMEOUT") });
-  });
+    const verificationMessage = message.channel.send(`<@${message.author.id}> would like the **${role}** role. Are they worthy?`).then(message => {
+      message.react('👍');
+      message.react('👎');
+      const filter = (reaction, user) => {
+        return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+      };
+      message.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
+        .then(userReaction => {
+          const reaction = userReaction.first();
+          if (reaction.emoji.name === '👍') {
+            message.reply("wow I guess you ARE worthy! ||mods must be real mistaken||");
+            message.member.roles.add(role).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
+          } else {
+            message.reply("I guess you won't be getting that role!");
+          }
+        }).catch(verificationMessage => { verificationMessage.edit("TIMEOUT") });
+    });
+    }).catch(console.error);
 }
 
 async function bulkDelete(message) {
