@@ -99,8 +99,9 @@ async function startLogs(message) {
           }]
         }).then(channel => {
           // Add the ID of the "#bot-logs" channel to the database
+          message.reply(`channel ${channel} created!`)
           collection.updateOne({ guild_id: message.guild.id }, { $set: { "bot_logs_id": `${channel.id}` } });
-        });
+        }).catch(message.reply(`unable to create channel :(`));
       }
     }
   });
