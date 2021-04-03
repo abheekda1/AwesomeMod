@@ -56,6 +56,9 @@ client.on("message", async message => {
     case `${prefix}startlogs`:
       startLogs(message);
       break;
+    case `${prefix}kulboard`:
+      kulboardCreate(message)
+      break;
   }
 
   if (message.content.toLowerCase().startsWith(`${prefix}bulkdelete`)) {
@@ -103,6 +106,52 @@ async function startLogs(message) {
           collection.updateOne({ guild_id: message.guild.id }, { $set: { "bot_logs_id": `${channel.id}` } });
         }).catch(message.reply(`unable to create channel :(`));
       }
+    }
+  });
+}
+
+async function kulboardCreate(message) {
+  if (!message.member.hasPermission("ADMINISTRATOR")) {
+    message.reply("you do not have admin permissions!");
+    return;
+  }
+  collection.findOne({ guild_id: message.guild.id }, (error, result) => {
+    if (error) {
+      console.error;
+    }
+    if (result.kulboard_id) {
+      kulboardChannel = result.kulboard_id;
+      if (message.guild.channels.cache.get(kulboardChannel)) {
+        message.reply('bot logs channel already exists!');
+      } else {
+        // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
+        message.guild.channels.create('külboard', {
+          type: 'text',
+          // Remove view permissions from "@everyone"
+          permissionOverwrites: [{
+            id: message.guild.id,
+            deny: ['VIEW_CHANNEL'],
+          }]
+        }).then(channel => {
+          // Add the ID of the "#bot-logs" channel to the database
+          message.reply(`channel ${channel} created!`)
+          collection.updateOne({ guild_id: message.guild.id }, { $set: { "kulboard_id": `${channel.id}` } });
+        }).catch(message.reply(`unable to create channel :(`));
+      }
+    } else {
+      // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
+      message.guild.channels.create('külboard', {
+        type: 'text',
+        // Remove view permissions from "@everyone"
+        permissionOverwrites: [{
+          id: message.guild.id,
+          deny: ['VIEW_CHANNEL'],
+        }]
+      }).then(channel => {
+        // Add the ID of the "#bot-logs" channel to the database
+        message.reply(`channel ${channel} created!`)
+        collection.updateOne({ guild_id: message.guild.id }, { $set: { "kulboard_id": `${channel.id}` } });
+      }).catch(message.reply(`unable to create channel :(`));
     }
   });
 }
