@@ -400,7 +400,7 @@ async function roleRequest(message) {
     return;
   }
 
-  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1]));
+  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1].toLowerCase()));
   let roleChannel;
 
   if (roles.array().length < 1) {
