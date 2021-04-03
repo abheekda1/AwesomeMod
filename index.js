@@ -183,7 +183,7 @@ async function addRole(message) {
       .then(userReaction => {
         const reaction = userReaction.first();
         if (reaction.emoji.name === '👍') {
-          member.roles.add(role).then(message.reply(`\`${member.user}\` has been given the **${role}**`)).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
+          member.roles.add(role).then(message.reply(`${member.user} has been given the **${role}** role!`)).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
         } else {
           message.reply("I guess you won't be getting that role!");
         }
