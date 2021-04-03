@@ -148,7 +148,7 @@ async function addRole(message) {
 
   const members = message.guild.members.cache.filter(member => {
     if (member.nickname) {
-      return member.user.username.toLowerCase().includes(message.content.split(" ")[2].toLowerCase()) || member.nickname.toLowerCase().includes(message.content.split(" ")[1].toLowerCase());
+      return member.user.username.toLowerCase().includes(message.content.split(" ")[2].toLowerCase()) || member.nickname.toLowerCase().includes(message.content.split(" ")[2].toLowerCase());
     } else {
       return member.user.username.toLowerCase().includes(message.content.split(" ")[2].toLowerCase())
     }
