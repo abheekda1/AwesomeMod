@@ -353,7 +353,7 @@ async function ban(message) {
 
     let verificationEmbed = new Discord.MessageEmbed()
       .setTitle(`Are you sure you would like to ban \`${member.user.tag}\`?`)
-      .setAuthor(member.user.tag, member.user.avatarURL)
+      .setAuthor(member.user.tag, member.user.avatarURL())
       .setDescription("React to this message to verify")
       .setThumbnail("https://emoji.gg/assets/emoji/9156_BanThonking.png")
       .setColor("fda172")
