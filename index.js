@@ -684,8 +684,11 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       console.error;
     }
     if (result.kulboard_id) {
+      console.log("Kulboard found");
+      console.log("Emoji name: " + messageReaction.emoji.name);
+      console.log("Amount: " + messageReaction.count);
       kulboardChannel = result.kulboard_id;
-      if (messageReaction.message.guild.channels.cache.get(kulboardChannel) && messageReaction.emoji.name === "😎" && messageReaction.count > 3) {
+      if (messageReaction.message.guild.channels.cache.get(kulboardChannel) && messageReaction.emoji.name === "😎" && messageReaction.count > 2) {
         messageReaction.message.guild.channels.cache.get(kulboardChannel).send(kulboardEmbed).catch(console.error);
       }
     }
