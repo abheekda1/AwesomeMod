@@ -469,7 +469,10 @@ client.on('messageReactionAdd', (messageReaction, user) => {
   const userTag = user.tag;
   const emoji = messageReaction.emoji.name;
   const numEmoji = messageReaction.count;
-  const messageContent = messageReaction.message.content;
+  let messageContent = messageReaction.message.content;
+  if (!messageContent) {
+    messageContent = "[NONE]";
+  }
   let channelCategory;
   const messageReactionAddEmbed = new Discord.MessageEmbed()
     .setTitle("Reaction Added")
@@ -492,7 +495,10 @@ client.on('messageReactionAdd', (messageReaction, user) => {
 client.on('messageReactionRemove', (messageReaction, user) => {
   const userTag = user.tag;
   const emoji = messageReaction.emoji.name;
-  const messageContent = messageReaction.message.content;
+  let messageContent = messageReaction.message.content;
+  if (!messageContent) {
+    messageContent = "[NONE]";
+  }
   let channelCategory;
   const messageReactionRemoveEmbed = new Discord.MessageEmbed()
     .setTitle("Reaction Removed")
