@@ -148,7 +148,7 @@ async function ban(message) {
         if (reaction.emoji.name === '👍') {
           message.guild.members.ban(member.user).then(user => message.reply(`<@${user.id}> has been banned!`)).catch(() => message.channel.send(`Unfortunately, I don't have the ability to ban ${member.user.username}, likely because their role is higher than mine.`));
         } else {
-          message.reply("phew! ${member}'s safe!");
+          message.reply(`phew! ${member}'s safe!`);
         }
       }).catch(verificationEmbed.edit("TIMEOUT"));
 }
@@ -198,7 +198,7 @@ async function kick(message) {
         if (reaction.emoji.name === '👍') {
           member.kick().then(user => message.reply(`<@${user.id}> has been kicked!`)).catch(() => message.channel.send(`Unfortunately, I don't have the ability to kick ${member.user.username}, likely because their role is higher than mine.`));
         } else {
-          message.reply("phew! ${member}'s safe!");
+          message.reply(`phew! ${member}'s safe!`);
         }
       }).catch(verificationEmbed.edit("TIMEOUT"));
 }
