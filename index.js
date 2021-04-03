@@ -84,7 +84,7 @@ async function startLogs(message) {
     if (error) {
       console.error;
     }
-    if (result.botLogsChannel) {
+    if (result.bot_logs_id) {
       botLogsChannel = result.bot_logs_id;
       if (message.guild.channels.cache.get(botLogsChannel)) {
         message.reply('bot logs channel already exists!');
@@ -92,15 +92,14 @@ async function startLogs(message) {
         // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
         message.guild.channels.create('bot-logs', {
           type: 'text',
-          parent: channel.id,
           // Remove view permissions from "@everyone"
           permissionOverwrites: [{
-            id: guild.id,
+            id: message.guild.id,
             deny: ['VIEW_CHANNEL'],
           }]
         }).then(channel => {
           // Add the ID of the "#bot-logs" channel to the database
-          collection.updateOne({ guild_id: guild.id }, { $set: { "bot_logs_id": `${channel.id}` } });
+          collection.updateOne({ guild_id: message.guild.id }, { $set: { "bot_logs_id": `${channel.id}` } });
         });
       }
     }
