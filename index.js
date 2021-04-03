@@ -303,13 +303,13 @@ async function roleRequest(message) {
     }
 
     const verificationMessage = message.channel.send(`<@${message.author.id}> would like the **${role}** role. Are they worthy?`)
-    .then(message => {
-      message.react('👍');
-      message.react('👎');
+    .then(verificationMessage => {
+      verificationMessage.react('👍');
+      verificationMessage.react('👎');
       const filter = (reaction, user) => {
         return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
       };
-      message.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
+      verificationMessage.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
         .then(userReaction => {
           const reaction = userReaction.first();
           if (reaction.emoji.name === '👍') {
