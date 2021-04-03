@@ -140,7 +140,7 @@ async function ban(message) {
       .setThumbnail(member.user.avatarURL())
       .setColor("fda172")
       .setTimestamp();
-    message.channel.send(verificationEmbed).catch(console.error)
+    message.channel.send(verificationEmbed)
     .then(verificationEmbed => {
       verificationEmbed.react('👍');
       verificationEmbed.react('👎');
