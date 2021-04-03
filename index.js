@@ -3,6 +3,7 @@
 const Discord = require('discord.js');
 const MongoClient = require('mongodb').MongoClient;
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
+const fetch = require(`node-fetch`);
 
 var database, collection;
 const DATABASE_NAME = process.env.DATABASE_NAME;
@@ -61,6 +62,10 @@ client.on("message", async message => {
       break;
     case `${prefix}ping`:
       ping(message);
+      break;
+    case `${prefix}iss`:
+      locateISS(message);
+      break;
   }
 
   if (message.content.toLowerCase().startsWith(`${prefix}bulkdelete`)) {
@@ -80,6 +85,21 @@ client.on("message", async message => {
   }
 });
 
+async function locateISS(message) {
+  await fetch("http://api.open-notify.org/iss-now.json")
+    .then(request => request.json())
+    .then(data => {
+      const issEmbed = new Discord.MessageEmbed()
+        .setTitle()
+        .setURL('https://spotthestation.nasa.gov/tracking_map.cfm')
+        .setImage(`https://api.mapbox.com/styles/v1/mapbox/light-v10/static/pin-s+000(${data.iss_position.longitude},${data.iss_position.latitude})/-87.0186,20,1/1000x1000?access_token=pk.eyJ1IjoiYWRhd2Vzb21lZ3V5IiwiYSI6ImNrbGpuaWdrYzJ0bGYydXBja2xsNmd2YTcifQ.Ude0UFOf9lFcQ-3BANWY5A`)
+        .setColor("00c5ff")
+        .setFooter(`Client ID: ${client.user.id}`)
+        .setTimestamp();
+      message.channel.send(issEmbed);
+    });
+}
+
 async function ping(message) {
   const pingEmbed = new Discord.MessageEmbed()
     .setAuthor(message.author.tag, message.author.avatarURL())
@@ -87,6 +107,7 @@ async function ping(message) {
     .addField(`🏓`, `${Date.now() - message.createdTimestamp}ms`)
     .addField(`API`, `${Math.round(client.ws.ping)}ms`)
     .setColor("00c5ff")
+    .setFooter(`Client ID: ${client.user.id}`)
     .setTimestamp();
   message.channel.send(pingEmbed).catch(console.error);
 }
@@ -417,6 +438,7 @@ async function helpMessage(message) {
     .addField(`Meta commands:`, `Help command: \`${prefix}help\`\nAbout your server: \`${prefix}aboutServer\``)
     .addField(`Admin commands:`, `Add logs channel: \`${prefix}startLogs\`\nAdd külboard channel: \`${prefix}kulboard\`\nBulk delete: \`${prefix}bulkDelete\`\nBan: \`${prefix}ban [user]\`\nKick: \`${prefix}kick [user]\`\nGive user role: \`${prefix}addRole [role]\``)
     .addField(`User commands:`, `Role request: \`${prefix}roleRequest [role]\`\nView users with role: \`${prefix}usersWithRole [role]\`\nUser info: \`${prefix}userInfo [user]\``)
+    .addField(`Fun commands:`, `Show ISS location: \`${prefix}iss\`\nMeasure latency: \`${prefix}ping\``)
     .setThumbnail(client.user.avatarURL())
     .setFooter(`Bot ID: ${client.user.id}`)
     .setColor("00c5ff")
