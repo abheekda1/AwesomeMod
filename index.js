@@ -112,7 +112,9 @@ client.on("message", async message => {
 });
 
 async function addRole(message) {
-
+  if (!message.member.hasPermission('ADMINISTRATOR')) {
+    message.reply("you do not have adequate permissions!")
+  }
 
   if (!message.content.split(" ")[1]) {
     message.reply("role query must contain at least 3 characters!")
