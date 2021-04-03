@@ -302,14 +302,20 @@ async function roleRequest(message) {
       return;
     }
 
-    const verificationMessage = message.channel.send(`<@${message.author.id}> would like the **${role}** role. Are they worthy?`)
-    .then(verificationMessage => {
-      verificationMessage.react('👍');
-      verificationMessage.react('👎');
+    const verificationEmbed = new Discord.MessageEmbed()
+      .setTitle(`\`${message.author.tag}\` would like the **${role}** role. Are they worthy?`)
+      .setDescription("React to this message to verify")
+      .setThumbnail(member.user.avatarURL())
+      .setColor("fda172")
+      .setTimestamp();
+    message.channel.send(verificationEmbed)
+    .then(verificationEmbed => {
+      verificationEmbed.react('👍');
+      verificationEmbed.react('👎');
       const filter = (reaction, user) => {
         return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
       };
-      verificationMessage.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
+      verificationEmbed.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
         .then(userReaction => {
           const reaction = userReaction.first();
           if (reaction.emoji.name === '👍') {
@@ -317,7 +323,7 @@ async function roleRequest(message) {
           } else {
             message.reply("I guess you won't be getting that role!");
           }
-        }).catch(verificationMessage => { verificationMessage.edit("TIMEOUT") });
+        }).catch(verificationEmbed => { verificationEmbed.edit("TIMEOUT") });
     }).catch(console.error);
   });
 }
