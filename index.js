@@ -79,7 +79,7 @@ async function startLogs(message) {
   if (!message.member.hasPermission("ADMINISTRATOR")) {
     message.reply("you do not have admin permissions!");
     return;
-  })
+  }
   collection.findOne({ guild_id: message.guild.id }, (error, result) => {
     if (error) {
       console.error;
