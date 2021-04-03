@@ -144,7 +144,8 @@ async function kulboardCreate(message) {
           // Remove view permissions from "@everyone"
           permissionOverwrites: [{
             id: message.guild.id,
-            deny: ['VIEW_CHANNEL'],
+            allow: ['VIEW_CHANNEL'],
+            deny: ['SEND_MESSAGES'],
           }]
         }).then(channel => {
           // Add the ID of the "#bot-logs" channel to the database
@@ -159,7 +160,8 @@ async function kulboardCreate(message) {
         // Remove view permissions from "@everyone"
         permissionOverwrites: [{
           id: message.guild.id,
-          deny: ['VIEW_CHANNEL'],
+          allow: ['VIEW_CHANNEL'],
+          deny: ['SEND_MESSAGES'],
         }]
       }).then(channel => {
         // Add the ID of the "#bot-logs" channel to the database
