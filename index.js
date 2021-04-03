@@ -83,6 +83,10 @@ client.on("ready", () => {
 });
 
 client.on("message", async message => {
+  if (message.author.bot) {
+    return;
+  }
+
   switch (message.content.toLowerCase()) {
     case `${prefix}aboutserver`:
       aboutServer(message);
@@ -106,6 +110,84 @@ client.on("message", async message => {
     addRole(message);
   }
 });
+
+async function addRole(message) {
+
+
+  if (!message.content.split(" ")[1]) {
+    message.reply("role query must contain at least 3 characters!")
+    return;
+  }
+
+  if (message.content.split(" ")[1].length < 3) {
+    message.reply("role query must contain at least 3 characters!")
+    return;
+  }
+
+  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1]));
+  let roleChannel;
+
+  if (!message.content.split(" ")[2]) {
+    message.reply("user query must contain at least 3 characters!")
+    return;
+  }
+
+  if (message.content.split(" ")[2].length < 3) {
+    message.reply("user query must contain at least 3 characters!")
+    return;
+  }
+
+  if (roles.array().length < 1) {
+    message.reply("no roles found with that name!");
+    return;
+  }
+
+  const role = roles.array()[0];
+
+  const members = message.guild.members.cache.filter(member => {
+    if (member.nickname) {
+      return member.user.username.toLowerCase().includes(message.content.split(" ")[2].toLowerCase()) || member.nickname.toLowerCase().includes(message.content.split(" ")[1].toLowerCase());
+    } else {
+      return member.user.username.toLowerCase().includes(message.content.split(" ")[2].toLowerCase())
+    }
+  });
+
+  if (members.array().length < 1) {
+    message.reply("no members found with that name!");
+    return;
+  }
+
+  const member = members.array()[0];
+
+  if (member.roles.cache.has(role.id)) {
+    message.reply(`${member.user} already has that role!`);
+    return;
+  }
+
+  const verificationEmbed = new Discord.MessageEmbed()
+    .setTitle(`Are you sure you want to give \`${message.author.tag}\` the **${role.name}** role?`)
+    .setDescription("React to this message to verify")
+    .setThumbnail(member.user.avatarURL())
+    .setColor("fda172")
+    .setTimestamp();
+  message.channel.send(verificationEmbed)
+  .then(verificationEmbed => {
+    verificationEmbed.react('👍');
+    verificationEmbed.react('👎');
+    const filter = (reaction, user) => {
+      return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+    };
+    verificationEmbed.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
+      .then(userReaction => {
+        const reaction = userReaction.first();
+        if (reaction.emoji.name === '👍') {
+          member.roles.add(role).then(message.reply(`\`${member.user}\` has been given the **${role}**`)).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
+        } else {
+          message.reply("I guess you won't be getting that role!");
+        }
+      }).catch(verificationEmbed => { verificationEmbed.edit("TIMEOUT") });
+  }).catch(console.error);
+}
 
 async function ban(message) {
 
