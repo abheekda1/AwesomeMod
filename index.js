@@ -152,7 +152,7 @@ async function ban(message) {
         } else {
           message.reply(`phew! ${member}'s safe!`);
         }
-      }).catch(verificationEmbed.edit("TIMEOUT"));
+      }).catch(verificationEmbed => { verificationEmbed.edit("TIMEOUT") });
 }
 
 async function kick(message) {
@@ -202,7 +202,7 @@ async function kick(message) {
         } else {
           message.reply(`phew! ${member}'s safe!`);
         }
-      }).catch(verificationEmbed.edit("TIMEOUT"));
+      }).catch(verificationEmbed => { verificationEmbed.edit("TIMEOUT") });
 }
 
 async function helpMessage(message) {
@@ -317,7 +317,7 @@ async function roleRequest(message) {
         } else {
           message.reply("I guess you won't be getting that role!");
         }
-      }).catch(verificationMessage.edit("TIMEOUT"));
+      }).catch(verificationMessage => { verificationMessage.edit("TIMEOUT") });
   });
 }
 
