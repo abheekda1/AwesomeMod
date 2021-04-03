@@ -313,8 +313,7 @@ async function roleRequest(message) {
         .then(userReaction => {
           const reaction = userReaction.first();
           if (reaction.emoji.name === '👍') {
-            message.reply("wow I guess you ARE worthy! ||mods must be real mistaken||");
-            message.member.roles.add(role).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
+            message.member.roles.add(role).then(message.reply("wow I guess you ARE worthy! ||mods must be real mistaken||")).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
           } else {
             message.reply("I guess you won't be getting that role!");
           }
