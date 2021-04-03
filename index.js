@@ -694,6 +694,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
         messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionAddEmbed).catch(console.error);
       }
+    }
   });
 });
 
