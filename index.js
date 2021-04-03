@@ -143,8 +143,8 @@ async function userInfo(message) {
     .setAuthor(member.user.tag, member.user.avatarURL())
     .addField("Roles", member.roles.cache.map(r => `${r}`).join(' • '))
     .addField("Permissions", member.permissions.toArray().map(p => `\`${p}\``.toLowerCase()).join(' • '))
-    .addField("Joined at", member.joinedTimestamp, true)
-    .addField("Account created", member.user.createdTimestamp, true)
+    .addField("Joined at", `${new Date(member.joinedTimestamp * 1000).toLocaleString("en-US", {timeZoneName: "short"})}`, true)
+    .addField("Account created", `${new Date(member.user.createdTimestamp * 1000).toLocaleString("en-US", {timeZoneName: "short"})}`, true)
     .setColor("00c5ff")
     .setFooter(`User ID: ${member.user.id}`)
     .setTimestamp();
