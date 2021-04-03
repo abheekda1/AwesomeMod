@@ -143,7 +143,7 @@ async function userInfo(message) {
     .setAuthor(member.user.tag, member.user.avatarURL())
     .addField("Roles", member.roles.cache.map(r => `${r}`).join(' • '))
     .setColor("00c5ff")
-    .setFooter("User ID: ", member.user.id)
+    .setFooter(`User ID: ${member.user.id}`)
     .setTimestamp();
   message.channel.send(userInfoEmbed);
 }
