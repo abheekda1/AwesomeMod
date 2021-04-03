@@ -100,6 +100,8 @@ client.on("message", async message => {
     usersWithRole(message);
   } else if (message.content.toLowerCase().startsWith(`${prefix}ban`)) {
     ban(message);
+  } else if (message.content.toLowerCase().startsWith(`${prefix}kick`)) {
+    kick(message);
   }
 });
 
