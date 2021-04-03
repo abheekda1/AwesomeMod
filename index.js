@@ -308,7 +308,7 @@ async function addRole(message) {
   message.channel.send(verificationEmbed)
   .then(verificationEmbed => {
     verificationEmbed.react('<a:anim_check:827985495295655988>');
-    verificationEmbed.react('<a:anim_cross:827985495295655988>');
+    verificationEmbed.react('<a:anim_cross:827990162113560576>');
     const filter = (reaction, user) => {
       return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
     };
@@ -360,7 +360,7 @@ async function ban(message) {
     message.channel.send(verificationEmbed)
     .then(verificationEmbed => {
       verificationEmbed.react('<a:anim_check:827985495295655988>');
-      verificationEmbed.react('<a:anim_cross:827985495295655988>');
+      verificationEmbed.react('<a:anim_cross:827990162113560576>');
       const filter = (reaction, user) => {
         return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
       };
@@ -412,7 +412,7 @@ async function kick(message) {
     message.channel.send(verificationEmbed)
     .then( verificationEmbed => {
       verificationEmbed.react('<a:anim_check:827985495295655988>');
-      verificationEmbed.react('<a:anim_cross:827985495295655988>');
+      verificationEmbed.react('<a:anim_cross:827990162113560576>');
       const filter = (reaction, user) => {
         return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
       };
@@ -525,7 +525,7 @@ async function roleRequest(message) {
   message.channel.send(verificationEmbed)
   .then(verificationEmbed => {
     verificationEmbed.react('<a:anim_check:827985495295655988>');
-    verificationEmbed.react('<a:anim_cross:827985495295655988>');
+    verificationEmbed.react('<a:anim_cross:827990162113560576>');
     const filter = (reaction, user) => {
       return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
     };
