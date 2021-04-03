@@ -103,8 +103,49 @@ client.on("message", async message => {
   }
 });
 
-async function ban() {
+async function ban(message) {
 
+  if (!message.content.split(" ")[1]) {
+    message.reply("query must contain at least 3 characters!")
+    return;
+  }
+
+  if (message.content.split(" ")[1].length < 3) {
+    message.reply("query must contain at least 3 characters!")
+    return;
+  }
+
+  const members = message.guild.members.cache.filter(member => {
+    if (member.nickname) {
+      return member.user.username.toLowerCase().includes(message.content.split(" ")[1]) || member.nickname.toLowerCase().includes(message.content.split(" ")[1]);
+    } else {
+      return member.user.username.toLowerCase().includes(message.content.split(" ")[1])
+    }
+  });
+
+  if (members.array().length < 1) {
+    message.reply("no members found with that name!");
+    return;
+  }
+
+  const member = members.array()[0];
+
+    const verificationMessage = message.reply(`are you sure you would like to ban ${member}?`);
+    message.react('👍');
+    message.react('👎');
+    const filter = (reaction, user) => {
+      return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+    };
+    message.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
+      .then(userReaction => {
+        const reaction = userReaction.first();
+        if (reaction.emoji.name === '👍') {
+          message.member.ban().catch(console.error);
+          message.reply(`${member} has been banned!`);
+        } else {
+          message.reply("I guess you won't be getting that role!");
+        }
+      }).catch("Role reaction timeout, I guess the mods don't really care about you and forgot.");
 }
 
 async function helpMessage(message) {
