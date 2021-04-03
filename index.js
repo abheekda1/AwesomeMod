@@ -104,8 +104,22 @@ async function startLogs(message) {
           // Add the ID of the "#bot-logs" channel to the database
           message.reply(`channel ${channel} created!`)
           collection.updateOne({ guild_id: message.guild.id }, { $set: { "bot_logs_id": `${channel.id}` } });
-        }).catch(message.reply(`unable to create channel :(`));
+        }).catch(console.error);
       }
+    } else {
+      // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
+      message.guild.channels.create('bot-logs', {
+        type: 'text',
+        // Remove view permissions from "@everyone"
+        permissionOverwrites: [{
+          id: message.guild.id,
+          deny: ['VIEW_CHANNEL'],
+        }]
+      }).then(channel => {
+        // Add the ID of the "#bot-logs" channel to the database
+        message.reply(`channel ${channel} created!`)
+        collection.updateOne({ guild_id: message.guild.id }, { $set: { "bot_logs_id": `${channel.id}` } });
+      }).catch(console.error);
     }
   });
 }
