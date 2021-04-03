@@ -130,7 +130,12 @@ async function ban(message) {
 
   const member = members.array()[0];
 
-    const verificationMessage = message.reply(`are you sure you would like to ban ${member}?`);
+    const verificationEmbed = new Discord.MessageEmbed()
+      .setTitle(`Are you sure you would like to ban ${member}?`)
+      .setDescription("React to your message to verify")
+      .setThumbnail(member.user.avatarURL())
+      .setColor("fda172")
+      .setTimestamp();
     message.react('👍');
     message.react('👎');
     const filter = (reaction, user) => {
