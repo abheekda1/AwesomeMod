@@ -59,6 +59,8 @@ client.on("message", async message => {
     case `${prefix}kulboard`:
       kulboardCreate(message)
       break;
+    case `${prefix}ping`:
+      ping(message);
   }
 
   if (message.content.toLowerCase().startsWith(`${prefix}bulkdelete`)) {
@@ -77,6 +79,16 @@ client.on("message", async message => {
     userInfo(message);
   }
 });
+
+async function ping(message) {
+  const pingEmbed = new Discord.MessageEmbed()
+    .setAuthor(message.author.tag, message.author.avatarURL())
+    .setTitle("Pong!")
+    .addField(`🏓`, `${Date.now() - message.createdTimestamp}ms`)
+    .addField(`API`, `${Math.round(client.ws.ping)}ms`)
+    .setColor("00c5ff")
+    .setTimestamp();
+}
 
 async function startLogs(message) {
   if (!message.member.hasPermission("ADMINISTRATOR")) {
