@@ -554,7 +554,7 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
       .setFooter("ID: " + editedMessage.id)
       .setTimestamp()
       .setColor('c9ff00');
-    collection.findOne({ guild_id: message.guild.id }, (error, result) => {
+    collection.findOne({ guild_id: editedMessage.guild.id }, (error, result) => {
       if (error) {
         console.error;
       }
