@@ -302,7 +302,8 @@ async function roleRequest(message) {
       return;
     }
 
-    const verificationMessage = message.channel.send(`<@${message.author.id}> would like the **${role}** role. Are they worthy?`).then(message => {
+    const verificationMessage = message.channel.send(`<@${message.author.id}> would like the **${role}** role. Are they worthy?`)
+    .then(message => {
       message.react('👍');
       message.react('👎');
       const filter = (reaction, user) => {
@@ -318,8 +319,8 @@ async function roleRequest(message) {
             message.reply("I guess you won't be getting that role!");
           }
         }).catch(verificationMessage => { verificationMessage.edit("TIMEOUT") });
-    });
     }).catch(console.error);
+  });
 }
 
 async function bulkDelete(message) {
