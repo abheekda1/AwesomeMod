@@ -410,7 +410,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
   const messageReactionAddEmbed = new Discord.MessageEmbed()
     .setTitle("Reaction Added")
     .addField("Message", messageContent)
-    .addField("Reactions", `${userTag} reacted with ${emoji}, along with ${numEmoji} other people in #${messageReaction.message.channel.name}.`)
+    .addField("Reactions", `${userTag} reacted with ${emoji}, along with ${numEmoji - 1} other people in #${messageReaction.message.channel.name}.`)
     .setFooter("Message ID: " + messageReaction.message.id)
     .setTimestamp()
     .setColor('00aaff');
