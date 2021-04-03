@@ -670,11 +670,26 @@ client.on('messageReactionAdd', (messageReaction, user) => {
     .setFooter("Message ID: " + messageReaction.message.id)
     .setTimestamp()
     .setColor('00aaff');
+
+  const kulboardEmbed = new Discord.MessageEmbed()
+    .setTitle("Very kül message")
+    .setURL(messageReaction.message.url)
+    .setAuthor(messageReaction.message.author.tag, messageReaction.message.author.avatarURL())
+    .addField("Message", messageContent)
+    .addField("Channel", messageReaction.message.channel)
+    .setFooter("Message ID: " + messageReaction.message.id)
+    .setTimestamp();
   collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
     if (error) {
       console.error;
     }
-    if (result.bot_logs_id)
+    if (result.kulboard_id) {
+      kulboardChannel = result.kulboard_id;
+      if (messageReaction.message.guild.channels.cache.get(kulboardChannel) && messageReaction.emoji.name === "😎" && messageReaction.count > 3) {
+        messageReaction.message.guild.channels.cache.get(kulboardChannel).send(kulboardEmbed).catch(console.error);
+      }
+    }
+    if (result.bot_logs_id) {
       botLogsChannel = result.bot_logs_id;
       if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
         messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionAddEmbed).catch(console.error);
