@@ -136,7 +136,7 @@ async function kulboardCreate(message) {
           // Add the ID of the "#bot-logs" channel to the database
           message.reply(`channel ${channel} created!`)
           collection.updateOne({ guild_id: message.guild.id }, { $set: { "kulboard_id": `${channel.id}` } });
-        }).catch(message.reply(`unable to create channel :(`));
+        }).catch(message.reply(console.error));
       }
     } else {
       // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
@@ -151,7 +151,7 @@ async function kulboardCreate(message) {
         // Add the ID of the "#bot-logs" channel to the database
         message.reply(`channel ${channel} created!`)
         collection.updateOne({ guild_id: message.guild.id }, { $set: { "kulboard_id": `${channel.id}` } });
-      }).catch(message.reply(`unable to create channel :(`));
+      }).catch(console.error));
     }
   });
 }
