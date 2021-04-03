@@ -88,6 +88,7 @@ async function ping(message) {
     .addField(`API`, `${Math.round(client.ws.ping)}ms`)
     .setColor("00c5ff")
     .setTimestamp();
+  message.channel.send(pingEmbed).catch(console.error);
 }
 
 async function startLogs(message) {
