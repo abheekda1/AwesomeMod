@@ -131,7 +131,7 @@ async function ban(message) {
   const member = members.array()[0];
 
     const verificationEmbed = new Discord.MessageEmbed()
-      .setTitle(`Are you sure you would like to ban <@${member.user.id}>?`)
+      .setTitle(`Are you sure you would like to ban \`${member.user.tag}\`?`)
       .setDescription("React to your message to verify")
       .setThumbnail(member.user.avatarURL())
       .setColor("fda172")
