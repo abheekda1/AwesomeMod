@@ -140,10 +140,10 @@ async function ban(message) {
       .then(userReaction => {
         const reaction = userReaction.first();
         if (reaction.emoji.name === '👍') {
-          message.member.ban().catch(console.error);
+          message.member.ban().catch(() => message.channel.send(`Nevermind, I don't have the ability to ban ${member.user.username}, likely because their role is higher than mine.`));
           message.reply(`${member} has been banned!`);
         } else {
-          message.reply("I guess you won't be getting that role!");
+          message.reply("phew! ${member}'s safe!");
         }
       }).catch("Role reaction timeout, I guess the mods don't really care about you and forgot.");
 }
