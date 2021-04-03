@@ -142,11 +142,13 @@ async function userInfo(message) {
   const userInfoEmbed = new Discord.MessageEmbed()
     .setAuthor(member.user.tag, member.user.avatarURL())
     .addField("Roles", member.roles.cache.map(r => `${r}`).join(' • '))
-    .addField("Permissions", member.permissions.toArray().map(p => `\`${p}\``).join(' • '))
+    .addField("Permissions", member.permissions.toArray().map(p => `\`${p}\``.toLowerCase()).join(' • '))
+    .addField("Joined at", member.joinedTimestamp, true)
+    .addField("Account created", member.user.createdTimestamp, true)
     .setColor("00c5ff")
     .setFooter(`User ID: ${member.user.id}`)
     .setTimestamp();
-  message.channel.send(userInfoEmbed);
+  message.channel.send(userInfoEmbed).catch(console.error);
 }
 
 async function addRole(message) {
