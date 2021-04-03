@@ -303,7 +303,7 @@ async function roleRequest(message) {
     }
 
     const verificationEmbed = new Discord.MessageEmbed()
-      .setTitle(`\`${message.author.tag}\` would like the **${role}** role. Are they worthy?`)
+      .setTitle(`\`${message.author.tag}\` would like the **${role.name}** role. Are they worthy?`)
       .setDescription("React to this message to verify")
       .setThumbnail(message.author.avatarURL())
       .setColor("fda172")
