@@ -146,8 +146,7 @@ async function ban(message) {
       .then(userReaction => {
         const reaction = userReaction.first();
         if (reaction.emoji.name === '👍') {
-          message.member.ban().catch(() => message.channel.send(`Nevermind, I don't have the ability to ban ${member.user.username}, likely because their role is higher than mine.`));
-          message.reply(`${member} has been banned!`);
+          message.guild.members.cache.ban(member.user).then(user => message.reply(`<@${user.id}> has been banned!`);).catch(() => message.channel.send(`Unfortunately, I don't have the ability to ban ${member.user.username}, likely because their role is higher than mine.`));
         } else {
           message.reply("phew! ${member}'s safe!");
         }
