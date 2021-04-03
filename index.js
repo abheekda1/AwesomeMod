@@ -76,7 +76,7 @@ client.on("message", async message => {
 });
 
 async function startLogs(message) {
-  if (!message.member.hasPermission("ADMINISTRATOR") {
+  if (!message.member.hasPermission("ADMINISTRATOR")) {
     message.reply("you do not have admin permissions!");
     return;
   })
