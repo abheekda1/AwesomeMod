@@ -167,7 +167,7 @@ async function addRole(message) {
   }
 
   const verificationEmbed = new Discord.MessageEmbed()
-    .setTitle(`Are you sure you want to give \`${message.author.tag}\` the **${role.name}** role?`)
+    .setTitle(`Are you sure you want to give \`${member.user.tag}\` the **${role.name}** role?`)
     .setDescription("React to this message to verify")
     .setThumbnail(member.user.avatarURL())
     .setColor("fda172")
