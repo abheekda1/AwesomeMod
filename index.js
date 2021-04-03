@@ -142,6 +142,7 @@ async function userInfo(message) {
   const userInfoEmbed = new Discord.MessageEmbed()
     .setAuthor(member.user.tag, member.user.avatarURL())
     .addField("Roles", member.roles.cache.map(r => `${r}`).join(' • '))
+    .addField("Permissions", member.permissions.toArray().map(p => `${p}`).join(' • '))
     .setColor("00c5ff")
     .setFooter(`User ID: ${member.user.id}`)
     .setTimestamp();
