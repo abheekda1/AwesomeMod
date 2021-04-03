@@ -136,7 +136,7 @@ async function kulboardCreate(message) {
     if (result.kulboard_id) {
       kulboardChannel = result.kulboard_id;
       if (message.guild.channels.cache.get(kulboardChannel)) {
-        message.reply('bot logs channel already exists!');
+        message.reply('külboard channel already exists!');
       } else {
         // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
         message.guild.channels.create('külboard', {
