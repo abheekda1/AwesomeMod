@@ -666,7 +666,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
     .setTitle("Reaction Added")
     .setURL(messageReaction.message.url)
     .addField("Message", messageContent)
-    .addField("Reactions", `${userTag} reacted with ${emoji}, along with ${numEmoji - 1} other people in #${messageReaction.message.channel.name}.`)
+    .addField("Reactions", `${userTag} reacted with ${emoji}, along with ${numEmoji - 1} other people in ${messageReaction.message.channel}.`)
     .setFooter("Message ID: " + messageReaction.message.id)
     .setTimestamp()
     .setColor('00aaff');
@@ -711,7 +711,7 @@ client.on('messageReactionRemove', (messageReaction, user) => {
     .setTitle("Reaction Removed")
     .setURL(messageReaction.message.url)
     .addField("Message", messageContent)
-    .addField("Reactions", `${userTag} removed their reaction ${emoji} in #${messageReaction.message.channel.name}.`)
+    .addField("Reactions", `${userTag} removed their reaction ${emoji} in ${messageReaction.message.channel}.`)
     .setFooter("Message ID: " + messageReaction.message.id)
     .setTimestamp()
     .setColor('e7778b');
