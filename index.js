@@ -307,15 +307,15 @@ async function addRole(message) {
     .setTimestamp();
   message.channel.send(verificationEmbed)
   .then(verificationEmbed => {
-    verificationEmbed.react('👍');
+    verificationEmbed.react('<a:anim_check:827985495295655988>');
     verificationEmbed.react('👎');
     const filter = (reaction, user) => {
-      return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+      return ['<a:anim_check:827985495295655988>', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
     };
     verificationEmbed.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
       .then(userReaction => {
         const reaction = userReaction.first();
-        if (reaction.emoji.name === '👍') {
+        if (reaction.emoji.name === '<a:anim_check:827985495295655988>') {
           member.roles.add(role).then(message.reply(`${member.user} has been given the **${role}** role!`)).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
         } else {
           message.reply("I guess you won't be getting that role!");
@@ -359,15 +359,15 @@ async function ban(message) {
       .setTimestamp();
     message.channel.send(verificationEmbed)
     .then(verificationEmbed => {
-      verificationEmbed.react('👍');
+      verificationEmbed.react('<a:anim_check:827985495295655988>');
       verificationEmbed.react('👎');
       const filter = (reaction, user) => {
-        return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+        return ['<a:anim_check:827985495295655988>', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
       };
       verificationEmbed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
         .then(userReaction => {
           const reaction = userReaction.first();
-          if (reaction.emoji.name === '👍') {
+          if (reaction.emoji.name === '<a:anim_check:827985495295655988>') {
             message.guild.members.ban(member.user).then(user => message.reply(`<@${user.id}> has been banned!`)).catch(() => message.channel.send(`Unfortunately, I don't have the ability to ban ${member.user.username}, likely because their role is higher than mine.`));
           } else {
             message.reply(`phew! ${member}'s safe!`);
@@ -411,15 +411,15 @@ async function kick(message) {
       .setTimestamp();
     message.channel.send(verificationEmbed)
     .then( verificationEmbed => {
-      verificationEmbed.react('👍');
+      verificationEmbed.react('<a:anim_check:827985495295655988>');
       verificationEmbed.react('👎');
       const filter = (reaction, user) => {
-        return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+        return ['<a:anim_check:827985495295655988>', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
       };
       verificationEmbed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
         .then(userReaction => {
           const reaction = userReaction.first();
-          if (reaction.emoji.name === '👍') {
+          if (reaction.emoji.name === '<a:anim_check:827985495295655988>') {
             member.kick().then(user => message.reply(`<@${user.id}> has been kicked!`)).catch(() => message.channel.send(`Unfortunately, I don't have the ability to kick ${member.user.username}, likely because their role is higher than mine.`));
           } else {
             message.reply(`phew! ${member}'s safe!`);
@@ -524,15 +524,15 @@ async function roleRequest(message) {
     .setTimestamp();
   message.channel.send(verificationEmbed)
   .then(verificationEmbed => {
-    verificationEmbed.react('👍');
+    verificationEmbed.react('<a:anim_check:827985495295655988>');
     verificationEmbed.react('👎');
     const filter = (reaction, user) => {
-      return ['👍', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+      return ['<a:anim_check:827985495295655988>', '👎'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
     };
     verificationEmbed.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
       .then(userReaction => {
         const reaction = userReaction.first();
-        if (reaction.emoji.name === '👍') {
+        if (reaction.emoji.name === '<a:anim_check:827985495295655988>') {
           message.member.roles.add(role).then(message.reply("wow I guess you ARE worthy! ||mods must be real mistaken||")).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
         } else {
           message.reply("I guess you won't be getting that role!");
