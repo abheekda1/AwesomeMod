@@ -88,6 +88,20 @@ client.on("message", async message => {
   }
 });
 
+async function memberCountChannelUpdate(member) {
+  collection.findOne({ guild_id: member.guild.id }, (error, result) => {
+    if (error) {
+      console.error;
+    }
+    if (result.member_count_channel_id) {
+      memberCountChannel = result.member_count_channel_id;
+      if (member.guild.channels.cache.get(memberCountChannel)) {
+        member.guild.channels.cache.get(memberCountChannel).edit({ name: `Members: ${message.guild.memberCount}` }).catch(console.error);
+      }
+    }
+  });
+}
+
 async function locateISS(message) {
   await fetch("http://api.open-notify.org/iss-now.json")
     .then(request => request.json())
@@ -876,6 +890,92 @@ client.on('roleUpdate', (oldRole, newRole) => {
       botLogsChannel = result.bot_logs_id;
       if (newRole.guild.channels.cache.get(botLogsChannel)) {
         newRole.guild.channels.cache.get(botLogsChannel).send(roleUpdateEmbed).catch(console.error);
+      }
+    }
+  });
+});
+
+client.on('guildMemberAdd', member => {
+  memberCountChannelUpdate(member);
+  const memberAddEmbed = new Discord.MessageEmbed()
+    .setTitle("New Member")
+    .setAuthor(member.user.tag, member.user.avatarURL())
+    .addField("Tag", `${member.user.tag}`)
+    .addField("Joined At", `${new Date(member.joinedTimestamp).toLocaleString("en-US", {timeZoneName: "short"})}`)
+    .addField("Account Created", `${new Date(member.user.createdTimestamp).toLocaleString("en-US", {timeZoneName: "short"})}`)
+    .setFooter("Member ID: " + member.id)
+    .setThumbnail(member.user.avatarURL())
+    .setTimestamp()
+    .setColor('c9ff00');
+  collection.findOne({ guild_id: member.guild.id }, (error, result) => {
+    if (error) {
+      console.error;
+    }
+    if (result.bot_logs_id) {
+      botLogsChannel = result.bot_logs_id;
+      if (member.guild.channels.cache.get(botLogsChannel)) {
+        member.guild.channels.cache.get(botLogsChannel).send(memberAddEmbed).catch(console.error);
+      }
+    }
+  });
+});
+
+client.on('guildMemberRemove', member => {
+  memberCountChannelUpdate(member);
+  const memberRemoveEmbed = new Discord.MessageEmbed()
+    .setTitle("Member Removed")
+    .setAuthor(member.user.tag, member.user.avatarURL())
+    .addField("Tag", `${member.user.tag}`)
+    .addField("Joined At", `${new Date(member.joinedTimestamp).toLocaleString("en-US", {timeZoneName: "short"})}`)
+    .addField("Account Created", `${new Date(member.user.createdTimestamp).toLocaleString("en-US", {timeZoneName: "short"})}`)
+    .setFooter("Member ID: " + member.id)
+    .setThumbnail(member.user.avatarURL())
+    .setTimestamp()
+    .setColor('e7778b');
+  collection.findOne({ guild_id: member.guild.id }, (error, result) => {
+    if (error) {
+      console.error;
+    }
+    if (result.bot_logs_id) {
+      botLogsChannel = result.bot_logs_id;
+      if (member.guild.channels.cache.get(botLogsChannel)) {
+        member.guild.channels.cache.get(botLogsChannel).send(memberRemoveEmbed).catch(console.error);
+      }
+    }
+  });
+});
+
+client.on('guildMemberUpdate', (oldMember, newMember) => {
+  const removedRoles = oldMember.roles.cache.filter(role => !newMember.roles.cache.has(role.id));
+  const addedRoles = newMember.roles.cache.filter(role => !oldMember.roles.cache.has(role.id));
+  const memberUpdateEmbed = new Discord.MessageEmbed()
+    .setTitle("Member Updated")
+    .setAuthor(member.user.tag, member.user.avatarURL())
+    .addField("Tag", `${member.user.tag}`)
+    .setFooter("Member ID: " + member.id)
+    .setThumbnail(member.user.avatarURL())
+    .setTimestamp()
+    .setColor('e7778b');
+  if (removedRoles) {
+    memberUpdateEmbed.addField("Roles Removed", removedRoles.map(r => `${r}`).join(' • '));
+  }
+  if (addedRoles) {
+    memberUpdateEmbed.addField("Roles Added", addedRoles.map(r => `${r}`).join(' • '));
+  }
+  if (newMember.nickname !== oldMember.nickname) {
+    memberUpdateEmbed.addField("Nickname Changed", `\`${oldMember.nickname}\` >> \`${newMember.nickname}\``)
+  }
+  if (newMember.user.tag !== oldMember.user.tag) {
+    memberUpdateEmbed.addField("User Tag Changed", `\`${oldMember.user.tag}\` >> \`${newMember.user.tag}\``)
+  }
+  collection.findOne({ guild_id: newMember.guild.id }, (error, result) => {
+    if (error) {
+      console.error;
+    }
+    if (result.bot_logs_id) {
+      botLogsChannel = result.bot_logs_id;
+      if (newMember.guild.channels.cache.get(botLogsChannel)) {
+        newMember.guild.channels.cache.get(botLogsChannel).send(memberUpdateEmbed).catch(console.error);
       }
     }
   });
