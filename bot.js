@@ -122,17 +122,17 @@ client.on("message", async message => {
 
 async function aboutBot(message) {
   const uptimeDays = client.uptime / 86400000;
-  let guildCount;
-  client.shard.fetchClientValues('guilds.cache.size')
+  let serverCount;
+  await client.shard.fetchClientValues('guilds.cache.size')
 	.then(results => {
-		guildCount = results.reduce((acc, guildCount) => acc + guildCount, 0);
+		serverCount = results.reduce((acc, guildCount) => acc + guildCount);
 	})
 	.catch(console.error);
   const aboutBotEmbed = new Discord.MessageEmbed()
     .setTitle("About me!")
     .setURL(`https://adat.link/awesomemod`)
     .setAuthor(client.user.tag, client.user.avatarURL())
-    .addField(`Servers`, guildCount, true)
+    .addField(`Servers`, `${serverCount}`, true)
     .addField(`Uptime`, `${uptimeDays.toFixed(1)} days`, true)
     .addField(`Invite Link`, `Click the title to add this bot to your server!`)
     .setFooter(`Client ID: ${client.user.id}`)
