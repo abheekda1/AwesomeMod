@@ -719,8 +719,8 @@ client.on('message', message => {
         }
       });
     }
+    console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
   });
-  console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
 });
 
 client.on('messageDeleteBulk', messages => {
