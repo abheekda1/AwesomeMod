@@ -46,7 +46,6 @@ client.on("message", async message => {
   const filter = reaction => {
     return reaction.emoji.name === '😎';
   };
-  
   const collector = message.createReactionCollector(filter);
 
   collector.on('collect', (reaction, user) => {
