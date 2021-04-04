@@ -874,8 +874,8 @@ client.on('roleDelete', role => {
 });
 
 client.on('roleUpdate', (oldRole, newRole) => {
-  const removedPerms = oldRole.permissions.filter(perm => !newRole.hasPermission(perm));
-  const addedPerms = newRole.permissions.filter(perm => !oldRole.hasPermission(perm));
+  /*const removedPerms = oldRole.permissions.filter(perm => !newRole.hasPermission(perm));
+  const addedPerms = newRole.permissions.filter(perm => !oldRole.hasPermission(perm));*/
   const roleUpdateEmbed = new Discord.MessageEmbed()
     .setTitle("Role Updated")
     .addField("Name", `${oldRole.name} >> ${newRole.name}`)
@@ -884,12 +884,12 @@ client.on('roleUpdate', (oldRole, newRole) => {
     .setFooter("Role ID: " + newRole.id)
     .setTimestamp()
     .setColor('c9ff00');
-  if (removedPerms.array().length > 0) {
+  /*if (removedPerms.array().length > 0) {
     roleUpdateEmbed.addField("Permissions Removed", removedPerms.map(p => `${p}`).join(' • '));
   }
   if (addedPerms.array().length > 0) {
     roleUpdateEmbed.addField("Permissions Added", addedPerms.map(p => `${p}`).join(' • '));
-  }
+  }*/
   collection.findOne({ guild_id: newRole.guild.id }, (error, result) => {
     if (error) {
       console.error;
