@@ -43,7 +43,34 @@ client.on("ready", () => {
 });
 
 client.on("message", async message => {
-  if (message.author.bot) {
+  const collector = message.createReactionCollector(filter);
+
+  collector.on('collect', (reaction, user) => {
+    if (reaction.count === 1) {
+      const kulboardEmbed = new Discord.MessageEmbed()
+        .setTitle("Very kül message")
+        .setURL(message.url)
+        .setAuthor(message.author ? message.author.tag : "Unknown: click on the link to find out", message.author ? message.author.avatarURL() : client.user.defaultAvatarURL)
+        .addField("Message", message.content)
+        .addField("Channel", message.channel)
+        .setFooter("Message ID: " + message.id)
+        .setColor("00c5ff")
+        .setTimestamp();
+      collection.findOne({ guild_id: message.guild.id }, (error, result) => {
+        if (error) {
+          console.error;
+        }
+        if (result.kulboard_id) {
+          kulboardChannel = result.kulboard_id;
+          if (message.guild.channels.cache.get(kulboardChannel)) {
+            message.guild.channels.cache.get(kulboardChannel).send(kulboardEmbed).catch(console.error);
+          }
+        }
+      });
+    }
+  });
+
+  if (!message.content.startsWith(prefix) || message.author.bot) {
     return;
   }
 
@@ -88,6 +115,10 @@ client.on("message", async message => {
   } else if (message.content.toLowerCase().startsWith(`${prefix}aboutbot`)) {
     aboutBot(message);
   }
+
+  const filter = reaction => {
+    return reaction.emoji.name === '😎';
+  };
 });
 
 async function aboutBot(message) {
@@ -685,39 +716,6 @@ client.on('messageDelete', message => {
       if (message.guild.channels.cache.get(botLogsChannel)) {
         message.guild.channels.cache.get(botLogsChannel).send(deleteEmbed).catch(console.error);
       }
-    }
-  });
-});
-
-client.on('message', message => {
-  const filter = reaction => {
-  	return reaction.emoji.name === '😎';
-  };
-
-  const collector = message.createReactionCollector(filter);
-
-  collector.on('collect', (reaction, user) => {
-    if (reaction.count === 1) {
-      const kulboardEmbed = new Discord.MessageEmbed()
-        .setTitle("Very kül message")
-        .setURL(message.url)
-        .setAuthor(message.author ? message.author.tag : "Unknown: click on the link to find out", message.author ? message.author.avatarURL() : client.user.defaultAvatarURL)
-        .addField("Message", message.content)
-        .addField("Channel", message.channel)
-        .setFooter("Message ID: " + message.id)
-        .setColor("00c5ff")
-        .setTimestamp();
-      collection.findOne({ guild_id: message.guild.id }, (error, result) => {
-        if (error) {
-          console.error;
-        }
-        if (result.kulboard_id) {
-          kulboardChannel = result.kulboard_id;
-          if (message.guild.channels.cache.get(kulboardChannel)) {
-            message.guild.channels.cache.get(kulboardChannel).send(kulboardEmbed).catch(console.error);
-          }
-        }
-      });
     }
   });
 });
