@@ -400,15 +400,15 @@ async function addRole(message) {
     const filter = (reaction, user) => {
       return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
     };
-    verificationEmbed.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
+    verificationEmbed.awaitReactions(filter, { max: 1 })
       .then(userReaction => {
         const reaction = userReaction.first();
         if (reaction.emoji.name === 'anim_check') {
           member.roles.add(role).then(message.reply(`${member.user} has been given the **${role}** role!`)).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
         } else {
-          message.reply("I guess you won't be getting that role!");
+          message.reply("I guess you won't be giving that role!");
         }
-      }).catch(verificationEmbed => { verificationEmbed.edit("TIMEOUT") });
+      }).catch(console.error);
   }).catch(console.error);
 }
 
@@ -453,7 +453,7 @@ async function ban(message) {
       const filter = (reaction, user) => {
         return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
       };
-      verificationEmbed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+      verificationEmbed.awaitReactions(filter, { max: 1 })
         .then(userReaction => {
           const reaction = userReaction.first();
           if (reaction.emoji.name === 'anim_check') {
@@ -461,7 +461,7 @@ async function ban(message) {
           } else {
             message.reply(`phew! ${member}'s safe!`);
           }
-        }).catch(verificationEmbed => { verificationEmbed.edit("TIMEOUT") });
+        }).catch(console.error);
       }).catch(console.error);
 }
 
@@ -505,7 +505,7 @@ async function kick(message) {
       const filter = (reaction, user) => {
         return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
       };
-      verificationEmbed.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+      verificationEmbed.awaitReactions(filter, { max: 1 })
         .then(userReaction => {
           const reaction = userReaction.first();
           if (reaction.emoji.name === 'anim_check') {
@@ -513,7 +513,7 @@ async function kick(message) {
           } else {
             message.reply(`phew! ${member}'s safe!`);
           }
-        }).catch(verificationEmbed => { verificationEmbed.edit("TIMEOUT") });
+        }).catch(console.error);
       }).catch(console.error);
 }
 
@@ -618,7 +618,7 @@ async function roleRequest(message) {
     const filter = (reaction, user) => {
       return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
     };
-    verificationEmbed.awaitReactions(filter, { max: 1, time: 600000000, errors: ['time'] })
+    verificationEmbed.awaitReactions(filter, { max: 1 })
       .then(userReaction => {
         const reaction = userReaction.first();
         if (reaction.emoji.name === 'anim_check') {
@@ -626,7 +626,7 @@ async function roleRequest(message) {
         } else {
           message.reply("I guess you won't be getting that role!");
         }
-      }).catch(verificationEmbed => { verificationEmbed.edit("TIMEOUT") });
+      }).catch(console.error);
   }).catch(console.error);
 }
 
