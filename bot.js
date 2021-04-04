@@ -43,36 +43,6 @@ client.on("ready", () => {
 });
 
 client.on("message", async message => {
-  const filter = reaction => {
-    return reaction.emoji.name === '😎';
-  };
-  const collector = message.createReactionCollector(filter);
-
-  collector.on('collect', (reaction, user) => {
-    if (reaction.count === 1) {
-      const kulboardEmbed = new Discord.MessageEmbed()
-        .setTitle("Very kül message")
-        .setURL(message.url)
-        .setAuthor(message.author ? message.author.tag : "Unknown: click on the link to find out", message.author ? message.author.avatarURL() : client.user.defaultAvatarURL)
-        .addField("Message", message.content)
-        .addField("Channel", message.channel)
-        .setFooter("Message ID: " + message.id)
-        .setColor("00c5ff")
-        .setTimestamp();
-      collection.findOne({ guild_id: message.guild.id }, (error, result) => {
-        if (error) {
-          console.error;
-        }
-        if (result.kulboard_id) {
-          kulboardChannel = result.kulboard_id;
-          if (message.guild.channels.cache.get(kulboardChannel)) {
-            message.guild.channels.cache.get(kulboardChannel).send(kulboardEmbed).catch(console.error);
-          }
-        }
-      });
-    }
-  });
-
   if (!message.content.startsWith(prefix) || message.author.bot) {
     return;j
   }
@@ -687,42 +657,32 @@ async function bulkDelete(message) {
   }).catch(console.error);
 }
 
-client.on('messageDelete', message => {
-  let messageContent = message.content;
-  let messageAvatar;
-  const messageID = message.id;
-  let messageAuthor;
-  if (message.author) {
-    messageAuthor = message.author.tag;
-    messageAvatar = message.author.avatarURL();
-  } else {
-    messageAuthor = "Message was not cached";
-    messageAvatar = client.user.defaultAvatarURL;
-  }
-  if (!messageContent) {
-    messageContent = "[NONE]";
-  }
-  const deleteEmbed = new Discord.MessageEmbed()
-    .setTitle('Message Deleted')
-    .setURL(message.url)
-    .addField('Author', messageAuthor)
-    .addField('Message', messageContent)
-    .setThumbnail(messageAvatar)
-    .setFooter("ID: " + messageID)
-    .setTimestamp()
-    .setColor('e7778b');
+client.on('messageDelete', msg => {
+  msg.channel.messages.fetch(msg.id)
+    .then(message => {
+      const deleteEmbed = new Discord.MessageEmbed()
+        .setTitle('Message Deleted')
+        .setAuthor(message.author.tag, message.author.avatarURL())
+        .setURL(message.url)
+        .addField('Author', message.author.tag)
+        .addField('Message', message.content)
+        .setThumbnail(message.author.avatarURL())
+        .setFooter("ID: " + message.id)
+        .setTimestamp()
+        .setColor('e7778b');
 
-  collection.findOne({ guild_id: message.guild.id }, (error, result) => {
-    if (error) {
-      console.error;
-    }
-    if (result.bot_logs_id) {
-      botLogsChannel = result.bot_logs_id;
-      if (message.guild.channels.cache.get(botLogsChannel)) {
-        message.guild.channels.cache.get(botLogsChannel).send(deleteEmbed).catch(console.error);
-      }
-    }
-  });
+      collection.findOne({ guild_id: message.guild.id }, (error, result) => {
+        if (error) {
+          console.error;
+        }
+        if (result.bot_logs_id) {
+          botLogsChannel = result.bot_logs_id;
+          if (message.guild.channels.cache.get(botLogsChannel)) {
+            message.guild.channels.cache.get(botLogsChannel).send(deleteEmbed).catch(console.error);
+          }
+        }
+      });
+    });
 });
 
 client.on('messageDeleteBulk', messages => {
@@ -807,22 +767,65 @@ client.on('channelCreate', channel => {
 });
 
 client.on('messageReactionAdd', (messageReaction, user) => {
-  const userTag = user.tag;
-  const emoji = messageReaction.emoji.name;
-  const numEmoji = messageReaction.count;
-  let messageContent = messageReaction.message.content;
-  if (!messageContent) {
-    messageContent = "[NONE]";
-  }
-  let channelCategory;
-  const messageReactionAddEmbed = new Discord.MessageEmbed()
-    .setTitle("Reaction Added")
-    .setURL(messageReaction.message.url)
-    .addField("Message", messageContent)
-    .addField("Reactions", `${userTag} reacted with ${emoji}, along with ${numEmoji - 1} other people in ${messageReaction.message.channel}.`)
-    .setFooter("Message ID: " + messageReaction.message.id)
-    .setTimestamp()
-    .setColor('00aaff');
+  messageReaction.message.channel.messages.fetch(messageReaction.message.id)
+    .then(message => {
+      const emoji = messageReaction.emoji.name;
+      const numEmoji = message.reactions.cache.get(emoji).count;
+      const messageReactionAddEmbed = new Discord.MessageEmbed()
+        .setTitle("Reaction Added")
+        .setURL(message.url)
+        .addField("Message", message.content)
+        .addField("Reactions", `\`${user.tag}\` reacted with \`${emoji}\`, along with ${numEmoji - 1} other people in ${messageReaction.message.channel}.`)
+        .setFooter("Message ID: " + messageReaction.message.id)
+        .setThumbnail(message.author.avatarURL())
+        .setTimestamp()
+        .setColor('00aaff');
+
+      const kulboardEmbed = new Discord.MessageEmbed()
+        .setTitle("Very kül message")
+        .setURL(message.url)
+        .setAuthor(message.author, message.author.avatarURL())
+        .addField("Message", message.content)
+        .addField("Channel", message.channel)
+        .setThumbnail(message.author.avatarURL())
+        .setFooter("Message ID: " + message.id)
+        .setColor("00c5ff")
+        .setTimestamp();
+
+        collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
+          if (error) {
+            console.error;
+          }
+          if (result.bot_logs_id) {
+            botLogsChannel = result.bot_logs_id;
+            if (message.guild.channels.cache.get(botLogsChannel)) {
+              message.guild.channels.cache.get(botLogsChannel).send(messageReactionAddEmbed).catch(console.error);
+            }
+
+            if (result.kulboard_id) {
+              kulboardChannel = result.kulboard_id;
+              if (message.guild.channels.cache.get(kulboardChannel)) {
+                message.guild.channels.cache.get(kulboardChannel).send(kulboardEmbed).catch(console.error);
+              }
+            }
+          }
+        });
+    });
+});
+
+client.on('messageReactionRemove', (messageReaction, user) => {
+  messageReaction.message.channel.messages.fetch(messageReaction.message.id)
+    .then(message => {
+      const emoji = messageReaction.emoji.name;
+      const messageReactionRemoveEmbed = new Discord.MessageEmbed()
+        .setTitle("Reaction Removed")
+        .setURL(message.url)
+        .addField("Message", message.content)
+        .addField("Reactions", `\`${user.tag}\` removed their reaction \`${emoji}\` in ${messageReaction.message.channel}.`)
+        .setFooter("Message ID: " + messageReaction.message.id)
+        .setThumbnail(message.author.avatarURL())
+        .setTimestamp()
+        .setColor('e7778b');
     collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
       if (error) {
         console.error;
@@ -830,38 +833,10 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       if (result.bot_logs_id) {
         botLogsChannel = result.bot_logs_id;
         if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
-          messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionAddEmbed).catch(console.error);
+          messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionRemoveEmbed).catch(console.error);
         }
       }
     });
-});
-
-client.on('messageReactionRemove', (messageReaction, user) => {
-  const userTag = user.tag;
-  const emoji = messageReaction.emoji.name;
-  let messageContent = messageReaction.message.content;
-  if (!messageContent) {
-    messageContent = "[NONE]";
-  }
-  let channelCategory;
-  const messageReactionRemoveEmbed = new Discord.MessageEmbed()
-    .setTitle("Reaction Removed")
-    .setURL(messageReaction.message.url)
-    .addField("Message", messageContent)
-    .addField("Reactions", `${userTag} removed their reaction ${emoji} in ${messageReaction.message.channel}.`)
-    .setFooter("Message ID: " + messageReaction.message.id)
-    .setTimestamp()
-    .setColor('e7778b');
-  collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
-    if (error) {
-      console.error;
-    }
-    if (result.bot_logs_id) {
-      botLogsChannel = result.bot_logs_id;
-      if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
-        messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionRemoveEmbed).catch(console.error);
-      }
-    }
   });
 });
 
@@ -910,8 +885,8 @@ client.on('roleDelete', role => {
 });
 
 client.on('roleUpdate', (oldRole, newRole) => {
-  /*const removedPerms = oldRole.permissions.filter(perm => !newRole.hasPermission(perm));
-  const addedPerms = newRole.permissions.filter(perm => !oldRole.hasPermission(perm));*/
+  const removedPerms = oldRole.permissions.toArray().filter(perm => !newRole.permissions.has(perm));
+  const addedPerms = newRole.permissions.toArray().filter(perm => !oldRole.permissions.has(perm));
   const roleUpdateEmbed = new Discord.MessageEmbed()
     .setTitle("Role Updated")
     .addField("Name", `${oldRole.name} >> ${newRole.name}`)
@@ -920,12 +895,12 @@ client.on('roleUpdate', (oldRole, newRole) => {
     .setFooter("Role ID: " + newRole.id)
     .setTimestamp()
     .setColor('c9ff00');
-  /*if (removedPerms.array().length > 0) {
-    roleUpdateEmbed.addField("Permissions Removed", removedPerms.map(p => `${p}`).join(' • '));
+  if (removedPerms.length > 0) {
+    roleUpdateEmbed.addField("Permissions Removed", removedPerms.map(p => `\`${p}\``.toLowerCase()).join(' • '));
   }
-  if (addedPerms.array().length > 0) {
-    roleUpdateEmbed.addField("Permissions Added", addedPerms.map(p => `${p}`).join(' • '));
-  }*/
+  if (addedPerms.length > 0) {
+    roleUpdateEmbed.addField("Permissions Added", addedPerms.map(p => `\`${p}\``.toLowerCase()).join(' • '));
+  }
   collection.findOne({ guild_id: newRole.guild.id }, (error, result) => {
     if (error) {
       console.error;
