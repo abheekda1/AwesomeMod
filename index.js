@@ -697,11 +697,11 @@ client.on('message', message => {
   const collector = message.createReactionCollector(filter);
 
   collector.on('collect', (reaction, user) => {
-    if (reaction.get("😎").count === 1) {
+    if (reaction.count === 1) {
       const kulboardEmbed = new Discord.MessageEmbed()
         .setTitle("Very kül message")
         .setURL(message.url)
-        .setAuthor(message.author ? message.author.tag : "Unknown: click on the link to find out", message.author ? messageReaction.message.author.avatarURL() : client.user.defaultAvatarURL)
+        .setAuthor(message.author ? message.author.tag : "Unknown: click on the link to find out", message.author ? message.author.avatarURL() : client.user.defaultAvatarURL)
         .addField("Message", message.content)
         .addField("Channel", message.channel)
         .setFooter("Message ID: " + message.id)
@@ -719,7 +719,6 @@ client.on('message', message => {
         }
       });
     }
-    console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
   });
 });
 
