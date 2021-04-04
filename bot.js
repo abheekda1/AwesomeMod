@@ -43,6 +43,10 @@ client.on("ready", () => {
 });
 
 client.on("message", async message => {
+  const filter = reaction => {
+    return reaction.emoji.name === '😎';
+  };
+  
   const collector = message.createReactionCollector(filter);
 
   collector.on('collect', (reaction, user) => {
@@ -115,10 +119,6 @@ client.on("message", async message => {
   } else if (message.content.toLowerCase().startsWith(`${prefix}aboutbot`)) {
     aboutBot(message);
   }
-
-  const filter = reaction => {
-    return reaction.emoji.name === '😎';
-  };
 });
 
 async function aboutBot(message) {
