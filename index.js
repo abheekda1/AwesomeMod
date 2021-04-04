@@ -950,10 +950,9 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
   const addedRoles = newMember.roles.cache.filter(role => !oldMember.roles.cache.has(role.id));
   const memberUpdateEmbed = new Discord.MessageEmbed()
     .setTitle("Member Updated")
-    .setAuthor(member.user.tag, member.user.avatarURL())
-    .addField("Tag", `${member.user.tag}`)
-    .setFooter("Member ID: " + member.id)
-    .setThumbnail(member.user.avatarURL())
+    .setAuthor(newMember.user.tag, newMember.user.avatarURL())
+    .setFooter("Member ID: " + newMember.id)
+    .setThumbnail(newMember.user.avatarURL())
     .setTimestamp()
     .setColor('e7778b');
   if (removedRoles) {
