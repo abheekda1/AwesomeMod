@@ -660,8 +660,8 @@ client.on('messageDelete', message => {
     messageAuthor = message.author.tag;
     messageAvatar = message.author.avatarURL();
   } else {
-    messageAuthor = "Someone else deleted this message";
-    messageAvatar = "https://www.myhowtoonline.com/wp-content/uploads/2020/10/discord-512x474.png";
+    messageAuthor = "Message was not cached";
+    messageAvatar = message.author.defaultAvatarURL;
   }
   if (!messageContent) {
     messageContent = "[NONE]";
