@@ -971,15 +971,14 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
     .setColor('c9ff00');
   if (removedRoles.array().length > 0) {
     memberUpdateEmbed.addField("Roles Removed", removedRoles.map(r => `${r}`).join(' • '));
-  }
-  if (addedRoles.array().length > 0) {
+  } else if (addedRoles.array().length > 0) {
     memberUpdateEmbed.addField("Roles Added", addedRoles.map(r => `${r}`).join(' • '));
-  }
-  if (newMember.nickname !== oldMember.nickname) {
+  } else if (newMember.nickname !== oldMember.nickname) {
     memberUpdateEmbed.addField("Nickname Changed", `\`${oldMember.nickname}\` >> \`${newMember.nickname}\``)
-  }
-  if (newMember.user.tag !== oldMember.user.tag) {
+  } else if (newMember.user.tag !== oldMember.user.tag) {
     memberUpdateEmbed.addField("User Tag Changed", `\`${oldMember.user.tag}\` >> \`${newMember.user.tag}\``)
+  } else {
+    return;
   }
   collection.findOne({ guild_id: newMember.guild.id }, (error, result) => {
     if (error) {
