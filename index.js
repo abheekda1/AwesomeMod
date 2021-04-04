@@ -689,6 +689,40 @@ client.on('messageDelete', message => {
   });
 });
 
+client.on('message', message => {
+  const filter = reaction => {
+  	return reaction.emoji.name === '👍';
+  };
+
+  const collector = message.createReactionCollector(filter);
+
+  collector.on('collect', (reaction, user) => {
+    if (reaction.get("😎").count === 1) {
+      const kulboardEmbed = new Discord.MessageEmbed()
+        .setTitle("Very kül message")
+        .setURL(message.url)
+        .setAuthor(message.author ? message.author.tag : "Unknown: click on the link to find out", message.author ? messageReaction.message.author.avatarURL() : client.user.defaultAvatarURL)
+        .addField("Message", message.content)
+        .addField("Channel", message.channel)
+        .setFooter("Message ID: " + message.id)
+        .setColor("00c5ff")
+        .setTimestamp();
+      collection.findOne({ guild_id: message.guild.id }, (error, result) => {
+        if (error) {
+          console.error;
+        }
+        if (result.kulboard_id) {
+          kulboardChannel = result.kulboard_id;
+          if (message.guild.channels.cache.get(kulboardChannel)) {
+            message.guild.channels.cache.get(kulboardChannel).send(kulboardEmbed).catch(console.error);
+          }
+        }
+      });
+    }
+  });
+  console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
+});
+
 client.on('messageDeleteBulk', messages => {
   const numMessages = messages.array().length;
   const messagesChannel = messages.array()[0].channel;
@@ -787,33 +821,17 @@ client.on('messageReactionAdd', (messageReaction, user) => {
     .setFooter("Message ID: " + messageReaction.message.id)
     .setTimestamp()
     .setColor('00aaff');
-
-  const kulboardEmbed = new Discord.MessageEmbed()
-    .setTitle("Very kül message")
-    .setURL(messageReaction.message.url)
-    .setAuthor(messageReaction.message.author ? messageReaction.message.author.tag : "Unknown: click on the link to find out", messageReaction.message.author ? messageReaction.message.author.avatarURL() : client.user.defaultAvatarURL)
-    .addField("Message", messageContent)
-    .addField("Channel", messageReaction.message.channel)
-    .setFooter("Message ID: " + messageReaction.message.id)
-    .setColor("00c5ff")
-    .setTimestamp();
-  collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
-    if (error) {
-      console.error;
-    }
-    if (result.kulboard_id) {
-      kulboardChannel = result.kulboard_id;
-      if (messageReaction.message.guild.channels.cache.get(kulboardChannel) && messageReaction.emoji.name === "😎" && messageReaction.count === 4) {
-        messageReaction.message.guild.channels.cache.get(kulboardChannel).send(kulboardEmbed).catch(console.error);
+    collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
+      if (error) {
+        console.error;
       }
-    }
-    if (result.bot_logs_id) {
-      botLogsChannel = result.bot_logs_id;
-      if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
-        messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionAddEmbed).catch(console.error);
+      if (result.bot_logs_id) {
+        botLogsChannel = result.bot_logs_id;
+        if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
+          messageReaction.message.guild.channels.cache.get(botLogsChannel).send(bulkDeleteEmbed).catch(console.error);
+        }
       }
-    }
-  });
+    });
 });
 
 client.on('messageReactionRemove', (messageReaction, user) => {
