@@ -96,7 +96,7 @@ async function memberCountChannelUpdate(member) {
     if (result.member_count_channel_id) {
       memberCountChannel = result.member_count_channel_id;
       if (member.guild.channels.cache.get(memberCountChannel)) {
-        member.guild.channels.cache.get(memberCountChannel).edit({ name: `Members: ${message.guild.memberCount}` }).catch(console.error);
+        member.guild.channels.cache.get(memberCountChannel).edit({ name: `Members: ${member.guild.memberCount}` }).catch(console.error);
       }
     }
   });
