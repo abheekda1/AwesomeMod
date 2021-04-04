@@ -963,10 +963,10 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
     .setThumbnail(newMember.user.avatarURL())
     .setTimestamp()
     .setColor('c9ff00');
-  if (removedRoles) {
+  if (removedRoles.array().length > 0) {
     memberUpdateEmbed.addField("Roles Removed", removedRoles.map(r => `${r}`).join(' • '));
   }
-  if (addedRoles) {
+  if (addedRoles.array().length > 0) {
     memberUpdateEmbed.addField("Roles Added", addedRoles.map(r => `${r}`).join(' • '));
   }
   if (newMember.nickname !== oldMember.nickname) {
