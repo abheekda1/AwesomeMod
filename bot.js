@@ -657,32 +657,29 @@ async function bulkDelete(message) {
   }).catch(console.error);
 }
 
-client.on('messageDelete', msg => {
-  msg.channel.messages.fetch(msg.id)
-    .then(message => {
-      const deleteEmbed = new Discord.MessageEmbed()
-        .setTitle('Message Deleted')
-        .setAuthor(message.author.tag, message.author.avatarURL())
-        .setURL(message.url)
-        .addField('Author', message.author.tag)
-        .addField('Message', message.content)
-        .setThumbnail(message.author.avatarURL())
-        .setFooter("ID: " + message.id)
-        .setTimestamp()
-        .setColor('e7778b');
+client.on('messageDelete', message => {
+  const deleteEmbed = new Discord.MessageEmbed()
+    .setTitle('Message Deleted')
+    .setURL(message.url)
+    .setAuthor(message.author ? message.author.tag : "Unknown", message.author ? message.author.avatarURL() : client.user.defaultAvatarURL)
+    .addField('Author', message.author ? message.author.tag : "Message not cached")
+    .addField('Message', message.content ? message.content : "Message not cached")
+    .setThumbnail(message.author.avatarURL())
+    .setFooter("ID: " + message.id)
+    .setTimestamp()
+    .setColor('e7778b');
 
-      collection.findOne({ guild_id: message.guild.id }, (error, result) => {
-        if (error) {
-          console.error;
-        }
-        if (result.bot_logs_id) {
-          botLogsChannel = result.bot_logs_id;
-          if (message.guild.channels.cache.get(botLogsChannel)) {
-            message.guild.channels.cache.get(botLogsChannel).send(deleteEmbed).catch(console.error);
-          }
-        }
-      });
-    });
+  collection.findOne({ guild_id: message.guild.id }, (error, result) => {
+    if (error) {
+      console.error;
+    }
+    if (result.bot_logs_id) {
+      botLogsChannel = result.bot_logs_id;
+      if (message.guild.channels.cache.get(botLogsChannel)) {
+        message.guild.channels.cache.get(botLogsChannel).send(deleteEmbed).catch(console.error);
+      }
+    }
+  });
 });
 
 client.on('messageDeleteBulk', messages => {
@@ -709,10 +706,8 @@ client.on('messageDeleteBulk', messages => {
 });
 
 client.on('messageUpdate', (originalMessage, editedMessage) => {
-  if (editedMessage.author) {
-    if (editedMessage.author.bot) {
-      return;
-    }
+  message.channel.messages.fetch(editedMessage.id)
+  .then(editedMessage => {
     const editEmbed = new Discord.MessageEmbed()
       .setTitle("Message Edited")
       .setURL(editedMessage.url)
@@ -733,7 +728,7 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
         }
       }
     });
-  }
+  });
 });
 
 client.on('channelCreate', channel => {
