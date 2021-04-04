@@ -661,7 +661,7 @@ client.on('messageDelete', message => {
     messageAvatar = message.author.avatarURL();
   } else {
     messageAuthor = "Message was not cached";
-    messageAvatar = message.author.defaultAvatarURL;
+    messageAvatar = client.user.defaultAvatarURL;
   }
   if (!messageContent) {
     messageContent = "[NONE]";
