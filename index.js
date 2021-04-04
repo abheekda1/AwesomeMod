@@ -66,6 +66,9 @@ client.on("message", async message => {
     case `${prefix}iss`:
       locateISS(message);
       break;
+    case `${prefix}membercountchannel`:
+      memberCountChannelCreate(message);
+      break;
   }
 
   if (message.content.toLowerCase().startsWith(`${prefix}bulkdelete`)) {
@@ -201,6 +204,54 @@ async function kulboardCreate(message) {
         // Add the ID of the "#bot-logs" channel to the database
         message.reply(`channel ${channel} created!`)
         collection.updateOne({ guild_id: message.guild.id }, { $set: { "kulboard_id": `${channel.id}` } });
+      }).catch(console.error);
+    }
+  });
+}
+
+async function memberCountChannelCreate(message) {
+  if (!message.member.hasPermission("ADMINISTRATOR")) {
+    message.reply("you do not have admin permissions!");
+    return;
+  }
+  collection.findOne({ guild_id: message.guild.id }, (error, result) => {
+    if (error) {
+      console.error;
+    }
+    if (result.member_count_channel_id) {
+      memberCountChannel = result.member_count_channel_id;
+      if (message.guild.channels.cache.get(memberCountChannel)) {
+        message.reply('member count channel already exists!');
+      } else {
+        // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
+        message.guild.channels.create(`Members: ${message.guild.memberCount}`, {
+          type: 'voice',
+          // Remove view permissions from "@everyone"
+          permissionOverwrites: [{
+            id: message.guild.id,
+            allow: ['VIEW_CHANNEL'],
+            deny: ['CONNECT'],
+          }]
+        }).then(channel => {
+          // Add the ID of the "#bot-logs" channel to the database
+          message.reply(`channel ${channel} created!`)
+          collection.updateOne({ guild_id: message.guild.id }, { $set: { "member_count_channel_id": `${channel.id}` } });
+        }).catch(console.error);
+      }
+    } else {
+      // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
+      message.guild.channels.create(`Members: ${message.guild.memberCount}`, {
+        type: 'voice',
+        // Remove view permissions from "@everyone"
+        permissionOverwrites: [{
+          id: message.guild.id,
+          allow: ['VIEW_CHANNEL'],
+          deny: ['CONNECT'],
+        }]
+      }).then(channel => {
+        // Add the ID of the "#bot-logs" channel to the database
+        message.reply(`channel ${channel} created!`)
+        collection.updateOne({ guild_id: message.guild.id }, { $set: { "member_count_channel_id": `${channel.id}` } });
       }).catch(console.error);
     }
   });
