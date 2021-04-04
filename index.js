@@ -691,7 +691,7 @@ client.on('messageDelete', message => {
 
 client.on('message', message => {
   const filter = reaction => {
-  	return reaction.emoji.name === '👍';
+  	return reaction.emoji.name === '😎';
   };
 
   const collector = message.createReactionCollector(filter);
