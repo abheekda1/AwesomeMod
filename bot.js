@@ -784,7 +784,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       const kulboardEmbed = new Discord.MessageEmbed()
         .setTitle("Very kül message")
         .setURL(message.url)
-        .setAuthor(message.author, message.author.avatarURL())
+        .setAuthor(message.author.tag, message.author.avatarURL())
         .addField("Message", message.content)
         .addField("Channel", message.channel)
         .setThumbnail(message.author.avatarURL())
