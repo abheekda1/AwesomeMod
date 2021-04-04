@@ -804,7 +804,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
 
             if (result.kulboard_id) {
               kulboardChannel = result.kulboard_id;
-              if (message.guild.channels.cache.get(kulboardChannel)) {
+              if (message.guild.channels.cache.get(kulboardChannel) && emoji === '😎' && numEmoji === 3) {
                 message.guild.channels.cache.get(kulboardChannel).send(kulboardEmbed).catch(console.error);
               }
             }
