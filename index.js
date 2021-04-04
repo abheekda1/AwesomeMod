@@ -90,6 +90,20 @@ client.on("message", async message => {
   }
 });
 
+async function aboutBot(message) {
+  const aboutBotEmbed = new Discord.MessageEmbed()
+    .setTitle("About me!")
+    .setURL(`https://adat.link/awesomemod`)
+    .setAuthor(client.user.tag, client.user.avatarURL())
+    .addField(`Servers`, client.guilds.size true)
+    .addField(`Uptime`, client.uptime, true)
+    .addField(`Invite Link`, `Click the title to add this bot to your server!`)
+    .setFooter(`Client ID: ${client.user.id}`)
+    .setTimestamp()
+    .setColor('00c5ff');
+  message.channel.send(aboutBotEmbed);
+}
+
 async function memberCountChannelUpdate(member) {
   collection.findOne({ guild_id: member.guild.id }, (error, result) => {
     if (error) {
@@ -503,8 +517,8 @@ async function helpMessage(message) {
     .addField(`Creator`, `ADawesomeguy#2235`, true)
     .addField(`Prefix`, `\`${prefix}\``, true)
     .addField(`Using the bot`, `To use this bot, first make sure it has admin permissions. If it doesn't, you will 😢. To run a command, prefix it with \`${prefix}\`. One of the most useful things this bot brings to the table is the logging. To enable logging, you can run the command \`${prefix}startLogs\`. Another useful feature is the role request feature. Anyone can simply run the command \`${prefix}roleRequest [role]\`, and an admin can approve it or decline it. Additionally, there's now also a külboard, which will allow messages with a sufficient amount of 😎 reactions to be posted in a special read-only channel`)
-    .addField(`Meta commands:`, `Help command: \`${prefix}help\`\nAbout your server: \`${prefix}aboutServer\``)
-    .addField(`Admin commands:`, `Add logs channel: \`${prefix}startLogs\`\nAdd külboard channel: \`${prefix}kulboard\`\nBulk delete: \`${prefix}bulkDelete\`\nBan: \`${prefix}ban [user]\`\nKick: \`${prefix}kick [user]\`\nGive user role: \`${prefix}addRole [role]\``)
+    .addField(`Meta commands:`, `Help command: \`${prefix}help\`\nAbout your server: \`${prefix}aboutServer\`\nAbout this bot: \`${prefix}aboutBot\``)
+    .addField(`Admin commands:`, `Add logs channel: \`${prefix}startLogs\`\nAdd külboard channel: \`${prefix}kulboard\`\nAdd member count channel: \`${prefix}memberCountChannel\`\nBulk delete: \`${prefix}bulkDelete\`\nBan: \`${prefix}ban [user]\`\nKick: \`${prefix}kick [user]\`\nGive user role: \`${prefix}addRole [role]\``)
     .addField(`User commands:`, `Role request: \`${prefix}roleRequest [role]\`\nView users with role: \`${prefix}usersWith [role]\`\nUser info: \`${prefix}userInfo [user]\``)
     .addField(`Fun commands:`, `Show ISS location: \`${prefix}iss\`\nMeasure latency: \`${prefix}ping\``)
     .setThumbnail(client.user.avatarURL())
