@@ -96,7 +96,7 @@ async function aboutBot(message) {
     .setTitle("About me!")
     .setURL(`https://adat.link/awesomemod`)
     .setAuthor(client.user.tag, client.user.avatarURL())
-    .addField(`Servers`, client.guilds.size, true)
+    .addField(`Servers`, client.guilds.cache.size, true)
     .addField(`Uptime`, `${uptimeDays.toFixed(1)} days`, true)
     .addField(`Invite Link`, `Click the title to add this bot to your server!`)
     .setFooter(`Client ID: ${client.user.id}`)
