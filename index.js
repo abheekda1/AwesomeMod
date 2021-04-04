@@ -75,8 +75,8 @@ client.on("message", async message => {
     bulkDelete(message);
   } else if (message.content.toLowerCase().startsWith(`${prefix}rolerequest`)) {
     roleRequest(message);
-  } else if (message.content.toLowerCase().startsWith(`${prefix}userswithrole`)) {
-    usersWithRole(message);
+  } else if (message.content.toLowerCase().startsWith(`${prefix}userswith`)) {
+    usersWith(message);
   } else if (message.content.toLowerCase().startsWith(`${prefix}ban`)) {
     ban(message);
   } else if (message.content.toLowerCase().startsWith(`${prefix}kick`)) {
@@ -85,6 +85,8 @@ client.on("message", async message => {
     addRole(message);
   } else if (message.content.toLowerCase().startsWith(`${prefix}userinfo`)) {
     userInfo(message);
+  } else if (message.content.toLowerCase().startsWith(`${prefix}aboutbot`)) {
+    aboutBot(message);
   }
 });
 
@@ -503,7 +505,7 @@ async function helpMessage(message) {
     .addField(`Using the bot`, `To use this bot, first make sure it has admin permissions. If it doesn't, you will 😢. To run a command, prefix it with \`${prefix}\`. One of the most useful things this bot brings to the table is the logging. To enable logging, you can run the command \`${prefix}startLogs\`. Another useful feature is the role request feature. Anyone can simply run the command \`${prefix}roleRequest [role]\`, and an admin can approve it or decline it. Additionally, there's now also a külboard, which will allow messages with a sufficient amount of 😎 reactions to be posted in a special read-only channel`)
     .addField(`Meta commands:`, `Help command: \`${prefix}help\`\nAbout your server: \`${prefix}aboutServer\``)
     .addField(`Admin commands:`, `Add logs channel: \`${prefix}startLogs\`\nAdd külboard channel: \`${prefix}kulboard\`\nBulk delete: \`${prefix}bulkDelete\`\nBan: \`${prefix}ban [user]\`\nKick: \`${prefix}kick [user]\`\nGive user role: \`${prefix}addRole [role]\``)
-    .addField(`User commands:`, `Role request: \`${prefix}roleRequest [role]\`\nView users with role: \`${prefix}usersWithRole [role]\`\nUser info: \`${prefix}userInfo [user]\``)
+    .addField(`User commands:`, `Role request: \`${prefix}roleRequest [role]\`\nView users with role: \`${prefix}usersWith [role]\`\nUser info: \`${prefix}userInfo [user]\``)
     .addField(`Fun commands:`, `Show ISS location: \`${prefix}iss\`\nMeasure latency: \`${prefix}ping\``)
     .setThumbnail(client.user.avatarURL())
     .setFooter(`Bot ID: ${client.user.id}`)
@@ -512,7 +514,7 @@ async function helpMessage(message) {
   message.channel.send(helpEmbed).catch(console.error);
 }
 
-async function usersWithRole(message) {
+async function usersWith(message) {
   if (message.content.split(" ")[1].length < 3) {
     message.reply("query must contain at least 3 characters!")
     return;
@@ -677,7 +679,7 @@ client.on('messageDeleteBulk', messages => {
   const messagesChannel = messages.array()[0].channel;
   const bulkDeleteEmbed = new Discord.MessageEmbed()
     .setTitle(`${numMessages} Messages Bulk Deleted`)
-    .addField(`Channel`, messagesChannel.name)
+    .addField(`Channel`, messagesChannel)
     .setFooter("Channel ID: " + messagesChannel.id)
     .setTimestamp()
     .setColor('e7778b');
@@ -724,7 +726,6 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
 });
 
 client.on('channelCreate', channel => {
-  const channelName = channel.name;
   const channelID = channel.id;
   const channelType = channel.type;
   let channelCategory;
@@ -735,7 +736,7 @@ client.on('channelCreate', channel => {
   }
   const channelCreateEmbed = new Discord.MessageEmbed()
     .setTitle("Channel Created")
-    .addField("Name", channelName)
+    .addField("Name", channel)
     .addField("Type", channelType)
     .addField("Category", channelCategory)
     .setFooter("ID: " + channelID)
