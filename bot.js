@@ -819,17 +819,17 @@ client.on('messageReactionAdd', (messageReaction, user) => {
 
       const kulboardEmbed = new Discord.MessageEmbed()
         .setTitle(`${coolness} Very Kül Message`)
-        .addField("Link", `[Click here!](${message.url})`)
+        .addField("Link", `[Click here!](${message.url})`, true)
         .setAuthor(message.author.tag, message.author.avatarURL())
-        .addField(`# of 😎 Reactions`, `${numEmoji}`)
-        .addField("Channel", message.channel)
+        .addField(`# of 😎 Reactions`, `${numEmoji}`, true)
+        .addField("Channel", message.channel, true)
         .setThumbnail(message.author.avatarURL())
         .setFooter("Message ID: " + message.id)
         .setColor("00c5ff")
         .setTimestamp();
 
       if (message.content) {
-        kulboardEmbed.addField("Message", message.content)
+        kulboardEmbed.addField("Message", `\`\`\`${message.content}\`\`\``)
       }
         collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
           let kulboardChannel;
@@ -904,17 +904,17 @@ client.on('messageReactionRemove', (messageReaction, user) => {
 
       const kulboardEmbed = new Discord.MessageEmbed()
         .setTitle(`${coolness} Very Kül Message`)
-        .addField("Link", `[Click here!](${message.url})`)
+        .addField("Link", `[Click here!](${message.url})`, true)
         .setAuthor(message.author.tag, message.author.avatarURL())
-        .addField(`# of 😎 Reactions`, `${numEmoji}`)
-        .addField("Channel", message.channel)
+        .addField(`# of 😎 Reactions`, `${numEmoji}`, true)
+        .addField("Channel", message.channel, true)
         .setThumbnail(message.author.avatarURL())
         .setFooter("Message ID: " + message.id)
         .setColor("00c5ff")
         .setTimestamp();
 
         if (message.content) {
-          kulboardEmbed.addField("Message", message.content)
+          kulboardEmbed.addField("Message", `\`\`\`${message.content}\`\`\``)
         }
 
     collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
