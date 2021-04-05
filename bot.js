@@ -115,7 +115,7 @@ async function aboutBot(message) {
 }
 
 async function memberCountChannelUpdate(member) {
-  collection.findOne({ guild_id: member.guild.id }, (error, result) => {
+  collection.findOne({ guild_id: member.guild.id }, async (error, result) => {
     if (error) {
       console.error;
     }
@@ -256,7 +256,7 @@ async function memberCountChannelCreate(message) {
     message.reply("you do not have admin permissions!");
     return;
   }
-  collection.findOne({ guild_id: message.guild.id }, (error, result) => {
+  collection.findOne({ guild_id: message.guild.id }, async (error, result) => {
     if (error) {
       console.error;
     }
