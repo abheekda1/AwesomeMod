@@ -414,6 +414,10 @@ async function addRole(message) {
 }
 
 async function ban(message) {
+  if (!message.member.hasPermission('ADMINISTRATOR')) {
+    message.reply('you do not have admin privileges!')
+    return;
+  }
 
   if (!message.content.split(" ")[1]) {
     message.reply("query must contain at least 3 characters!")
@@ -467,6 +471,10 @@ async function ban(message) {
 }
 
 async function kick(message) {
+  if (!message.member.hasPermission('ADMINISTRATOR')) {
+    message.reply('you do not have admin privileges!')
+    return;
+  }
 
   if (!message.content.split(" ")[1]) {
     message.reply("query must contain at least 3 characters!")
