@@ -710,6 +710,9 @@ client.on('messageDeleteBulk', messages => {
 });
 
 client.on('messageUpdate', (originalMessage, editedMessage) => {
+  if (editedMessage.embeds.length > 0) {
+    return;
+  }
   editedMessage.channel.messages.fetch(editedMessage.id)
   .then(editedMessage => {
     const editEmbed = new Discord.MessageEmbed()
