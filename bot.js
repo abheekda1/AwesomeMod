@@ -800,6 +800,8 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       const emoji = messageReaction.emoji.name;
       const emojiID = messageReaction.emoji.id;
       let numEmoji;
+      let coolness;
+      numEmoji > 6 ? coolness = '<:cool_finger_guns:828632824512512030>' : coolness = '😎';
       message.reactions.cache.get(emojiID) ? numEmoji = message.reactions.cache.get(emojiID).count : numEmoji = message.reactions.cache.get(emoji).count;
       const messageReactionAddEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Added")
@@ -816,10 +818,10 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       }
 
       const kulboardEmbed = new Discord.MessageEmbed()
-        .setTitle("Very kül message")
+        .setTitle(`Very Kül Message ${coolness}`)
         .addField("Link", `[Click here!](${message.url})`)
         .setAuthor(message.author.tag, message.author.avatarURL())
-        .addField(`Max 😎 Reactions`, `${numEmoji}`)
+        .addField(`# of 😎 Reactions`, `${numEmoji}`)
         .addField("Channel", message.channel)
         .setThumbnail(message.author.avatarURL())
         .setFooter("Message ID: " + message.id)
