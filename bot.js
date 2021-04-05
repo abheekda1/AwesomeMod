@@ -804,12 +804,15 @@ client.on('messageReactionAdd', (messageReaction, user) => {
         .setTitle("Reaction Added")
         .setAuthor(message.author.tag, message.author.avatarURL())
         .addField("Link", `[Click here!](${message.url})`)
-        .addField("Message", message.content)
         .addField("Reactions", `\`${user.tag}\` reacted with \`${emoji}\`, along with ${numEmoji - 1} other people in ${messageReaction.message.channel}.`)
         .setFooter("Message ID: " + messageReaction.message.id)
         .setThumbnail(message.author.avatarURL())
         .setTimestamp()
         .setColor('00aaff');
+
+      if (message.content) {
+        messageReactionAddEmbed.addField("Message", message.content);
+      }
 
       const kulboardEmbed = new Discord.MessageEmbed()
         .setTitle("Very kül message")
