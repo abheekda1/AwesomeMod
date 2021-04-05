@@ -665,7 +665,6 @@ async function bulkDelete(message) {
 client.on('messageDelete', message => {
   const deleteEmbed = new Discord.MessageEmbed()
     .setTitle('Message Deleted')
-    .setURL(message.url)
     .setAuthor(message.author ? message.author.tag : "Unknown", message.author ? message.author.avatarURL() : client.user.defaultAvatarURL)
     .addField('Author', message.author ? message.author.tag : "Message not cached")
     .addField('Message', message.content ? message.content : "Message not cached")
@@ -715,7 +714,7 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
   .then(editedMessage => {
     const editEmbed = new Discord.MessageEmbed()
       .setTitle("Message Edited")
-      .setURL(editedMessage.url)
+      .addField("Link", `[Click here!](${editedMessage.url})`)
       .setAuthor(editedMessage.author ? editedMessage.author.tag : "Unknown", editedMessage.author ? editedMessage.author.avatarURL() : client.user.defaultAvatarURL)
       .addField("Author", editedMessage.author.tag)
       .addField("Message", `<< ${originalMessage}\n>> ${editedMessage}`)
@@ -774,7 +773,8 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       const numEmoji = message.reactions.cache.get(emoji).count;
       const messageReactionAddEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Added")
-        .setURL(message.url)
+        .setAuthor(message.author.tag, message.author.avatarURL())
+        .addField("Link", `[Click here!](${message.url})`)
         .addField("Message", message.content)
         .addField("Reactions", `\`${user.tag}\` reacted with \`${emoji}\`, along with ${numEmoji - 1} other people in ${messageReaction.message.channel}.`)
         .setFooter("Message ID: " + messageReaction.message.id)
@@ -784,7 +784,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
 
       const kulboardEmbed = new Discord.MessageEmbed()
         .setTitle("Very kül message")
-        .setURL(message.url)
+        .addField("Link", `[Click here!](${message.url})`)
         .setAuthor(message.author.tag, message.author.avatarURL())
         .addField(`😎 Reactions`, `${numEmoji}`)
         .addField("Message", message.content)
@@ -848,7 +848,7 @@ client.on('messageReactionRemove', (messageReaction, user) => {
       const emoji = messageReaction.emoji.name;
       const messageReactionRemoveEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Removed")
-        .setURL(message.url)
+        .addField("Link", `[Click here!](${message.url})`)
         .addField("Message", message.content)
         .addField("Reactions", `\`${user.tag}\` removed their reaction \`${emoji}\` in ${messageReaction.message.channel}.`)
         .setFooter("Message ID: " + messageReaction.message.id)
