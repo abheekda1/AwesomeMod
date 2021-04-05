@@ -99,7 +99,7 @@ async function aboutBot(message) {
 	})
 	.catch(console.error);
   const aboutBotEmbed = new Discord.MessageEmbed()
-    .setTitle("Invite link!")
+    .setTitle("About AwesomeMod!")
     .setURL(`https://github.com/ADawesomeguy/AwesomeMod`)
     .setAuthor(client.user.tag, client.user.avatarURL())
     .addField(`Servers`, `${serverCount}`, true)
