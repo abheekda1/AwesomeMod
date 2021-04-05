@@ -724,7 +724,7 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
       .setColor('c9ff00');
 
     if (editedMessage !== originalMessage) {
-      editEmbed.addField("Message", `\`\`\`diff\n+${originalMessage}\n+${editedMessage}\`\`\``)
+      editEmbed.addField("Message", `\`\`\`diff\n-${originalMessage}\n+${editedMessage}\`\`\``)
     }
     if (editedMessage.attachments.array().length > 0) {
       editEmbed.addField("Attachments", editedMessage.attachments.array().map(a =>`[${a.name}](${a.url})`).join(' • '))
