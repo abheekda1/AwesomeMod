@@ -801,8 +801,8 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       const emojiID = messageReaction.emoji.id;
       let numEmoji;
       let coolness;
-      numEmoji > 6 ? coolness = '<:cool_finger_guns:828632824512512030>' : coolness = '😎';
       message.reactions.cache.get(emojiID) ? numEmoji = message.reactions.cache.get(emojiID).count : numEmoji = message.reactions.cache.get(emoji).count;
+      numEmoji > 6 ? coolness = '<:cool_finger_guns:828632824512512030>' : coolness = '😎';
       const messageReactionAddEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Added")
         .setAuthor(user.tag, user.avatarURL())
@@ -818,7 +818,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       }
 
       const kulboardEmbed = new Discord.MessageEmbed()
-        .setTitle(`Very Kül Message ${coolness}`)
+        .setTitle(`${coolness} Very Kül Message`)
         .addField("Link", `[Click here!](${message.url})`)
         .setAuthor(message.author.tag, message.author.avatarURL())
         .addField(`# of 😎 Reactions`, `${numEmoji}`)
@@ -885,7 +885,9 @@ client.on('messageReactionRemove', (messageReaction, user) => {
       const emoji = messageReaction.emoji.name;
       const emojiID = messageReaction.emoji.id;
       let numEmoji;
+      let coolness;
       message.reactions.cache.get(emojiID) ? numEmoji = message.reactions.cache.get(emojiID).count : numEmoji = message.reactions.cache.get(emoji).count;
+      numEmoji > 6 ? coolness = '<:cool_finger_guns:828632824512512030>' : coolness = '😎';
       const messageReactionRemoveEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Removed")
         .setAuthor(user.tag, user.avatarURL())
@@ -901,11 +903,11 @@ client.on('messageReactionRemove', (messageReaction, user) => {
       }
 
       const kulboardEmbed = new Discord.MessageEmbed()
-        .setTitle("Very kül message")
+        .setTitle(`${coolness} Very Kül Message`)
         .addField("Link", `[Click here!](${message.url})`)
         .setAuthor(message.author.tag, message.author.avatarURL())
-        .addField(`😎 Reactions`, `${numEmoji}`, true)
-        .addField("Channel", message.channel, true)
+        .addField(`# of 😎 Reactions`, `${numEmoji}`)
+        .addField("Channel", message.channel)
         .setThumbnail(message.author.avatarURL())
         .setFooter("Message ID: " + message.id)
         .setColor("00c5ff")
@@ -914,18 +916,6 @@ client.on('messageReactionRemove', (messageReaction, user) => {
         if (message.content) {
           kulboardEmbed.addField("Message", message.content)
         }
-
-    /*collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
-      if (error) {
-        console.error;
-      }
-      if (result.bot_logs_id) {
-        botLogsChannel = result.bot_logs_id;
-        if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
-          messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionRemoveEmbed).catch(console.error);
-        }
-      }
-    });*/
 
     collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
       let kulboardChannel;
