@@ -669,7 +669,7 @@ client.on('messageDelete', message => {
     .addField('Author', message.author ? message.author.tag : "Message not cached")
     .addField('Message', message.content ? message.content : "Message not cached")
     .addField('Channel', message.channel ? message.channel : "Message not cached")
-    .setThumbnail(message.author.avatarURL())
+    .setThumbnail(message.author ? message.author.avatarURL() : client.user.defaultAvatarURL)
     .setFooter("ID: " + message.id)
     .setTimestamp()
     .setColor('e7778b');
