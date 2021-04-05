@@ -362,6 +362,7 @@ async function roleInfo(message) {
     .addField("Permissions", role.permissions.toArray().map(p => `\`${p}\``.toLowerCase()).join(' • '))
     .addField("Mentionable", role.mentionable)
     .setFooter("Role ID: " + role.id)
+    .setThumbnail(message.author.avatarURL())
     .setTimestamp()
     .setColor('00aaff');
   message.channel.send(roleInfoEmbed)
