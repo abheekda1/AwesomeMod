@@ -349,16 +349,6 @@ async function roleInfo(message) {
   const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1]));
   let roleChannel;
 
-  if (!message.content.split(" ")[2]) {
-    message.reply("user query must contain at least 3 characters!")
-    return;
-  }
-
-  if (message.content.split(" ")[2].length < 3) {
-    message.reply("user query must contain at least 3 characters!")
-    return;
-  }
-
   if (roles.array().length < 1) {
     message.reply("no roles found with that name!");
     return;
