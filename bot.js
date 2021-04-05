@@ -716,6 +716,7 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
     const editEmbed = new Discord.MessageEmbed()
       .setTitle("Message Edited")
       .setURL(editedMessage.url)
+      .setAuthor(editedMessage.author ? editedMessage.author.tag : "Unknown", editedMessage.author ? editedMessage.author.avatarURL() : client.user.defaultAvatarURL)
       .addField("Author", editedMessage.author.tag)
       .addField("Message", `<< ${originalMessage}\n>> ${editedMessage}`)
       .setThumbnail(editedMessage.author.avatarURL())
