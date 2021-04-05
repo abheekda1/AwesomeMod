@@ -356,7 +356,7 @@ async function roleInfo(message) {
 
   const role = roles.array()[0];
 
-  const roleCreateEmbed = new Discord.MessageEmbed()
+  const roleInfoEmbed = new Discord.MessageEmbed()
     .setTitle(`Role \`${role.name}\` Info`)
     .setAuthor(message.author.tag, message.author.avatarURL())
     .addField("Permissions", role.permissions.toArray().map(p => `\`${p}\``.toLowerCase()).join(' • '))
@@ -364,6 +364,7 @@ async function roleInfo(message) {
     .setFooter("Role ID: " + role.id)
     .setTimestamp()
     .setColor('00aaff');
+  message.channel.send(roleInfoEmbed)
 }
 
 async function addRole(message) {
