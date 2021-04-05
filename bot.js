@@ -803,11 +803,11 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       message.reactions.cache.get(emojiID) ? numEmoji = message.reactions.cache.get(emojiID).count : numEmoji = message.reactions.cache.get(emoji).count;
       const messageReactionAddEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Added")
-        .setAuthor(message.author.tag, message.author.avatarURL())
+        .setAuthor(user.tag, user.avatarURL())
         .addField("Link", `[Click here!](${message.url})`)
-        .addField("Reactions", `\`${user.tag}\` reacted with \`${emoji}\`, along with ${numEmoji - 1} other people in ${messageReaction.message.channel}.`)
+        .addField("Reactions", `${user} reacted with ${messageReaction.emoji} to ${messageReaction.message.author}'s message, along with ${numEmoji - 1} other people in ${messageReaction.message.channel}.`)
         .setFooter("Message ID: " + messageReaction.message.id)
-        .setThumbnail(message.author.avatarURL())
+        .setThumbnail(user.avatarURL())
         .setTimestamp()
         .setColor('00aaff');
 
@@ -886,10 +886,11 @@ client.on('messageReactionRemove', (messageReaction, user) => {
       const emoji = messageReaction.emoji.name;
       const messageReactionRemoveEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Removed")
+        .setAuthor(user.tag, user.avatarURL())
         .addField("Link", `[Click here!](${message.url})`)
-        .addField("Reactions", `\`${user.tag}\` removed their reaction \`${emoji}\` in ${messageReaction.message.channel}.`)
+        .addField("Reactions", `\`${user}\` removed their reaction ${messageReaction.emoji} on ${messageReaction.message.author}'s message in ${messageReaction.message.channel}.`)
         .setFooter("Message ID: " + messageReaction.message.id)
-        .setThumbnail(message.author.avatarURL())
+        .setThumbnail(user.avatarURL())
         .setTimestamp()
         .setColor('e7778b');
 
@@ -1024,9 +1025,9 @@ client.on('roleUpdate', (oldRole, newRole) => {
   const addedPerms = newRole.permissions.toArray().filter(perm => !oldRole.permissions.has(perm));
   const roleUpdateEmbed = new Discord.MessageEmbed()
     .setTitle("Role Updated")
-    .addField("Name", `${oldRole.name} >> ${newRole.name}`)
-    .addField("Permissions", `${oldRole.permissions.bitfield} >> ${newRole.permissions.bitfield}`)
-    .addField("Mentionable", `${oldRole.mentionable} >> ${newRole.mentionable}`)
+    .addField("Name", `${oldRole.name} » ${newRole.name}`)
+    .addField("Permissions", `${oldRole.permissions.bitfield} » ${newRole.permissions.bitfield}`)
+    .addField("Mentionable", `${oldRole.mentionable} » ${newRole.mentionable}`)
     .setFooter("Role ID: " + newRole.id)
     .setTimestamp()
     .setColor('c9ff00');
@@ -1114,9 +1115,9 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
   } else if (addedRoles.array().length > 0) {
     memberUpdateEmbed.addField("Roles Added", addedRoles.map(r => `${r}`).join(' • '));
   } else if (newMember.nickname !== oldMember.nickname) {
-    memberUpdateEmbed.addField("Nickname Changed", `\`${oldMember.nickname}\` >> \`${newMember.nickname}\``)
+    memberUpdateEmbed.addField("Nickname Changed", `\`${oldMember.nickname}\` » \`${newMember.nickname}\``)
   } else if (newMember.user.tag !== oldMember.user.tag) {
-    memberUpdateEmbed.addField("User Tag Changed", `\`${oldMember.user.tag}\` >> \`${newMember.user.tag}\``)
+    memberUpdateEmbed.addField("User Tag Changed", `\`${oldMember.user.tag}\` » \`${newMember.user.tag}\``)
   } else {
     return;
   }
