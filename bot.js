@@ -718,11 +718,17 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
       .addField("Link", `[Click here!](${editedMessage.url})`)
       .setAuthor(editedMessage.author ? editedMessage.author.tag : "Unknown", editedMessage.author ? editedMessage.author.avatarURL() : client.user.defaultAvatarURL)
       .addField("Author", editedMessage.author.tag)
-      .addField("Message", `<< ${originalMessage}\n>> ${editedMessage}`)
       .setThumbnail(editedMessage.author.avatarURL())
       .setFooter("ID: " + editedMessage.id)
       .setTimestamp()
       .setColor('c9ff00');
+
+    if (editedMessage !== originalMessage) {
+      editEmbed.addField("Message", `<< ${originalMessage}\n>> ${editedMessage}`)''
+    }
+    if (editedMessage.attachments) {
+      editEmbed.addField("Attachments", editedMessage.attachments.array().map(`[${a.name}](${a.url})`).join(' • '))
+    }
     collection.findOne({ guild_id: editedMessage.guild.id }, (error, result) => {
       if (error) {
         console.error;
