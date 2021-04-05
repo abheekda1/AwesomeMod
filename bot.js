@@ -787,7 +787,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
         .setTitle("Very kül message")
         .addField("Link", `[Click here!](${message.url})`)
         .setAuthor(message.author.tag, message.author.avatarURL())
-        .addField(`😎 Reactions`, `${numEmoji}`)
+        .addField(`Max 😎 Reactions`, `${numEmoji}`)
         .addField("Message", message.content)
         .addField("Channel", message.channel)
         .setThumbnail(message.author.avatarURL())
