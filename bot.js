@@ -800,7 +800,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       const emoji = messageReaction.emoji.name;
       const emojiID = messageReaction.emoji.id;
       let numEmoji;
-      message.reactions.cache.get(emojiID) ? numEmoji = message.reactions.cache.get(emojiID).count : message.reactions.cache.get(emoji).count;
+      message.reactions.cache.get(emojiID) ? numEmoji = message.reactions.cache.get(emojiID).count : numEmoji = message.reactions.cache.get(emoji).count;
       const messageReactionAddEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Added")
         .setAuthor(message.author.tag, message.author.avatarURL())
