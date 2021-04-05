@@ -536,6 +536,10 @@ async function helpMessage(message) {
 }
 
 async function usersWith(message) {
+  if (message.content.split(" ").length < 2) {
+    message.reply("query must contain at least 3 characters!")
+    return;
+  }
   if (message.content.split(" ")[1].length < 3) {
     message.reply("query must contain at least 3 characters!")
     return;
