@@ -99,7 +99,7 @@ async function aboutBot(message) {
 	})
 	.catch(console.error);
   const aboutBotEmbed = new Discord.MessageEmbed()
-    .setTitle("About me!")
+    .setTitle("Invite link!")
     .setURL(`https://adat.link/awesomemod`)
     .setAuthor(client.user.tag, client.user.avatarURL())
     .addField(`Servers`, `${serverCount}`, true)
@@ -706,7 +706,7 @@ client.on('messageDeleteBulk', messages => {
 });
 
 client.on('messageUpdate', (originalMessage, editedMessage) => {
-  message.channel.messages.fetch(editedMessage.id)
+  editedMessage.channel.messages.fetch(editedMessage.id)
   .then(editedMessage => {
     const editEmbed = new Discord.MessageEmbed()
       .setTitle("Message Edited")
@@ -780,6 +780,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
         .setTitle("Very kül message")
         .setURL(message.url)
         .setAuthor(message.author.tag, message.author.avatarURL())
+        .addField(`😎 Reactions`, `${numEmoji}`)
         .addField("Message", message.content)
         .addField("Channel", message.channel)
         .setThumbnail(message.author.avatarURL())
@@ -788,6 +789,8 @@ client.on('messageReactionAdd', (messageReaction, user) => {
         .setTimestamp();
 
         collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
+          let kulboardChannel;
+          let botLogsChannel;
           if (error) {
             console.error;
           }
@@ -796,11 +799,36 @@ client.on('messageReactionAdd', (messageReaction, user) => {
             if (message.guild.channels.cache.get(botLogsChannel)) {
               message.guild.channels.cache.get(botLogsChannel).send(messageReactionAddEmbed).catch(console.error);
             }
-
-            if (result.kulboard_id) {
-              kulboardChannel = result.kulboard_id;
-              if (message.guild.channels.cache.get(kulboardChannel) && emoji === '😎' && numEmoji === 3) {
-                message.guild.channels.cache.get(kulboardChannel).send(kulboardEmbed).catch(console.error);
+          }
+          if (result.kulboard_id) {
+            kulboardChannel = result.kulboard_id;
+            if (message.guild.channels.cache.get(kulboardChannel) && emoji === '😎' && numEmoji >= 3) {
+              if (!result.kulboard_messages) {
+                message.guild.channels.cache.get(kulboardChannel).send(kulboardEmbed)
+                .then(kulboardMessage => {
+                  collection.updateOne({ guild_id: message.guild.id }, { $set: { "kulboard_messages": [{ "original_message": `${message.id}`, "kulboard_message": `${kulboardMessage.id}` }] } });
+                }).catch(console.error)
+              } else {
+                collection.findOne( {"guild_id": `${message.guild.id}`}, { "projection": { "kulboard_messages": { "$elemMatch": { "original_message": `${message.id}` }}}}, (error, result) => {
+                  if (error) {
+                    console.error;
+                  }
+                  console.log(result)
+                  if (!result.kulboard_messages) {
+                    message.guild.channels.cache.get(kulboardChannel).send(kulboardEmbed)
+                    .then(kulboardMessage => {
+                      collection.updateOne({ guild_id: message.guild.id }, { $push: { "kulboard_messages": { "original_message": `${message.id}`, "kulboard_message": `${kulboardMessage.id}` } } });
+                    }).catch(console.error);
+                  } else {
+                    console.log(result)
+                    console.log(result.kulboard_messages)
+                    message.guild.channels.cache.get(kulboardChannel).messages.fetch(result.kulboard_messages[0].kulboard_message)
+                    .then(kulboardMessage => {
+                      console.log(kulboardMessage.author.tag)
+                      kulboardMessage.edit(kulboardEmbed).catch(console.error);
+                    }).catch(console.error);
+                  }
+                });
               }
             }
           }
