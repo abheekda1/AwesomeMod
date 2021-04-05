@@ -449,8 +449,8 @@ async function addRole(message) {
 }
 
 async function ban(message) {
-  if (!message.member.hasPermission('ADMINISTRATOR')) {
-    message.reply('you do not have admin privileges!')
+  if (!message.member.hasPermission('BAN_MEMBERS')) {
+    message.reply('you do not have ban permissions!')
     return;
   }
 
@@ -482,6 +482,10 @@ async function ban(message) {
   if (member === message.member) {
     message.reply("you can't ban yourself!");
     return;
+  }
+
+  if (member.roles.highest.comparePositionTo(message.member.roles.highest) > 0) {
+    message.reply("this member is above you!")
   }
 
     let verificationEmbed = new Discord.MessageEmbed()
