@@ -105,6 +105,7 @@ async function aboutBot(message) {
     .addField(`Servers`, `${serverCount}`, true)
     .addField(`Uptime`, `${uptimeDays.toFixed(1)} days`, true)
     .addField(`Invite Link`, `[Click here!](https://adat.link/awesomemod)`)
+    .addField(`Icon Designer`, `<@809624830809735168> [yabioboi#3071]`)
     .setFooter(`Client ID: ${client.user.id}`)
     .setTimestamp()
     .setColor('00c5ff');
