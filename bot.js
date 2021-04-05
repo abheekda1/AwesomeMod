@@ -856,18 +856,14 @@ client.on('messageReactionAdd', (messageReaction, user) => {
                   if (error) {
                     console.error;
                   }
-                  console.log(result)
                   if (!result.kulboard_messages) {
                     message.guild.channels.cache.get(kulboardChannel).send(kulboardEmbed)
                     .then(kulboardMessage => {
                       collection.updateOne({ guild_id: message.guild.id }, { $push: { "kulboard_messages": { "original_message": `${message.id}`, "kulboard_message": `${kulboardMessage.id}` } } });
                     }).catch(console.error);
                   } else {
-                    console.log(result)
-                    console.log(result.kulboard_messages)
                     message.guild.channels.cache.get(kulboardChannel).messages.fetch(result.kulboard_messages[0].kulboard_message)
                     .then(kulboardMessage => {
-                      console.log(kulboardMessage.author.tag)
                       kulboardMessage.edit(kulboardEmbed).catch(console.error);
                     }).catch(console.error);
                   }
@@ -942,18 +938,14 @@ client.on('messageReactionRemove', (messageReaction, user) => {
               if (error) {
                 console.error;
               }
-              console.log(result)
               if (!result.kulboard_messages) {
                 message.guild.channels.cache.get(kulboardChannel).send(kulboardEmbed)
                 .then(kulboardMessage => {
                   collection.updateOne({ guild_id: message.guild.id }, { $push: { "kulboard_messages": { "original_message": `${message.id}`, "kulboard_message": `${kulboardMessage.id}` } } });
                 }).catch(console.error);
               } else {
-                console.log(result)
-                console.log(result.kulboard_messages)
                 message.guild.channels.cache.get(kulboardChannel).messages.fetch(result.kulboard_messages[0].kulboard_message)
                 .then(kulboardMessage => {
-                  console.log(kulboardMessage.author.tag)
                   kulboardMessage.edit(kulboardEmbed).catch(console.error);
                 }).catch(console.error);
               }
