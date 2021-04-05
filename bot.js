@@ -881,12 +881,15 @@ client.on('messageReactionRemove', (messageReaction, user) => {
       const messageReactionRemoveEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Removed")
         .addField("Link", `[Click here!](${message.url})`)
-        .addField("Message", message.content)
         .addField("Reactions", `\`${user.tag}\` removed their reaction \`${emoji}\` in ${messageReaction.message.channel}.`)
         .setFooter("Message ID: " + messageReaction.message.id)
         .setThumbnail(message.author.avatarURL())
         .setTimestamp()
         .setColor('e7778b');
+
+      if (message.content) {
+        messageReactionRemoveEmbed.addField("Message", message.content);
+      }
     collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
       if (error) {
         console.error;
