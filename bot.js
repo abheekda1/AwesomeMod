@@ -829,7 +829,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
         .setTimestamp();
 
       if (message.content) {
-        kulboardEmbed.addField("Message", `\`\`\`${message.content}\`\`\``)
+        kulboardEmbed.addField("Message", message.content);
       }
         collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
           let kulboardChannel;
@@ -914,7 +914,7 @@ client.on('messageReactionRemove', (messageReaction, user) => {
         .setTimestamp();
 
         if (message.content) {
-          kulboardEmbed.addField("Message", `\`\`\`${message.content}\`\`\``)
+          kulboardEmbed.addField("Message", message.content)
         }
 
     collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
