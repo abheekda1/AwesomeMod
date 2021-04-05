@@ -819,13 +819,15 @@ client.on('messageReactionAdd', (messageReaction, user) => {
         .addField("Link", `[Click here!](${message.url})`)
         .setAuthor(message.author.tag, message.author.avatarURL())
         .addField(`Max 😎 Reactions`, `${numEmoji}`)
-        .addField("Message", message.content)
         .addField("Channel", message.channel)
         .setThumbnail(message.author.avatarURL())
         .setFooter("Message ID: " + message.id)
         .setColor("00c5ff")
         .setTimestamp();
 
+      if (message.content) {
+        kulboardEmbed.addField("Message", message.content)
+      }
         collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
           let kulboardChannel;
           let botLogsChannel;
