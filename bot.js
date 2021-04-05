@@ -802,7 +802,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       let numEmoji;
       let coolness;
       message.reactions.cache.get(emojiID) ? numEmoji = message.reactions.cache.get(emojiID).count : numEmoji = message.reactions.cache.get(emoji).count;
-      if (numEmoji > 6) {
+      if (numEmoji > 6 && numEmoji <= 9) {
         coolness = '<:cool_finger_guns:828632824512512030> *Very* Kül Message'
       } else if (numEmoji > 9) {
         coolness = '<a:pepe_cool_clap:828638408297414727> **SUPA** Kül Message'
@@ -889,7 +889,7 @@ client.on('messageReactionRemove', (messageReaction, user) => {
       let numEmoji;
       let coolness;
       message.reactions.cache.get(emojiID) ? numEmoji = message.reactions.cache.get(emojiID).count : numEmoji = message.reactions.cache.get(emoji).count;
-      if (numEmoji > 6) {
+      if (numEmoji > 6 && numEmoji <= 9) {
         coolness = '<:cool_finger_guns:828632824512512030> *Very* Kül Message'
       } else if (numEmoji > 9) {
         coolness = '<a:pepe_cool_clap:828638408297414727> **SUPA** Kül Message'
