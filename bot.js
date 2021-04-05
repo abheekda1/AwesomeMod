@@ -613,7 +613,7 @@ async function usersWith(message) {
 }
 
 async function aboutServer(message) {
-  await guild.members.fetch();
+  await message.guild.members.fetch();
   const textChannelCount = message.guild.channels.cache.filter(c => c.type === 'text').size;
   const voiceChannelCount = message.guild.channels.cache.filter(c => c.type === 'voice').size;
   const categoryChannelCount = message.guild.channels.cache.filter(c => c.type === 'category').size;
