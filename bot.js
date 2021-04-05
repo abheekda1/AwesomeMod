@@ -521,7 +521,6 @@ async function kick(message) {
 async function helpMessage(message) {
   const helpEmbed = new Discord.MessageEmbed()
     .setTitle(`Helping \`${message.author.tag}\``)
-    .setURL('https://adat.link/awesomemod')
     .addField(`Creator`, `ADawesomeguy#2235`, true)
     .addField(`Prefix`, `\`${prefix}\``, true)
     .addField(`Using the bot`, `To use this bot, first make sure it has admin permissions. If it doesn't, you will 😢. To run a command, prefix it with \`${prefix}\`. One of the most useful things this bot brings to the table is the logging. To enable logging, you can run the command \`${prefix}startLogs\`. Another useful feature is the role request feature. Anyone can simply run the command \`${prefix}roleRequest [role]\`, and an admin can approve it or decline it. Additionally, there's now also a külboard, which will allow messages with a sufficient amount of 😎 reactions to be posted in a special read-only channel`)
