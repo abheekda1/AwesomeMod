@@ -87,6 +87,8 @@ client.on("message", async message => {
     userInfo(message);
   } else if (message.content.toLowerCase().startsWith(`${prefix}aboutbot`)) {
     aboutBot(message);
+  } else if (message.content.toLowerCase().startsWith(`${prefix}roleinfo`)) {
+    roleInfo(message);
   }
 });
 
@@ -331,6 +333,47 @@ async function userInfo(message) {
     .setFooter(`User ID: ${member.user.id}`)
     .setTimestamp();
   message.channel.send(userInfoEmbed).catch(console.error);
+}
+
+async function roleInfo(message) {
+  if (!message.content.split(" ")[1]) {
+    message.reply("role query must contain at least 3 characters!")
+    return;
+  }
+
+  if (message.content.split(" ")[1].length < 3) {
+    message.reply("role query must contain at least 3 characters!")
+    return;
+  }
+
+  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1]));
+  let roleChannel;
+
+  if (!message.content.split(" ")[2]) {
+    message.reply("user query must contain at least 3 characters!")
+    return;
+  }
+
+  if (message.content.split(" ")[2].length < 3) {
+    message.reply("user query must contain at least 3 characters!")
+    return;
+  }
+
+  if (roles.array().length < 1) {
+    message.reply("no roles found with that name!");
+    return;
+  }
+
+  const role = roles.array()[0];
+
+  const roleCreateEmbed = new Discord.MessageEmbed()
+    .setTitle(`Role \`${role.name}\` Info`)
+    .setAuthor(message.author.tag, message.author.avatarURL())
+    .addField("Permissions", role.permissions.toArray().map(p => `\`${p}\``.toLowerCase()).join(' • '))
+    .addField("Mentionable", role.mentionable)
+    .setFooter("Role ID: " + role.id)
+    .setTimestamp()
+    .setColor('00aaff');
 }
 
 async function addRole(message) {
