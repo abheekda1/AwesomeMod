@@ -100,11 +100,11 @@ async function aboutBot(message) {
 	.catch(console.error);
   const aboutBotEmbed = new Discord.MessageEmbed()
     .setTitle("Invite link!")
-    .setURL(`https://adat.link/awesomemod`)
+    .setURL(`https://github.com/ADawesomeguy/AwesomeMod`)
     .setAuthor(client.user.tag, client.user.avatarURL())
     .addField(`Servers`, `${serverCount}`, true)
     .addField(`Uptime`, `${uptimeDays.toFixed(1)} days`, true)
-    .addField(`Invite Link`, `Click the title to add this bot to your server!`)
+    .addField(`Invite Link`, `[Click here!](https://adat.link/awesomemod)`)
     .setFooter(`Client ID: ${client.user.id}`)
     .setTimestamp()
     .setColor('00c5ff');
