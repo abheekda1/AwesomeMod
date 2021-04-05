@@ -892,7 +892,7 @@ client.on('messageReactionRemove', (messageReaction, user) => {
         .setTitle("Reaction Removed")
         .setAuthor(user.tag, user.avatarURL())
         .addField("Link", `[Click here!](${message.url})`)
-        .addField("Reactions", `\`${user}\` removed their reaction ${messageReaction.emoji} on ${messageReaction.message.author}'s message in ${messageReaction.message.channel}.`)
+        .addField("Reactions", `${user} removed their reaction ${messageReaction.emoji} on ${messageReaction.message.author}'s message in ${messageReaction.message.channel}.`)
         .setFooter("Message ID: " + messageReaction.message.id)
         .setThumbnail(user.avatarURL())
         .setTimestamp()
