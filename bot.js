@@ -880,6 +880,9 @@ client.on('messageReactionAdd', (messageReaction, user) => {
 client.on('messageReactionRemove', (messageReaction, user) => {
   messageReaction.message.channel.messages.fetch(messageReaction.message.id)
     .then(message => {
+      const emojiID = messageReaction.emoji.id;
+      let numEmoji;
+      message.reactions.cache.get(emojiID) ? numEmoji = message.reactions.cache.get(emojiID).count : numEmoji = message.reactions.cache.get(emoji).count;
       const emoji = messageReaction.emoji.name;
       const messageReactionRemoveEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Removed")
@@ -893,7 +896,23 @@ client.on('messageReactionRemove', (messageReaction, user) => {
       if (message.content) {
         messageReactionRemoveEmbed.addField("Message", message.content);
       }
-    collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
+
+      const kulboardEmbed = new Discord.MessageEmbed()
+        .setTitle("Very kül message")
+        .addField("Link", `[Click here!](${message.url})`)
+        .setAuthor(message.author.tag, message.author.avatarURL())
+        .addField(`Max 😎 Reactions`, `${numEmoji}`)
+        .addField("Channel", message.channel)
+        .setThumbnail(message.author.avatarURL())
+        .setFooter("Message ID: " + message.id)
+        .setColor("00c5ff")
+        .setTimestamp();
+
+        if (message.content) {
+          kulboardEmbed.addField("Message", message.content)
+        }
+
+    /*collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
       if (error) {
         console.error;
       }
@@ -901,6 +920,52 @@ client.on('messageReactionRemove', (messageReaction, user) => {
         botLogsChannel = result.bot_logs_id;
         if (messageReaction.message.guild.channels.cache.get(botLogsChannel)) {
           messageReaction.message.guild.channels.cache.get(botLogsChannel).send(messageReactionRemoveEmbed).catch(console.error);
+        }
+      }
+    });*/
+
+    collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
+      let kulboardChannel;
+      let botLogsChannel;
+      if (error) {
+        console.error;
+      }
+      if (result.bot_logs_id) {
+        botLogsChannel = result.bot_logs_id;
+        if (message.guild.channels.cache.get(botLogsChannel)) {
+          message.guild.channels.cache.get(botLogsChannel).send(messageReactionRemoveEmbed).catch(console.error);
+        }
+      }
+      if (result.kulboard_id) {
+        kulboardChannel = result.kulboard_id;
+        if (message.guild.channels.cache.get(kulboardChannel) && emoji === '😎' && numEmoji >= 3) {
+          if (!result.kulboard_messages) {
+            message.guild.channels.cache.get(kulboardChannel).send(kulboardEmbed)
+            .then(kulboardMessage => {
+              collection.updateOne({ guild_id: message.guild.id }, { $set: { "kulboard_messages": [{ "original_message": `${message.id}`, "kulboard_message": `${kulboardMessage.id}` }] } });
+            }).catch(console.error)
+          } else {
+            collection.findOne( {"guild_id": `${message.guild.id}`}, { "projection": { "kulboard_messages": { "$elemMatch": { "original_message": `${message.id}` }}}}, (error, result) => {
+              if (error) {
+                console.error;
+              }
+              console.log(result)
+              if (!result.kulboard_messages) {
+                message.guild.channels.cache.get(kulboardChannel).send(kulboardEmbed)
+                .then(kulboardMessage => {
+                  collection.updateOne({ guild_id: message.guild.id }, { $push: { "kulboard_messages": { "original_message": `${message.id}`, "kulboard_message": `${kulboardMessage.id}` } } });
+                }).catch(console.error);
+              } else {
+                console.log(result)
+                console.log(result.kulboard_messages)
+                message.guild.channels.cache.get(kulboardChannel).messages.fetch(result.kulboard_messages[0].kulboard_message)
+                .then(kulboardMessage => {
+                  console.log(kulboardMessage.author.tag)
+                  kulboardMessage.edit(kulboardEmbed).catch(console.error);
+                }).catch(console.error);
+              }
+            });
+          }
         }
       }
     });
