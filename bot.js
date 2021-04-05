@@ -880,10 +880,10 @@ client.on('messageReactionAdd', (messageReaction, user) => {
 client.on('messageReactionRemove', (messageReaction, user) => {
   messageReaction.message.channel.messages.fetch(messageReaction.message.id)
     .then(message => {
+      const emoji = messageReaction.emoji.name;
       const emojiID = messageReaction.emoji.id;
       let numEmoji;
       message.reactions.cache.get(emojiID) ? numEmoji = message.reactions.cache.get(emojiID).count : numEmoji = message.reactions.cache.get(emoji).count;
-      const emoji = messageReaction.emoji.name;
       const messageReactionRemoveEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Removed")
         .setAuthor(user.tag, user.avatarURL())
