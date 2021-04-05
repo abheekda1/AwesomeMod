@@ -711,9 +711,6 @@ client.on('messageDeleteBulk', messages => {
 });
 
 client.on('messageUpdate', (originalMessage, editedMessage) => {
-  if (editedMessage.embeds.length > 0) {
-      return;
-  }
   editedMessage.channel.messages.fetch(editedMessage.id)
   .then(editedMessage => {
     const editEmbed = new Discord.MessageEmbed()
@@ -729,8 +726,8 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
     if (editedMessage !== originalMessage) {
       editEmbed.addField("Message", `<< ${originalMessage}\n>> ${editedMessage}`)
     }
-    if (editedMessage.attachments.array().length) {
-      editEmbed.addField("Attachments", editedMessage.attachments.array().map(a => `[${a.name}](${a.url})`).join(' • '))
+    if (editedMessage.attachments) {
+      editEmbed.addField("Attachments", editedMessage.attachments.array().map(`[${a.name}](${a.url})`).join(' • '))
     }
     collection.findOne({ guild_id: editedMessage.guild.id }, (error, result) => {
       if (error) {
@@ -780,7 +777,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
   messageReaction.message.channel.messages.fetch(messageReaction.message.id)
     .then(message => {
       const emoji = messageReaction.emoji.name;
-      const numEmoji = message.reactions.cache.get(emoji).count;
+      const numEmoji = await message.reactions.cache.get(emoji).count;
       const messageReactionAddEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Added")
         .setAuthor(message.author.tag, message.author.avatarURL())
@@ -924,6 +921,9 @@ client.on('roleDelete', role => {
 });
 
 client.on('roleUpdate', (oldRole, newRole) => {
+  if (newRole.position !== oldRole.position) {
+    return;
+  }
   const removedPerms = oldRole.permissions.toArray().filter(perm => !newRole.permissions.has(perm));
   const addedPerms = newRole.permissions.toArray().filter(perm => !oldRole.permissions.has(perm));
   const roleUpdateEmbed = new Discord.MessageEmbed()
