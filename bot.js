@@ -122,7 +122,9 @@ async function memberCountChannelUpdate(member) {
     if (result.member_count_channel_id) {
       memberCountChannel = result.member_count_channel_id;
       if (member.guild.channels.cache.get(memberCountChannel)) {
-        member.guild.channels.cache.get(memberCountChannel).edit({ name: `Members: ${member.guild.memberCount}` }).catch(console.error);
+        await member.guild.members.fetch();
+        const numHumans = member.guild.members.cache.filter(member => !member.user.bot).size;
+        member.guild.channels.cache.get(memberCountChannel).edit({ name: `Members: ${numHumans}` }).catch(console.error);
       }
     }
   });
@@ -264,7 +266,9 @@ async function memberCountChannelCreate(message) {
         message.reply('member count channel already exists!');
       } else {
         // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
-        message.guild.channels.create(`Members: ${message.guild.memberCount}`, {
+        await message.guild.members.fetch();
+        const numHumans = message.guild.members.cache.filter(member => !member.user.bot).size;
+        message.guild.channels.create(`Members: ${numHumans}`, {
           type: 'voice',
           // Remove view permissions from "@everyone"
           permissionOverwrites: [{
@@ -280,7 +284,9 @@ async function memberCountChannelCreate(message) {
       }
     } else {
       // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
-      message.guild.channels.create(`Members: ${message.guild.memberCount}`, {
+      await message.guild.members.fetch();
+      const numHumans = message.guild.members.cache.filter(member => !member.user.bot).size;
+      message.guild.channels.create(`Members: ${numHumans}`, {
         type: 'voice',
         // Remove view permissions from "@everyone"
         permissionOverwrites: [{
