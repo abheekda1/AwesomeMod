@@ -500,7 +500,7 @@ async function ban(message) {
       verificationEmbed.react('<a:anim_check:827985495295655988>');
       verificationEmbed.react('<a:anim_cross:827990162113560576>');
       const filter = (reaction, user) => {
-        return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+        return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.author.id === user.id && !user.bot;
       };
       verificationEmbed.awaitReactions(filter, { max: 1 })
         .then(userReaction => {
