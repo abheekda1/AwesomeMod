@@ -802,7 +802,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       let numEmoji;
       let coolness;
       message.reactions.cache.get(emojiID) ? numEmoji = message.reactions.cache.get(emojiID).count : numEmoji = message.reactions.cache.get(emoji).count;
-      numEmoji > 6 ? coolness = '<:cool_finger_guns:828632824512512030>' : coolness = '😎';
+      numEmoji > 6 ? coolness = '<:cool_finger_guns:828632824512512030> *Very* Kül Message' : coolness = '😎 Pretty Kül Message';
       const messageReactionAddEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Added")
         .setAuthor(user.tag, user.avatarURL())
@@ -818,7 +818,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       }
 
       const kulboardEmbed = new Discord.MessageEmbed()
-        .setTitle(`${coolness} Very Kül Message`)
+        .setTitle(`${coolness}`)
         .addField("Link", `[Click here!](${message.url})`, true)
         .setAuthor(message.author.tag, message.author.avatarURL())
         .addField(`# of 😎 Reactions`, `${numEmoji}`, true)
@@ -883,7 +883,7 @@ client.on('messageReactionRemove', (messageReaction, user) => {
       let numEmoji;
       let coolness;
       message.reactions.cache.get(emojiID) ? numEmoji = message.reactions.cache.get(emojiID).count : numEmoji = message.reactions.cache.get(emoji).count;
-      numEmoji > 6 ? coolness = '<:cool_finger_guns:828632824512512030>' : coolness = '😎';
+      numEmoji > 6 ? coolness = '<:cool_finger_guns:828632824512512030> *Very* Kül Message' : coolness = '😎 Pretty Kül Message';
       const messageReactionRemoveEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Removed")
         .setAuthor(user.tag, user.avatarURL())
@@ -899,7 +899,7 @@ client.on('messageReactionRemove', (messageReaction, user) => {
       }
 
       const kulboardEmbed = new Discord.MessageEmbed()
-        .setTitle(`${coolness} Very Kül Message`)
+        .setTitle(`${coolness}`)
         .addField("Link", `[Click here!](${message.url})`, true)
         .setAuthor(message.author.tag, message.author.avatarURL())
         .addField(`# of 😎 Reactions`, `${numEmoji}`, true)
