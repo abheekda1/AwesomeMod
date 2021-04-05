@@ -803,11 +803,11 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       message.reactions.cache.get(emojiID) ? numEmoji = message.reactions.cache.get(emojiID).count : numEmoji = message.reactions.cache.get(emoji).count;
       const messageReactionAddEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Added")
-        .setAuthor(message.author.tag, message.author.avatarURL())
+        .setAuthor(user.tag, user.avatarURL())
         .addField("Link", `[Click here!](${message.url})`)
-        .addField("Reactions", `\`${user.tag}\` reacted with ${messageReaction.emoji}, along with ${numEmoji - 1} other people in ${messageReaction.message.channel}.`)
+        .addField("Reactions", `${user} reacted with ${messageReaction.emoji} to ${messageReaction.message.author}'s message, along with ${numEmoji - 1} other people in ${messageReaction.message.channel}.`)
         .setFooter("Message ID: " + messageReaction.message.id)
-        .setThumbnail(message.author.avatarURL())
+        .setThumbnail(user.avatarURL())
         .setTimestamp()
         .setColor('00aaff');
 
@@ -883,10 +883,11 @@ client.on('messageReactionRemove', (messageReaction, user) => {
       const emoji = messageReaction.emoji.name;
       const messageReactionRemoveEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Removed")
+        .setAuthor(user.tag, user.avatarURL())
         .addField("Link", `[Click here!](${message.url})`)
-        .addField("Reactions", `\`${user.tag}\` removed their reaction ${messageReaction.emoji} in ${messageReaction.message.channel}.`)
+        .addField("Reactions", `\`${user}\` removed their reaction ${messageReaction.emoji} on ${messageReaction.message.author}'s message in ${messageReaction.message.channel}.`)
         .setFooter("Message ID: " + messageReaction.message.id)
-        .setThumbnail(message.author.avatarURL())
+        .setThumbnail(user.avatarURL())
         .setTimestamp()
         .setColor('e7778b');
 
