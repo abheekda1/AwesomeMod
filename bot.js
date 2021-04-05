@@ -727,7 +727,7 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
       editEmbed.addField("Message", `\`\`\`diff\n+${originalMessage}\n+${editedMessage}\`\`\``)
     }
     if (editedMessage.attachments) {
-      editEmbed.addField("Attachments", editedMessage.attachments.array().map(`[${a.name}](${a.url})`).join(' • '))
+      editEmbed.addField("Attachments", editedMessage.attachments.array().map(a =>`[${a.name}](${a.url})`).join(' • '))
     }
     collection.findOne({ guild_id: editedMessage.guild.id }, (error, result) => {
       if (error) {
