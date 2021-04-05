@@ -444,6 +444,11 @@ async function ban(message) {
 
   const member = members.array()[0];
 
+  if (member === message.member) {
+    message.reply("you can't ban yourself!");
+    return;
+  }
+
     let verificationEmbed = new Discord.MessageEmbed()
       .setTitle(`Are you sure you would like to ban \`${member.user.tag}\`?`)
       .setAuthor(member.user.tag, member.user.avatarURL())
@@ -500,6 +505,12 @@ async function kick(message) {
   }
 
   const member = members.array()[0];
+
+  if (member === message.member) {
+    message.reply("you can't ban yourself!");
+    return;
+  }
+
 
     const verificationEmbed = new Discord.MessageEmbed()
       .setTitle(`Are you sure you would like to kick \`${member.user.tag}\`?`)
