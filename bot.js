@@ -865,9 +865,17 @@ client.on('messageReactionAdd', (messageReaction, user) => {
         .setTimestamp()
         .setColor('00aaff');
 
-      if (message.content) {
-        messageReactionAddEmbed.addField("Message", message.content);
+     if (message.content) {
+          if (message.content.length > 25) {
+            messageReactionAddEmbed.addField("Message", message.content.substring(0, 25) + "...")
+          } else {
+            messageReactionAddEmbed.addField("Message", message.content);
+          }
       }
+
+      //if (message.content) {
+      //  messageReactionAddEmbed.addField("Message", message.content);
+      //}
 
       const kulboardEmbed = new Discord.MessageEmbed()
         .setTitle(`${coolness}`)
@@ -881,7 +889,11 @@ client.on('messageReactionAdd', (messageReaction, user) => {
         .setTimestamp();
 
       if (message.content) {
-        kulboardEmbed.addField("Message", message.content);
+          if (message.content.length > 1024) {
+            kulboardEmbed.addField("Message", message.content.substring(0, 1020) + "...")
+          } else {
+            kulboardEmbed.addField("Message", message.content);
+          }
       }
         collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
           let kulboardChannel;
@@ -952,9 +964,17 @@ client.on('messageReactionRemove', (messageReaction, user) => {
         .setTimestamp()
         .setColor('e7778b');
 
-      if (message.content) {
-        messageReactionRemoveEmbed.addField("Message", message.content);
+     if (message.content) {
+          if (message.content.length > 25) {
+            messageReactionRemoveEmbed.addField("Message", message.content.substring(0, 25) + "...")
+          } else {
+            messageReactionRemoveEmbed.addField("Message", message.content);
+          }
       }
+
+      //if (message.content) {
+      //  messageReactionRemoveEmbed.addField("Message", message.content);
+      //}
 
       const kulboardEmbed = new Discord.MessageEmbed()
         .setTitle(`${coolness}`)
@@ -967,9 +987,17 @@ client.on('messageReactionRemove', (messageReaction, user) => {
         .setColor("00c5ff")
         .setTimestamp();
 
-        if (message.content) {
-          kulboardEmbed.addField("Message", message.content)
-        }
+     if (message.content) {
+          if (message.content.length > 1024) {
+            kulboardEmbed.addField("Message", message.content.substring(0, 1020) + "...")
+          } else {
+            kulboardEmbed.addField("Message", message.content);
+          }
+      }
+
+ //       if (message.content) {
+ //         kulboardEmbed.addField("Message", message.content)
+ //       }
 
     collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
       let kulboardChannel;
