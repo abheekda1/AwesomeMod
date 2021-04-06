@@ -30,11 +30,20 @@ client.on("guildCreate", async guild => {
 
 client.on("guildDelete", async guild => {
   // If the bot is removed from a guild or the guild is deleted, the bot deletes the old data
-  collection.deleteOne({ "guild_id": `${guild.id}` }, (error, result) => {
-    if (error) {
-      console.error;
-    }
-  });
+  //collection.deleteOne({ "guild_id": `${guild.id}` }, (error, result) => {
+  //  if (error) {
+  //    console.error;
+  //  }
+  //});
+  const removedEmbed = new Discord.MessageEmbed()
+    .setTitle("Bye!")
+    .setDescription("You just removed me from your server! Is there something I was missing? Something not functioning well? If so, please leave an issue on my GitHub page and it'll be fixed as soon as possible (hopefully!)")
+    .addField("GitHub", "https://github.com/ADawesomeguy/AwesomeMod")
+    .addField("Creator", "ADawesomeguy#2235")
+    .setColor("ff0000")
+    .setFooter("Client ID: " + client.user.id)
+    .setTimestamp();
+  guild.owner.send(removedEmbed);
 });
 
 client.on("ready", () => {
