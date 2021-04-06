@@ -913,7 +913,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
           if (result.bot_logs_id) {
             botLogsChannel = result.bot_logs_id;
             if (message.guild.channels.cache.get(botLogsChannel)) {
-              message.guild.channels.cache.get(botLogsChannel).send(messageReactionAddEmbed).catch(console.error);
+           //   message.guild.channels.cache.get(botLogsChannel).send(messageReactionAddEmbed).catch(console.error);
             }
           }
           if (result.kulboard_id) {
@@ -948,14 +948,20 @@ client.on('messageReactionAdd', (messageReaction, user) => {
     });
 });
 
-client.on('messageReactionRemove', (messageReaction, user) => {
-  messageReaction.message.channel.messages.fetch(messageReaction.message.id)
+client.on('messageReactionRemove', async (messageReaction, user) => {
+  await messageReaction.message.channel.messages.fetch(messageReaction.message.id)
     .then(message => {
       const emoji = messageReaction.emoji.name;
       const emojiID = messageReaction.emoji.id;
       let numEmoji;
       let coolness;
-      message.reactions.cache.get(emojiID) ? numEmoji = message.reactions.cache.get(emojiID).count : numEmoji = message.reactions.cache.get(emoji).count;
+        if (!message.reactions.cache.get(emojiID)) {
+            numEmoji = 0;
+        } else if (message.reactions.cache.get(emojiID)) {
+            numEmoji = message.reactions.cache.get(emojiID).count;
+        } else {
+            numEmoji = message.reactions.cache.get(emoji).count;
+        }
       if (numEmoji > 6 && numEmoji <= 9) {
         coolness = '<:cool_finger_guns:828632824512512030> *Very* Kül Message'
       } else if (numEmoji > 9) {
