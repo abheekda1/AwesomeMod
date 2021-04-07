@@ -963,7 +963,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
           if (result.bot_logs_id) {
             botLogsChannel = result.bot_logs_id;
             if (message.guild.channels.cache.get(botLogsChannel)) {
-              message.guild.channels.cache.get(botLogsChannel).send(messageReactionAddEmbed).catch(console.error);
+              //message.guild.channels.cache.get(botLogsChannel).send(messageReactionAddEmbed).catch(console.error);
             }
           }
           if (result.kulboard_id) {
