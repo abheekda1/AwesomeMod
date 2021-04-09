@@ -609,6 +609,7 @@ async function helpMessage(message) {
 }
 
 async function usersWith(message) {
+  const threshold = 20;
   if (message.content.split(" ").length < 2) {
     message.reply("query must contain at least 3 characters!")
     return;
@@ -619,12 +620,73 @@ async function usersWith(message) {
   }
   const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1]));
   const role = roles.array()[0];
-  const roleEmbed = new Discord.MessageEmbed()
-    .setTitle(`${role.members.array().length} user(s) with the role \`${role.name}\`:`)
-    .setDescription(" • " + roles.array()[0].members.map(m => m.user.tag).join('\n\n • '))
-    .setFooter(`Role ID: ${role.id}`)
-    .setTimestamp();
-  message.channel.send(roleEmbed);
+  const membersList = roles.array()[0].members.array()
+  if (membersList.length > threshold) {
+    let embedContentArray = [];
+    while(membersList.length) {
+      embedContentArray.push(membersList.splice(0,threshold));
+    }
+    //console.log(embedContentArray);
+    let embedArray = [];
+    embedContentArray.forEach((members, index) => {
+      const roleEmbed = new Discord.MessageEmbed()
+        .setTitle(`${role.members.array().length} user(s) with the role \`${role.name}\`:`)
+        .setDescription(" • " + members.map(m => m.user.tag).join('\n\n • '))
+        .setFooter(`Role ID: ${role.id}`)
+        .setTimestamp();
+      embedArray.push(roleEmbed);
+    });
+    message.channel.send(embedArray[0])
+      .then(roleMessage => {
+        let embedIndex = 0;
+        roleMessage.react('⬅️');
+        roleMessage.react('➡️');
+        const filter = (reaction, user) => {
+          return ['⬅️', '➡️'].includes(reaction.emoji.name) && user.id === message.author.id;
+        };
+
+        const collector = roleMessage.createReactionCollector(filter, { time: 600000 });
+
+        collector.on('collect', async (reaction, user) => {
+          if (reaction.emoji.name === '➡️') {
+            let index = (embedIndex + 1) % (embedArray.length);
+            embedIndex = index;
+            roleMessage.edit(embedArray[index]);
+            const userReactions = roleMessage.reactions.cache.filter(reaction => reaction.users.cache.has(user.id));
+            try {
+            	for (const reaction of userReactions.values()) {
+            		await reaction.users.remove(user.id);
+            	}
+            } catch (error) {
+            	console.error('Failed to remove reactions.');
+            }
+          } else {
+            let index = (embedIndex + threshold - 1) % embedArray.length;
+            embedIndex = index;
+            roleMessage.edit(embedArray[index]);
+            const userReactions = roleMessage.reactions.cache.filter(reaction => reaction.users.cache.has(user.id));
+            try {
+              for (const reaction of userReactions.values()) {
+                await reaction.users.remove(user.id);
+              }
+            } catch (error) {
+              console.error('Failed to remove reactions.');
+            }
+          }
+        });
+
+        collector.on('end', () => {
+          roleMessage.edit("TIMEOUT");
+        })
+      });
+  } else {
+    const roleEmbed = new Discord.MessageEmbed()
+      .setTitle(`${role.members.array().length} user(s) with the role \`${role.name}\`:`)
+      .setDescription(" • " + roles.array()[0].members.map(m => m.user.tag).join('\n\n • '))
+      .setFooter(`Role ID: ${role.id}`)
+      .setTimestamp();
+    message.channel.send(roleEmbed);
+  }
 }
 
 async function aboutServer(message) {
