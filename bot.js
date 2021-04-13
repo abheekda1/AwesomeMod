@@ -98,9 +98,25 @@ client.on("message", async message => {
     aboutBot(message);
   } else if (message.content.toLowerCase().startsWith(`${prefix}roleinfo`)) {
     roleInfo(message);
+  } else if (message.content.toLowerCase().startsWith(`${prefix}addemoji`)) {
+    addEmoji(message);
   }
 });
 
+async function addEmoji(message) {
+    if (!message.member.hasPermission('MANAGE_EMOJIS')) {
+      message.reply(`you don't have the correct permissions to manage emojis!`);
+      return;
+    }
+    let splitMessage = message.content.split(" ");
+    if (splitMessage.length > 2) {
+        message.guild.emojis.create(splitMessage[1], splitMessage[2])
+        .then(emoji => message.reply(`created new emoji "${emoji.name}"`))
+        .catch(error => message.reply(error));
+    } else {
+        message.reply("the format should be `$addEmoji [URL] [name]`");
+    }
+}
 async function aboutBot(message) {
   const uptimeDays = client.uptime / 86400000;
   let serverCount;
