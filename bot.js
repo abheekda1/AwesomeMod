@@ -898,6 +898,9 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
 });
 
 client.on('channelCreate', channel => {
+    if (channel.type === "dm") {
+        return;
+    }
   const channelID = channel.id;
   const channelType = channel.type;
   let channelCategory;
