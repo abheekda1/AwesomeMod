@@ -634,7 +634,7 @@ async function usersWith(message) {
     message.reply("query must contain at least 3 characters!")
     return;
   }
-  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1]));
+  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1].toLowerCase()));
   const role = roles.array()[0];
   const membersList = roles.array()[0].members.array()
   if (membersList.length > threshold) {
