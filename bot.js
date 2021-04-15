@@ -229,9 +229,11 @@ async function startLogs(message) {
 }
 
 async function kulboardCreate(message) {
-  if (!message.member.hasPermission("ADMINISTRATOR")) {
-    message.reply("you do not have admin permissions!");
-    return;
+  if (!message.member.hasPermission('MANAGE_CHANNELS')) {
+	if (!message.member.hasPermission('ADMINISTRATOR')){
+    		message.reply('you do not have privileges to create new channels!')
+    		return;
+	}
   }
   collection.findOne({ guild_id: message.guild.id }, (error, result) => {
     if (error) {
