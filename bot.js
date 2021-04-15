@@ -481,8 +481,10 @@ async function addRole(message) {
 
 async function ban(message) {
   if (!message.member.hasPermission('BAN_MEMBERS')) {
-    message.reply('you do not have ban permissions!')
-    return;
+	if (!message.member.hasPermission('ADMINISTRATOR')){
+    		message.reply('you do not have banning privileges!')
+    		return;
+	}
   }
 
   if (!message.content.split(" ")[1]) {
@@ -546,9 +548,11 @@ async function ban(message) {
 }
 
 async function kick(message) {
-  if (!message.member.hasPermission('ADMINISTRATOR')) {
-    message.reply('you do not have admin privileges!')
-    return;
+  if (!message.member.hasPermission('KICK_MEMBERS')) {
+	if (!message.member.hasPermission('ADMINISTRATOR')){
+    		message.reply('you do not have kicking privileges!')
+    		return;
+	}
   }
 
   if (!message.content.split(" ")[1]) {
