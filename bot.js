@@ -577,7 +577,7 @@ async function kick(message) {
   const member = members.array()[0];
 
   if (member === message.member) {
-    message.reply("you can't ban yourself!");
+    message.reply("you can't kick yourself!");
     return;
   }
 
