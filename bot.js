@@ -634,9 +634,16 @@ async function usersWith(message) {
     message.reply("query must contain at least 3 characters!")
     return;
   }
-  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1].toLowerCase()));
-  const role = roles.array()[0];
-  const membersList = roles.array()[0].members.array()
+  const queriedRole = message.content.split(" ");
+  queriedRole.shift();
+  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(queriedRole.join(" ").toLowerCase()));
+  if (!roles.array().length) {
+    message.reply("no roles found with that name!");
+    return;
+  }
+  const sortedRoles = roles.array().sort((a, b) => a.name.length - b.name.length);
+  const role = sortedRoles[0];
+  const membersList = sortedRoles[0].members.array()
   if (membersList.length > threshold) {
     let embedContentArray = [];
     while(membersList.length) {
