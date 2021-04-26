@@ -376,8 +376,9 @@ async function roleInfo(message) {
     message.reply("role query must contain at least 3 characters!")
     return;
   }
-
-  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1]));
+  const queriedRole = message.content.split(" ");
+  queriedRole.shift();
+  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(queriedRole.join(" ").toLowerCase()));
   let roleChannel;
 
   if (roles.array().length < 1) {
@@ -414,7 +415,11 @@ async function addRole(message) {
     return;
   }
 
-  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1]));
+  const queriedRole = message.content.split(" ");
+  console.log(queriedRole);
+  queriedRole.shift();
+  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(queriedRole[0].toLowerCase()));
+  console.log(roles);
   let roleChannel;
 
   if (!message.content.split(" ")[2]) {
@@ -753,7 +758,9 @@ async function roleRequest(message) {
     return;
   }
 
-  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(message.content.split(" ")[1].toLowerCase()));
+  const queriedRole = message.content.split(" ");
+  queriedRole.shift();
+  const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(queriedRole.join(" ").toLowerCase()));
   let roleChannel;
 
   if (roles.array().length < 1) {
