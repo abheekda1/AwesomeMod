@@ -8,7 +8,7 @@ const fetch = require(`node-fetch`);
 var database, collection;
 const DATABASE_NAME = process.env.DATABASE_NAME;
 const CONNECTION_URL = "localhost:27017";
-const prefix = '$';
+const prefix = process.env.BOT_PREFIX;
 
 MongoClient.connect("mongodb://" + CONNECTION_URL, { useNewUrlParser: true }, (error, client) => {
   if (error) {
@@ -53,7 +53,7 @@ client.on("ready", () => {
 
 client.on("message", async message => {
   if (!message.content.startsWith(prefix) || message.author.bot) {
-    return;j
+    return;
   }
 
   switch (message.content.toLowerCase()) {
@@ -100,8 +100,65 @@ client.on("message", async message => {
     roleInfo(message);
   } else if (message.content.toLowerCase().startsWith(`${prefix}addemoji`)) {
     addEmoji(message);
+  } else if (message.content.toLowerCase().startsWith(`${prefix}reactionrole`)) {
+    reactionRole(message);
   }
 });
+
+async function reactionRole(message) {
+  if (!message.member.hasPermission('ADMINISTRATOR')) {
+    message.reply(`you don't have the correct permissions to create a reaction roles!`);
+    return;
+  }
+  let splitMessage = message.content.split(" ");
+  if (splitMessage.length > 1) {
+    splitMessage.shift();
+    const messageContent = splitMessage.join(" ");
+    message.channel.send(messageContent)
+    .then(reactionRoleMessage => {
+      const originalMessageAuthorId = message.author.id;
+      message.delete();
+      const reactionFilter = (reaction, user) => {
+      	return user.id === originalMessageAuthorId;
+      };
+      const collector = reactionRoleMessage.createReactionCollector(reactionFilter);
+      collector.on('collect', (reaction, user) => {
+        const messageFilter = response => {
+          return response;
+        };
+      	message.author.send(`You reacted with ${reaction.emoji.name}. What role should this reaction give?`)
+        .then(() => {
+          message.author.dmChannel.awaitMessages(messageFilter, { max: 1, time: 30000, errors: ['time'] })
+          .then(collected => {
+            if (!collected.first().content) {
+              collected.first().reply("query must contain at least 3 characters!")
+              return;
+            }
+
+            if (collected.first().content.length < 3) {
+              collected.first().reply("query must contain at least 3 characters!")
+              return;
+            }
+
+            const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(collected.first().content.toLowerCase()));
+            let roleChannel;
+
+            if (roles.array().length < 1) {
+              collected.first().reply("no roles found with that name!");
+              return;
+            }
+
+            const role = roles.array()[0];
+            console.log(role.name);
+        }).catch(console.error);
+      });
+    });
+  });
+  } else {
+    message.reply(`the format should be \`${prefix}reactionRole [channel mention] [message]\``);
+    return;
+  }
+}
 
 async function addEmoji(message) {
     if (!message.member.hasPermission('MANAGE_EMOJIS')) {
@@ -115,6 +172,7 @@ async function addEmoji(message) {
         .catch(error => message.reply(error));
     } else {
         message.reply("the format should be `$addEmoji [URL] [name]`");
+        return;
     }
 }
 async function aboutBot(message) {
