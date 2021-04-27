@@ -110,6 +110,8 @@ async function reactionRole(message) {
     message.reply(`you don't have the correct permissions to create a reaction roles!`);
     return;
   }
+  let reactionsJSON = {};
+  let reactionsMessageJSON = {};
   let splitMessage = message.content.split(" ");
   if (splitMessage.length > 1) {
     splitMessage.shift();
@@ -117,6 +119,7 @@ async function reactionRole(message) {
     message.channel.send(messageContent)
     .then(reactionRoleMessage => {
       const originalMessageAuthorId = message.author.id;
+      reactionRoleMessage.react("<a:anim_check:827985495295655988>");
       message.delete();
       const reactionFilter = (reaction, user) => {
       	return user.id === originalMessageAuthorId;
@@ -126,32 +129,81 @@ async function reactionRole(message) {
         const messageFilter = response => {
           return response;
         };
-      	message.author.send(`You reacted with ${reaction.emoji.name}. What role should this reaction give?`)
-        .then(() => {
-          message.author.dmChannel.awaitMessages(messageFilter, { max: 1, time: 30000, errors: ['time'] })
-          .then(collected => {
-            if (!collected.first().content) {
-              collected.first().reply("query must contain at least 3 characters!")
-              return;
-            }
+        if (reaction.emoji.name === 'anim_check') {
+          reactionRoleMessage.delete();
+          message.channel.send(reactionRoleMessage.content)
+          .then(finalizedReactionRoleMessage => {
+            Object.keys(reactionsJSON).forEach(item => finalizedReactionRoleMessage.react(item));
+            reactionsMessageJSON[finalizedReactionRoleMessage.id] = reactionsJSON;
+            console.log(reactionsMessageJSON);
+            collection.findOne({ guild_id: message.guild.id }, (error, result) => {
+              if (error) {
+                console.error;
+              }
+              let reactionRoleMessages;
+              if (result.reaction_role_messages) {
+                reactionRoleMessages = result.reaction_role_messages;
+                collection.updateOne({ guild_id: message.guild.id }, { $push: { "reaction_role_messages": reactionsMessageJSON} });
+              } else {
+                collection.updateOne({ guild_id: message.guild.id }, { $set: { "reaction_role_messages": [reactionsMessageJSON]} });
+              }
+            });
+            message.author.dmChannel.send("Reaction role message confirmed!");
+          }).catch(console.error);
+        } else if (reaction.emoji.id) {
+          message.author.send(`Please refrain from using custom emojis!`)
+        } else {
+          message.author.send(`You reacted with ${reaction.emoji.name}. What role should this reaction give?`)
+          .then(() => {
+            message.author.dmChannel.awaitMessages(messageFilter, { max: 1, time: 300000, errors: ['time'] })
+            .then(collected => {
+              if (!collected.first().content) {
+                collected.first().reply("Query must contain at least 3 characters!")
+                return;
+              }
 
-            if (collected.first().content.length < 3) {
-              collected.first().reply("query must contain at least 3 characters!")
-              return;
-            }
+              if (collected.first().content.length < 3) {
+                collected.first().reply("Query must contain at least 3 characters!")
+                return;
+              }
 
-            const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(collected.first().content.toLowerCase()));
-            let roleChannel;
+              const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(collected.first().content.toLowerCase()));
+              let roleChannel;
 
-            if (roles.array().length < 1) {
-              collected.first().reply("no roles found with that name!");
-              return;
-            }
+              if (roles.array().length < 1) {
+                collected.first().reply("No roles found with that name!");
+                return;
+              }
 
-            const role = roles.array()[0];
-            console.log(role.name);
-        }).catch(console.error);
-      });
+              const role = roles.array()[0];
+
+              const verificationEmbed = new Discord.MessageEmbed()
+                .setTitle(`Are you sure you would like ${reaction.emoji.name} to correspond to the **${role.name}** role?`)
+                .setDescription("React to this message to verify")
+                .setThumbnail(message.guild.iconURL())
+                .setColor("fda172")
+                .setTimestamp();
+              message.author.dmChannel.send(verificationEmbed)
+              .then(verificationEmbed => {
+                verificationEmbed.react('<a:anim_check:827985495295655988>');
+                verificationEmbed.react('<a:anim_cross:827990162113560576>');
+                const roleConfirmationFilter = (reaction, user) => {
+                  return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && !user.bot;
+                };
+                verificationEmbed.awaitReactions(roleConfirmationFilter, { max: 1 })
+                  .then(userReaction => {
+                    const roleConfirmationReaction = userReaction.first();
+                    if (roleConfirmationReaction.emoji.name === 'anim_check') {
+                      reactionsJSON[reaction.emoji.name] = role.id;
+                      message.author.dmChannel.send(`Role \`${role.name}\` used`)
+                    } else {
+                      message.author.dmChannel.send("If you would like to select a different role, please re-react to the message in the server");
+                    }
+                  }).catch(console.error);
+              }).catch(console.error);
+          }).catch(console.error);
+        });
+      }
     });
   });
   } else {
@@ -1057,11 +1109,28 @@ client.on('messageReactionAdd', (messageReaction, user) => {
             kulboardEmbed.addField("Message", message.content);
           }
       }
+      if (messageReaction.message.guild) {
         collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
           let kulboardChannel;
           let botLogsChannel;
+          let reactionRoleMessages;
           if (error) {
             console.error;
+          }
+          if (result.reaction_role_messages) {
+            reactionRoleMessages = result.reaction_role_messages;
+            reactionRoleMessages.forEach(async item => {
+              if (item.hasOwnProperty(messageReaction.message.id)) {
+                if (item[messageReaction.message.id].hasOwnProperty(messageReaction.emoji.name)) {
+                  //console.log(messageReaction.message.guild.roles.fetch(item[messageReaction.message.id][messageReaction.emoji.name]));
+                  //if (messageReaction.message.guild.roles.cache.get(item[messageReaction.message.id][messageReaction.emoji.name])
+                  const member = await messageReaction.message.guild.members.fetch(user.id);
+                  if (!member.user.bot) {
+                    member.roles.add(item[messageReaction.message.id][messageReaction.emoji.name]).catch();
+                  }
+                }
+              }
+            });
           }
           if (result.bot_logs_id) {
             botLogsChannel = result.bot_logs_id;
@@ -1098,6 +1167,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
             }
           }
         });
+      }
     });
 });
 
@@ -1166,12 +1236,30 @@ client.on('messageReactionRemove', async (messageReaction, user) => {
  //       if (message.content) {
  //         kulboardEmbed.addField("Message", message.content)
  //       }
-
+  if (messageReaction.message.guild) {
     collection.findOne({ guild_id: messageReaction.message.guild.id }, (error, result) => {
       let kulboardChannel;
       let botLogsChannel;
+      let reactionRoleMessages;
       if (error) {
         console.error;
+      }
+      if (result.reaction_role_messages) {
+        reactionRoleMessages = result.reaction_role_messages;
+        reactionRoleMessages.forEach(async item => {
+          if (item.hasOwnProperty(messageReaction.message.id)) {
+            if (item[messageReaction.message.id].hasOwnProperty(messageReaction.emoji.name)) {
+              //console.log(messageReaction.message.guild.roles.fetch(item[messageReaction.message.id][messageReaction.emoji.name]));
+              //if (messageReaction.message.guild.roles.cache.get(item[messageReaction.message.id][messageReaction.emoji.name])
+              const member = await messageReaction.message.guild.members.fetch(user.id);
+              if (!member.user.bot) {
+                if (member.roles.cache.has(item[messageReaction.message.id][messageReaction.emoji.name])) {
+                  member.roles.remove(item[messageReaction.message.id][messageReaction.emoji.name]).catch();
+                }
+              }
+            }
+          }
+        });
       }
       if (result.bot_logs_id) {
         botLogsChannel = result.bot_logs_id;
@@ -1208,6 +1296,7 @@ client.on('messageReactionRemove', async (messageReaction, user) => {
         }
       }
     });
+  }
   });
 });
 
