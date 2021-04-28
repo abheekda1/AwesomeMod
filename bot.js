@@ -164,7 +164,6 @@ async function reactionRole(message) {
           .then(finalizedReactionRoleMessage => {
             Object.keys(reactionsJSON).forEach(item => finalizedReactionRoleMessage.react(item));
             reactionsMessageJSON[finalizedReactionRoleMessage.id] = reactionsJSON;
-            console.log(reactionsMessageJSON);
             collection.findOne({ guild_id: message.guild.id }, (error, result) => {
               if (error) {
                 console.error;
@@ -555,10 +554,8 @@ async function addRole(message) {
   }
 
   const queriedRole = message.content.split(" ");
-  console.log(queriedRole);
   queriedRole.shift();
   const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(queriedRole[0].toLowerCase()));
-  console.log(roles);
   let roleChannel;
 
   if (!message.content.split(" ")[2]) {
@@ -793,7 +790,7 @@ async function usersWith(message) {
     while(membersList.length) {
       embedContentArray.push(membersList.splice(0,threshold));
     }
-    //console.log(embedContentArray);
+
     let embedArray = [];
     embedContentArray.forEach((members, index) => {
       const roleEmbed = new Discord.MessageEmbed()
@@ -1151,8 +1148,6 @@ client.on('messageReactionAdd', (messageReaction, user) => {
             reactionRoleMessages.forEach(async item => {
               if (item.hasOwnProperty(messageReaction.message.id)) {
                 if (item[messageReaction.message.id].hasOwnProperty(messageReaction.emoji.name)) {
-                  //console.log(messageReaction.message.guild.roles.fetch(item[messageReaction.message.id][messageReaction.emoji.name]));
-                  //if (messageReaction.message.guild.roles.cache.get(item[messageReaction.message.id][messageReaction.emoji.name])
                   const member = await messageReaction.message.guild.members.fetch(user.id);
                   if (!member.user.bot) {
                     member.roles.add(item[messageReaction.message.id][messageReaction.emoji.name]).catch();
@@ -1278,8 +1273,6 @@ client.on('messageReactionRemove', async (messageReaction, user) => {
         reactionRoleMessages.forEach(async item => {
           if (item.hasOwnProperty(messageReaction.message.id)) {
             if (item[messageReaction.message.id].hasOwnProperty(messageReaction.emoji.name)) {
-              //console.log(messageReaction.message.guild.roles.fetch(item[messageReaction.message.id][messageReaction.emoji.name]));
-              //if (messageReaction.message.guild.roles.cache.get(item[messageReaction.message.id][messageReaction.emoji.name])
               const member = await messageReaction.message.guild.members.fetch(user.id);
               if (!member.user.bot) {
                 if (member.roles.cache.has(item[messageReaction.message.id][messageReaction.emoji.name])) {
