@@ -269,7 +269,8 @@ async function reactionRole(message) {
                 return;
               }
 
-              const role = roles.array()[0];
+              const sortedRoles = roles.array().sort((a, b) => a.name.length - b.name.length);
+              const role = sortedRoles[0];
 
               const verificationEmbed = new Discord.MessageEmbed()
                 .setTitle(`Are you sure you would like ${reaction.emoji.name} to correspond to the **${role.name}** role?`)
@@ -590,7 +591,8 @@ async function roleInfo(message) {
     return;
   }
 
-  const role = roles.array()[0];
+  const sortedRoles = roles.array().sort((a, b) => a.name.length - b.name.length);
+  const role = sortedRoles[0];
 
   const roleInfoEmbed = new Discord.MessageEmbed()
     .setTitle(`Role \`${role.name}\` Info`)
@@ -639,7 +641,8 @@ async function addRole(message) {
     return;
   }
 
-  const role = roles.array()[0];
+  const sortedRoles = roles.array().sort((a, b) => a.name.length - b.name.length);
+  const role = sortedRoles[0];
 
   const members = message.guild.members.cache.filter(member => {
     if (member.nickname) {
@@ -970,7 +973,8 @@ async function roleRequest(message) {
     return;
   }
 
-  const role = roles.array()[0];
+  const sortedRoles = roles.array().sort((a, b) => a.name.length - b.name.length);
+  const role = sortedRoles[0];
 
   if (message.member.roles.cache.has(role.id)) {
     message.reply("you already have that role!");
