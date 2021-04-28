@@ -10,7 +10,7 @@ const DATABASE_NAME = process.env.DATABASE_NAME;
 const CONNECTION_URL = "localhost:27017";
 const defaultPrefix = process.env.BOT_PREFIX;
 
-MongoClient.connect("mongodb://" + CONNECTION_URL, { useNewUrlParser: true }, (error, client) => {
+MongoClient.connect("mongodb://" + CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true }, (error, client) => {
   if (error) {
     throw error;
   }
