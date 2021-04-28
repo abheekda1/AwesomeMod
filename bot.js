@@ -57,6 +57,10 @@ client.on("message", async message => {
       console.error;
     }
     let prefix;
+    if (!result) {
+      console.log(`Guild ${message.guild.id} not in database`);
+      return;
+    }
     if (result.prefix) {
       prefix = result.prefix;
     } else {
