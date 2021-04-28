@@ -8,7 +8,7 @@ const fetch = require(`node-fetch`);
 var database, collection;
 const DATABASE_NAME = process.env.DATABASE_NAME;
 const CONNECTION_URL = "localhost:27017";
-const prefix = process.env.BOT_PREFIX;
+const defaultPrefix = process.env.BOT_PREFIX;
 
 MongoClient.connect("mongodb://" + CONNECTION_URL, { useNewUrlParser: true }, (error, client) => {
   if (error) {
@@ -48,62 +48,91 @@ client.on("guildDelete", async guild => {
 
 client.on("ready", () => {
   console.log("Logged in as " + client.user.tag + "!");
-  client.user.setActivity(`for \`${prefix}help\` | Add me to your own server: adat.link/awesomemod`, { type: "WATCHING" });
+  client.user.setActivity(`for @AwesomeMod | Add me to your own server: adat.link/awesomemod`, { type: "WATCHING" });
 });
 
 client.on("message", async message => {
-  if (!message.content.startsWith(prefix) || message.author.bot) {
+  collection.findOne({ guild_id: message.guild.id }, (error, result) => {
+    if (error) {
+      console.error;
+    }
+    let prefix;
+    if (result.prefix) {
+      prefix = result.prefix;
+    } else {
+      prefix = defaultPrefix;
+    }
+
+    if (message.content === "<@!827758580965965824>") {
+      message.reply(`\nPrefix: \`${prefix}\`\nHelp: \`${prefix}help\`\nChange Prefix: \`${prefix}prefix [new prefix]\``);
+    }
+
+    if (!message.content.startsWith(prefix) || message.author.bot) {
+      return;
+    }
+
+    switch (message.content.toLowerCase()) {
+      case `${prefix}aboutserver`:
+        aboutServer(message);
+        break;
+      case `${prefix}help`:
+        helpMessage(message, prefix);
+        break;
+      case `${prefix}startlogs`:
+        startLogs(message);
+        break;
+      case `${prefix}kulboard`:
+        kulboardCreate(message)
+        break;
+      case `${prefix}ping`:
+        ping(message);
+        break;
+      case `${prefix}iss`:
+        locateISS(message);
+        break;
+      case `${prefix}membercountchannel`:
+        memberCountChannelCreate(message);
+        break;
+    }
+
+    if (message.content.toLowerCase().startsWith(`${prefix}bulkdelete`)) {
+      bulkDelete(message);
+    } else if (message.content.toLowerCase().startsWith(`${prefix}rolerequest`)) {
+      roleRequest(message);
+    } else if (message.content.toLowerCase().startsWith(`${prefix}userswith`)) {
+      usersWith(message);
+    } else if (message.content.toLowerCase().startsWith(`${prefix}ban`)) {
+      ban(message);
+    } else if (message.content.toLowerCase().startsWith(`${prefix}kick`)) {
+      kick(message);
+    } else if (message.content.toLowerCase().startsWith(`${prefix}addrole`)) {
+      addRole(message);
+    } else if (message.content.toLowerCase().startsWith(`${prefix}userinfo`)) {
+      userInfo(message);
+    } else if (message.content.toLowerCase().startsWith(`${prefix}aboutbot`)) {
+      aboutBot(message);
+    } else if (message.content.toLowerCase().startsWith(`${prefix}roleinfo`)) {
+      roleInfo(message);
+    } else if (message.content.toLowerCase().startsWith(`${prefix}addemoji`)) {
+      addEmoji(message);
+    } else if (message.content.toLowerCase().startsWith(`${prefix}reactionrole`)) {
+      reactionRole(message);
+    } else if (message.content.toLowerCase().startsWith(`${prefix}prefix`)) {
+      customPrefix(message);
+    }
+  });
+});
+
+async function customPrefix(message) {
+  if (!message.member.hasPermission("ADMINISTRATOR")) {
+    message.reply("you must have admin permissions to run this command!");
     return;
   }
-
-  switch (message.content.toLowerCase()) {
-    case `${prefix}aboutserver`:
-      aboutServer(message);
-      break;
-    case `${prefix}help`:
-      helpMessage(message);
-      break;
-    case `${prefix}startlogs`:
-      startLogs(message);
-      break;
-    case `${prefix}kulboard`:
-      kulboardCreate(message)
-      break;
-    case `${prefix}ping`:
-      ping(message);
-      break;
-    case `${prefix}iss`:
-      locateISS(message);
-      break;
-    case `${prefix}membercountchannel`:
-      memberCountChannelCreate(message);
-      break;
-  }
-
-  if (message.content.toLowerCase().startsWith(`${prefix}bulkdelete`)) {
-    bulkDelete(message);
-  } else if (message.content.toLowerCase().startsWith(`${prefix}rolerequest`)) {
-    roleRequest(message);
-  } else if (message.content.toLowerCase().startsWith(`${prefix}userswith`)) {
-    usersWith(message);
-  } else if (message.content.toLowerCase().startsWith(`${prefix}ban`)) {
-    ban(message);
-  } else if (message.content.toLowerCase().startsWith(`${prefix}kick`)) {
-    kick(message);
-  } else if (message.content.toLowerCase().startsWith(`${prefix}addrole`)) {
-    addRole(message);
-  } else if (message.content.toLowerCase().startsWith(`${prefix}userinfo`)) {
-    userInfo(message);
-  } else if (message.content.toLowerCase().startsWith(`${prefix}aboutbot`)) {
-    aboutBot(message);
-  } else if (message.content.toLowerCase().startsWith(`${prefix}roleinfo`)) {
-    roleInfo(message);
-  } else if (message.content.toLowerCase().startsWith(`${prefix}addemoji`)) {
-    addEmoji(message);
-  } else if (message.content.toLowerCase().startsWith(`${prefix}reactionrole`)) {
-    reactionRole(message);
-  }
-});
+  let customPrefix = message.content.split(" ");
+  customPrefix.shift();
+  customPrefix = customPrefix.join("");
+  collection.updateOne({ guild_id: message.guild.id }, { $set: { "prefix": customPrefix }}).then(message.reply(`prefix set to \`${customPrefix}\``))
+}
 
 async function reactionRole(message) {
   if (!message.member.hasPermission('ADMINISTRATOR')) {
@@ -722,14 +751,14 @@ async function kick(message) {
       }).catch(console.error);
 }
 
-async function helpMessage(message) {
+async function helpMessage(message, prefix) {
   const helpEmbed = new Discord.MessageEmbed()
     .setTitle(`Helping \`${message.author.tag}\``)
     .addField(`Creator`, `ADawesomeguy#2235`, true)
     .addField(`Prefix`, `\`${prefix}\``, true)
     .addField(`Using the bot`, `To use this bot, first make sure it has admin permissions. If it doesn't, you will 😢. To run a command, prefix it with \`${prefix}\`. One of the most useful things this bot brings to the table is the logging. To enable logging, you can run the command \`${prefix}startLogs\`. Another useful feature is the role request feature. Anyone can simply run the command \`${prefix}roleRequest [role]\`, and an admin can approve it or decline it. Additionally, there's now also a külboard, which will allow messages with a sufficient amount of 😎 reactions to be posted in a special read-only channel`)
     .addField(`Meta commands:`, `Help command: \`${prefix}help\`\nAbout your server: \`${prefix}aboutServer\`\nAbout this bot: \`${prefix}aboutBot\``)
-    .addField(`Admin commands:`, `Add logs channel: \`${prefix}startLogs\`\nAdd külboard channel: \`${prefix}kulboard\`\nAdd member count channel: \`${prefix}memberCountChannel\`\nBulk delete: \`${prefix}bulkDelete\`\nBan: \`${prefix}ban [user]\`\nKick: \`${prefix}kick [user]\`\nGive user role: \`${prefix}addRole [role] [user]\``)
+    .addField(`Admin commands:`, `Add logs channel: \`${prefix}startLogs\`\nAdd külboard channel: \`${prefix}kulboard\`\nAdd member count channel: \`${prefix}memberCountChannel\`\nBulk delete: \`${prefix}bulkDelete\`\nBan: \`${prefix}ban [user]\`\nKick: \`${prefix}kick [user]\`\nGive user role: \`${prefix}addRole [role] [user]\`\nSet custom prefix: \`${prefix}prefix [new prefix]\``)
     .addField(`User commands:`, `Role request: \`${prefix}roleRequest [role]\`\nView users with role: \`${prefix}usersWith [role]\`\nUser info: \`${prefix}userInfo [user]\``)
     .addField(`Fun commands:`, `Show ISS location: \`${prefix}iss\`\nMeasure latency: \`${prefix}ping\`\nAdd custom emoji: \`${prefix}addEmoji [url] [name]\``)
     .setThumbnail(client.user.avatarURL())
