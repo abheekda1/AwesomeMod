@@ -52,20 +52,82 @@ client.on("ready", () => {
 });
 
 client.on("message", async message => {
-  collection.findOne({ guild_id: message.guild.id }, (error, result) => {
-    if (error) {
-      console.error;
-    }
-    let prefix;
-    if (!result) {
-      console.log(`Guild ${message.guild.id} not in database`);
-      return;
-    }
-    if (result.prefix) {
-      prefix = result.prefix;
-    } else {
-      prefix = defaultPrefix;
-    }
+  let prefix;
+  if (message.guild) {
+    collection.findOne({ guild_id: message.guild.id }, (error, result) => {
+      if (error) {
+        console.error;
+      }
+      if (!result) {
+        console.log(`Guild ${message.guild.id} not in database`);
+        return;
+      }
+      if (result.prefix) {
+        prefix = result.prefix;
+      } else {
+        prefix = defaultPrefix;
+      }
+
+      if (message.content === `<@!${client.user.id}>`) {
+        message.reply(`\nPrefix: \`${prefix}\`\nHelp: \`${prefix}help\`\nChange Prefix: \`${prefix}prefix [new prefix]\``);
+      }
+
+      if (!message.content.startsWith(prefix) || message.author.bot) {
+        return;
+      }
+
+      switch (message.content.toLowerCase()) {
+        case `${prefix}aboutserver`:
+          aboutServer(message);
+          break;
+        case `${prefix}help`:
+          helpMessage(message, prefix);
+          break;
+        case `${prefix}startlogs`:
+          startLogs(message);
+          break;
+        case `${prefix}kulboard`:
+          kulboardCreate(message)
+          break;
+        case `${prefix}ping`:
+          ping(message);
+          break;
+        case `${prefix}iss`:
+          locateISS(message);
+          break;
+        case `${prefix}membercountchannel`:
+          memberCountChannelCreate(message);
+          break;
+      }
+
+      if (message.content.toLowerCase().startsWith(`${prefix}bulkdelete`)) {
+        bulkDelete(message);
+      } else if (message.content.toLowerCase().startsWith(`${prefix}rolerequest`)) {
+        roleRequest(message);
+      } else if (message.content.toLowerCase().startsWith(`${prefix}userswith`)) {
+        usersWith(message);
+      } else if (message.content.toLowerCase().startsWith(`${prefix}ban`)) {
+        ban(message);
+      } else if (message.content.toLowerCase().startsWith(`${prefix}kick`)) {
+        kick(message);
+      } else if (message.content.toLowerCase().startsWith(`${prefix}addrole`)) {
+        addRole(message);
+      } else if (message.content.toLowerCase().startsWith(`${prefix}userinfo`)) {
+        userInfo(message);
+      } else if (message.content.toLowerCase().startsWith(`${prefix}aboutbot`)) {
+        aboutBot(message);
+      } else if (message.content.toLowerCase().startsWith(`${prefix}roleinfo`)) {
+        roleInfo(message);
+      } else if (message.content.toLowerCase().startsWith(`${prefix}addemoji`)) {
+        addEmoji(message);
+      } else if (message.content.toLowerCase().startsWith(`${prefix}reactionrole`)) {
+        reactionRole(message);
+      } else if (message.content.toLowerCase().startsWith(`${prefix}prefix`)) {
+        customPrefix(message);
+      }
+    });
+  } else {
+    prefix = defaultPrefix;
 
     if (message.content === `<@!${client.user.id}>`) {
       message.reply(`\nPrefix: \`${prefix}\`\nHelp: \`${prefix}help\`\nChange Prefix: \`${prefix}prefix [new prefix]\``);
@@ -124,7 +186,7 @@ client.on("message", async message => {
     } else if (message.content.toLowerCase().startsWith(`${prefix}prefix`)) {
       customPrefix(message);
     }
-  });
+  }
 });
 
 async function customPrefix(message) {
