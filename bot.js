@@ -499,7 +499,6 @@ async function userInfo(message) {
     .addField("Joined at", `${new Date(member.joinedTimestamp).toLocaleString("en-US", {timeZoneName: "short"})}`, true)
     .addField("Account created", `${new Date(member.user.createdTimestamp).toLocaleString("en-US", {timeZoneName: "short"})}`, true)
     .setColor("00c5ff")
-    .setThumbnail(member.user.avatarURL({ dynamic: true, size: 1024 }))
     .setFooter(`User ID: ${member.user.id}`)
     .setTimestamp();
   message.channel.send(userInfoEmbed).catch(console.error);
