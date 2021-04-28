@@ -63,7 +63,7 @@ client.on("message", async message => {
       prefix = defaultPrefix;
     }
 
-    if (message.content === "<@!827758580965965824>") {
+    if (message.content === `<@!${client.user.id}>`) {
       message.reply(`\nPrefix: \`${prefix}\`\nHelp: \`${prefix}help\`\nChange Prefix: \`${prefix}prefix [new prefix]\``);
     }
 
