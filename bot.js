@@ -363,7 +363,7 @@ async function memberCountChannelUpdate(member) {
 async function locateISS(message) {
   await fetch("http://api.open-notify.org/iss-now.json")
     .then(request => request.json())
-    .then(data => {
+    .then(async data => {
       const issEmbed = new Discord.MessageEmbed()
         .setTitle("The current location of the ISS!")
         .setURL('https://spotthestation.nasa.gov/tracking_map.cfm')
@@ -371,7 +371,14 @@ async function locateISS(message) {
         .setColor("00c5ff")
         .setFooter(`Client ID: ${client.user.id}`)
         .setTimestamp();
-      message.channel.send(issEmbed);
+      await fetch ("http://api.open-notify.org/astros.json")
+        .then(request => request.json())
+        .then(data => {
+          data.people.forEach((astronaut, index) => {
+            issEmbed.addField(`Astronaut ${index + 1}`, astronaut.name, true);
+          })
+          message.channel.send(issEmbed);
+        });
     });
 }
 
