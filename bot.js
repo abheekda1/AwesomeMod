@@ -68,7 +68,7 @@ client.on("message", async message => {
         prefix = defaultPrefix;
       }
 
-      if (message.content === `<@!${client.user.id}>`) {
+      if (message.content === `<@!${client.user.id}>` || message.content === `<@${client.user.id}>`) {
         message.reply(`\nPrefix: \`${prefix}\`\nHelp: \`${prefix}help\`\nChange Prefix: \`${prefix}prefix [new prefix]\``);
       }
 
@@ -616,6 +616,7 @@ async function roleInfo(message) {
 async function addRole(message) {
   if (!message.member.hasPermission('ADMINISTRATOR')) {
     message.reply("you do not have adequate permissions!")
+    return;
   }
 
   if (!message.content.split(" ")[1]) {
