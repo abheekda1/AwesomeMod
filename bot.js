@@ -1027,7 +1027,7 @@ async function bulkDelete(message) {
     message.reply("you do not have high enough permissions!");
     return;
   }
-  const amount = parseInt(message.content.substring(12));
+  const amount = parseInt(message.content.split(" ")[1]);
 
   if (!amount) {
     message.reply('please add the number of messages to be deleted!');
