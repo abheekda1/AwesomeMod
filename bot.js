@@ -1498,7 +1498,7 @@ client.on('guildMemberAdd', member => {
     .setAuthor(member.user.tag, member.user.avatarURL({ dynamic: true, size: 1024 }))
     .addField("Tag", `${member.user.tag}`)
     .addField("Joined At", `${new Date(member.joinedTimestamp).toLocaleString("en-US", {timeZoneName: "short"})}`)
-    .addField("Account Created", `${new Date(member.user.createdTimestamp).toLocaleString("en-US", {timeZoneName: "short"})}`)
+    .addField("Account Created", member.joinedTimestamp - member.user.createdTimestamp > 86000000 ? `${new Date(member.user.createdTimestamp).toLocaleString("en-US", {timeZoneName: "short"})}` : `⚠ ${new Date(member.user.createdTimestamp).toLocaleString("en-US", {timeZoneName: "short"})} ⚠ (account created in the last 24 hours)`)
     .setFooter("Member ID: " + member.id)
     .setThumbnail(member.user.avatarURL({ dynamic: true, size: 1024 }))
     .setTimestamp()
