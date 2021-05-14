@@ -864,12 +864,12 @@ async function usersWith(message) {
     message.reply("query must contain at least 3 characters!")
     return;
   }
-  if (message.content.split(" ")[1].length < 3) {
+  const queriedRole = message.content.split(" ");
+  queriedRole.shift();
+  if (queriedRole.join(" ").length < 3) {
     message.reply("query must contain at least 3 characters!")
     return;
   }
-  const queriedRole = message.content.split(" ");
-  queriedRole.shift();
   const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(queriedRole.join(" ").toLowerCase()));
   if (!roles.array().length) {
     message.reply("no roles found with that name!");
