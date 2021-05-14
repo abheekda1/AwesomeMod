@@ -789,9 +789,17 @@ async function kick(message) {
 
   const members = message.guild.members.cache.filter(member => {
     if (member.nickname) {
-      return message.mentions.users.first().id === member.user.id || member.user.username.toLowerCase().includes(message.content.split(" ")[1].toLowerCase()) || member.nickname.toLowerCase().includes(message.content.split(" ")[1].toLowerCase());
+      if (message.mentions.users.first()) {
+        return message.mentions.users.first().id === member.user.id || member.user.username.toLowerCase().includes(message.content.split(" ")[1].toLowerCase()) || member.nickname.toLowerCase().includes(message.content.split(" ")[1].toLowerCase());
+      } else {
+        return member.user.username.toLowerCase().includes(message.content.split(" ")[1].toLowerCase()) || member.nickname.toLowerCase().includes(message.content.split(" ")[1].toLowerCase());
+      }
     } else {
-      return message.mentions.users.first().id === member.user.id || member.user.username.toLowerCase().includes(message.content.split(" ")[1].toLowerCase())
+      if (message.mentions.users.first()) {
+        return message.mentions.users.first().id === member.user.id || member.user.username.toLowerCase().includes(message.content.split(" ")[1].toLowerCase())
+      } else {
+        return member.user.username.toLowerCase().includes(message.content.split(" ")[1].toLowerCase());
+      }
     }
   });
 
