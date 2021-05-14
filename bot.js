@@ -374,7 +374,7 @@ async function locateISS(message) {
       await fetch ("http://api.open-notify.org/astros.json")
         .then(request => request.json())
         .then(data => {
-          issEmbed.addField(`Astronauts`, `${data.people.join(" • ")}`);
+          issEmbed.addField(`Astronauts`, `${data.people.map(e => e.name).join(" • ")}`);
           message.channel.send(issEmbed);
         });
     });
