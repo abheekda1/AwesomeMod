@@ -333,7 +333,7 @@ async function aboutBot(message) {
   const aboutBotEmbed = new Discord.MessageEmbed()
     .setTitle("About AwesomeMod!")
     .setURL(`https://github.com/ADawesomeguy/AwesomeMod`)
-    .setAuthor(client.user.tag, client.user.avatarURL({ dynamic: true, size: 1024 }))
+    .setAuthor(client.user.tag, client.user.displayAvatarURL({ dynamic: true, size: 1024 }))
     .addField(`Servers`, `${serverCount}`, true)
     .addField(`Uptime`, `${uptimeDays.toFixed(1)} days`, true)
     .addField(`Invite Link`, `[Click here!](https://adat.link/awesomemod)`)
@@ -382,7 +382,7 @@ async function locateISS(message) {
 
 async function ping(message) {
   const pingEmbed = new Discord.MessageEmbed()
-    .setAuthor(message.author.tag, message.author.avatarURL({ dynamic: true, size: 1024 }))
+    .setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
     .setTitle("Pong!")
     .addField(`🏓`, `${Date.now() - message.createdTimestamp}ms`)
     .addField(`API`, `${Math.round(client.ws.ping)}ms`)
@@ -565,7 +565,7 @@ async function userInfo(message) {
   const member = members.array()[0];
 
   const userInfoEmbed = new Discord.MessageEmbed()
-    .setAuthor(member.user.tag, member.user.avatarURL({ dynamic: true, size: 1024 }))
+    .setAuthor(member.user.tag, member.user.displayAvatarURL({ dynamic: true, size: 1024 }))
     .addField("Roles", member.roles.cache.map(r => `${r}`).join(' • '))
     .addField("Permissions", member.permissions.toArray().map(p => `\`${p}\``.toLowerCase()).join(' • '))
     .addField("Joined at", `${new Date(member.joinedTimestamp).toLocaleString("en-US", {timeZoneName: "short"})}`, true)
@@ -601,11 +601,11 @@ async function roleInfo(message) {
 
   const roleInfoEmbed = new Discord.MessageEmbed()
     .setTitle(`Role \`${role.name}\` Info`)
-    .setAuthor(message.author.tag, message.author.avatarURL({ dynamic: true, size: 1024 }))
+    .setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
     .addField("Permissions", role.permissions.toArray().map(p => `\`${p}\``.toLowerCase()).join(' • '))
     .addField("Mentionable", role.mentionable)
     .setFooter("Role ID: " + role.id)
-    .setThumbnail(message.author.avatarURL({ dynamic: true, size: 1024 }))
+    .setThumbnail(message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
     .setTimestamp()
     .setColor('00aaff');
   message.channel.send(roleInfoEmbed)
@@ -673,7 +673,7 @@ async function addRole(message) {
   const verificationEmbed = new Discord.MessageEmbed()
     .setTitle(`Are you sure you want to give \`${member.user.tag}\` the **${role.name}** role?`)
     .setDescription("React to this message to verify")
-    .setThumbnail(member.user.avatarURL({ dynamic: true, size: 1024 }))
+    .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 1024 }))
     .setColor("fda172")
     .setTimestamp();
   message.channel.send(verificationEmbed)
@@ -745,7 +745,7 @@ async function ban(message) {
 
     let verificationEmbed = new Discord.MessageEmbed()
       .setTitle(`Are you sure you would like to ban \`${member.user.tag}\`?`)
-      .setAuthor(member.user.tag, member.user.avatarURL({ dynamic: true, size: 1024 }))
+      .setAuthor(member.user.tag, member.user.displayAvatarURL({ dynamic: true, size: 1024 }))
       .setDescription("React to this message to verify")
       .setThumbnail("https://emoji.gg/assets/emoji/9156_BanThonking.png")
       .setColor("fda172")
@@ -817,7 +817,7 @@ async function kick(message) {
     const verificationEmbed = new Discord.MessageEmbed()
       .setTitle(`Are you sure you would like to kick \`${member.user.tag}\`?`)
       .setDescription("React to this message to verify")
-      .setThumbnail(member.user.avatarURL({ dynamic: true, size: 1024 }))
+      .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 1024 }))
       .setColor("fda172")
       .setTimestamp();
     message.channel.send(verificationEmbed)
@@ -849,7 +849,7 @@ async function helpMessage(message, prefix) {
     .addField(`Admin commands:`, `Add logs channel: \`${prefix}startLogs\`\nAdd külboard channel: \`${prefix}kulboard\`\nAdd member count channel: \`${prefix}memberCountChannel\`\nBulk delete: \`${prefix}bulkDelete\`\nBan: \`${prefix}ban [user]\`\nKick: \`${prefix}kick [user]\`\nGive user role: \`${prefix}addRole [role] [user]\`\nSet custom prefix: \`${prefix}prefix [new prefix]\``)
     .addField(`User commands:`, `Role request: \`${prefix}roleRequest [role]\`\nView users with role: \`${prefix}usersWith [role]\`\nUser info: \`${prefix}userInfo [user]\``)
     .addField(`Fun commands:`, `Show ISS location: \`${prefix}iss\`\nMeasure latency: \`${prefix}ping\`\nAdd custom emoji: \`${prefix}addEmoji [url] [name]\``)
-    .setThumbnail(client.user.avatarURL({ dynamic: true, size: 1024 }))
+    .setThumbnail(client.user.displayAvatarURL({ dynamic: true, size: 1024 }))
     .setFooter(`Bot ID: ${client.user.id}`)
     .setColor("00c5ff")
     .setTimestamp();
@@ -1006,7 +1006,7 @@ async function roleRequest(message) {
   const verificationEmbed = new Discord.MessageEmbed()
     .setTitle(`\`${message.author.tag}\` would like the **${role.name}** role. Are they worthy?`)
     .setDescription("React to this message to verify")
-    .setThumbnail(message.author.avatarURL({ dynamic: true, size: 1024 }))
+    .setThumbnail(message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
     .setColor("fda172")
     .setTimestamp();
   message.channel.send(verificationEmbed)
@@ -1058,11 +1058,11 @@ async function bulkDelete(message) {
 client.on('messageDelete', message => {
   const deleteEmbed = new Discord.MessageEmbed()
     .setTitle('Message Deleted')
-    .setAuthor(message.author ? message.author.tag : "Unknown", message.author ? message.author.avatarURL({ dynamic: true, size: 1024 }) : client.user.defaultAvatarURL)
+    .setAuthor(message.author ? message.author.tag : "Unknown", message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
     .addField('Author', message.author ? message.author.tag : "Message not cached")
     .addField('Message', message.content ? message.content : "Message not cached")
     .addField('Channel', message.channel ? message.channel : "Message not cached")
-    .setThumbnail(message.author ? message.author.avatarURL({ dynamic: true, size: 1024 }) : client.user.defaultAvatarURL)
+    .setThumbnail(message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
     .setFooter("ID: " + message.id)
     .setTimestamp()
     .setColor('e7778b');
@@ -1112,9 +1112,9 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
     const editEmbed = new Discord.MessageEmbed()
       .setTitle("Message Edited")
       .addField("Link", `[Click here!](${editedMessage.url})`)
-      .setAuthor(editedMessage.author ? editedMessage.author.tag : "Unknown", editedMessage.author ? editedMessage.author.avatarURL({ dynamic: true, size: 1024 }) : client.user.defaultAvatarURL)
+      .setAuthor(editedMessage.author ? editedMessage.author.tag : "Unknown", editedMessage.author.displayAvatarURL({ dynamic: true, size: 1024 }))
       .addField("Author", editedMessage.author.tag)
-      .setThumbnail(editedMessage.author.avatarURL({ dynamic: true, size: 1024 }))
+      .setThumbnail(editedMessage.author.displayAvatarURL({ dynamic: true, size: 1024 }))
       .setFooter("ID: " + editedMessage.id)
       .setTimestamp()
       .setColor('c9ff00');
@@ -1189,11 +1189,11 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       }
       const messageReactionAddEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Added")
-        .setAuthor(user.tag, user.avatarURL({ dynamic: true, size: 1024 }))
+        .setAuthor(user.tag, user.displayAvatarURL({ dynamic: true, size: 1024 }))
         .addField("Link", `[Click here!](${message.url})`)
         .addField("Reactions", `${user} reacted with ${messageReaction.emoji} to ${messageReaction.message.author}'s message, along with ${numEmoji - 1} other people in ${messageReaction.message.channel}.`)
         .setFooter("Message ID: " + messageReaction.message.id)
-        .setThumbnail(user.avatarURL({ dynamic: true, size: 1024 }))
+        .setThumbnail(user.displayAvatarURL({ dynamic: true, size: 1024 }))
         .setTimestamp()
         .setColor('00aaff');
 
@@ -1212,10 +1212,10 @@ client.on('messageReactionAdd', (messageReaction, user) => {
       const kulboardEmbed = new Discord.MessageEmbed()
         .setTitle(`${coolness}`)
         .addField("Link", `[Click here!](${message.url})`, true)
-        .setAuthor(message.author.tag, message.author.avatarURL({ dynamic: true, size: 1024 }))
+        .setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
         .addField(`# of 😎 Reactions`, `${numEmoji}`, true)
         .addField("Channel", message.channel, true)
-        .setThumbnail(message.author.avatarURL({ dynamic: true, size: 1024 }))
+        .setThumbnail(message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
         .setFooter("Message ID: " + message.id)
         .setColor("00c5ff")
         .setTimestamp();
@@ -1310,11 +1310,11 @@ client.on('messageReactionRemove', async (messageReaction, user) => {
       }
       const messageReactionRemoveEmbed = new Discord.MessageEmbed()
         .setTitle("Reaction Removed")
-        .setAuthor(user.tag, user.avatarURL({ dynamic: true, size: 1024 }))
+        .setAuthor(user.tag, user.displayAvatarURL({ dynamic: true, size: 1024 }))
         .addField("Link", `[Click here!](${message.url})`)
         .addField("Reactions", `${user} removed their reaction ${messageReaction.emoji} on ${messageReaction.message.author}'s message in ${messageReaction.message.channel}.`)
         .setFooter("Message ID: " + messageReaction.message.id)
-        .setThumbnail(user.avatarURL({ dynamic: true, size: 1024 }))
+        .setThumbnail(user.displayAvatarURL({ dynamic: true, size: 1024 }))
         .setTimestamp()
         .setColor('e7778b');
 
@@ -1333,10 +1333,10 @@ client.on('messageReactionRemove', async (messageReaction, user) => {
       const kulboardEmbed = new Discord.MessageEmbed()
         .setTitle(`${coolness}`)
         .addField("Link", `[Click here!](${message.url})`, true)
-        .setAuthor(message.author.tag, message.author.avatarURL({ dynamic: true, size: 1024 }))
+        .setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
         .addField(`# of 😎 Reactions`, `${numEmoji}`, true)
         .addField("Channel", message.channel, true)
-        .setThumbnail(message.author.avatarURL({ dynamic: true, size: 1024 }))
+        .setThumbnail(message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
         .setFooter("Message ID: " + message.id)
         .setColor("00c5ff")
         .setTimestamp();
@@ -1495,12 +1495,12 @@ client.on('guildMemberAdd', member => {
   memberCountChannelUpdate(member);
   const memberAddEmbed = new Discord.MessageEmbed()
     .setTitle("New Member")
-    .setAuthor(member.user.tag, member.user.avatarURL({ dynamic: true, size: 1024 }))
+    .setAuthor(member.user.tag, member.user.displayAvatarURL({ dynamic: true, size: 1024 }))
     .addField("Tag", `${member.user.tag}`)
     .addField("Joined At", `${new Date(member.joinedTimestamp).toLocaleString("en-US", {timeZoneName: "short"})}`)
     .addField("Account Created", member.joinedTimestamp - member.user.createdTimestamp > 86000000 ? `${new Date(member.user.createdTimestamp).toLocaleString("en-US", {timeZoneName: "short"})}` : `⚠ ${new Date(member.user.createdTimestamp).toLocaleString("en-US", {timeZoneName: "short"})} ⚠ (account created in the last 24 hours)`)
     .setFooter("Member ID: " + member.id)
-    .setThumbnail(member.user.avatarURL({ dynamic: true, size: 1024 }))
+    .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 1024 }))
     .setTimestamp()
     .setColor('c9ff00');
   collection.findOne({ guild_id: member.guild.id }, (error, result) => {
@@ -1520,12 +1520,12 @@ client.on('guildMemberRemove', member => {
   memberCountChannelUpdate(member);
   const memberRemoveEmbed = new Discord.MessageEmbed()
     .setTitle("Member Removed")
-    .setAuthor(member.user.tag, member.user.avatarURL({ dynamic: true, size: 1024 }))
+    .setAuthor(member.user.tag, member.user.displayAvatarURL({ dynamic: true, size: 1024 }))
     .addField("Tag", `${member.user.tag}`)
     .addField("Joined At", `${new Date(member.joinedTimestamp).toLocaleString("en-US", {timeZoneName: "short"})}`)
     .addField("Account Created", `${new Date(member.user.createdTimestamp).toLocaleString("en-US", {timeZoneName: "short"})}`)
     .setFooter("Member ID: " + member.id)
-    .setThumbnail(member.user.avatarURL({ dynamic: true, size: 1024 }))
+    .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 1024 }))
     .setTimestamp()
     .setColor('e7778b');
   collection.findOne({ guild_id: member.guild.id }, (error, result) => {
@@ -1546,9 +1546,9 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
   const addedRoles = newMember.roles.cache.filter(role => !oldMember.roles.cache.has(role.id));
   const memberUpdateEmbed = new Discord.MessageEmbed()
     .setTitle("Member Updated")
-    .setAuthor(newMember.user.tag, newMember.user.avatarURL({ dynamic: true, size: 1024 }))
+    .setAuthor(newMember.user.tag, newMember.user.displayAvatarURL({ dynamic: true, size: 1024 }))
     .setFooter("Member ID: " + newMember.id)
-    .setThumbnail(newMember.user.avatarURL({ dynamic: true, size: 1024 }))
+    .setThumbnail(newMember.user.displayAvatarURL({ dynamic: true, size: 1024 }))
     .setTimestamp()
     .setColor('c9ff00');
   if (removedRoles.array().length > 0) {
