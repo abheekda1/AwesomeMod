@@ -190,7 +190,7 @@ client.on("message", async message => {
 });
 
 async function customPrefix(message) {
-  if (!message.member.hasPermission("ADMINISTRATOR")) {
+  if (!message.member.permissions.has("ADMINISTRATOR")) {
     message.reply("you must have admin permissions to run this command!");
     return;
   }
@@ -201,7 +201,7 @@ async function customPrefix(message) {
 }
 
 async function reactionRole(message) {
-  if (!message.member.hasPermission('ADMINISTRATOR')) {
+  if (!message.member.permissions.has('ADMINISTRATOR')) {
     message.reply(`you don't have the correct permissions to create a reaction roles!`);
     return;
   }
@@ -308,7 +308,7 @@ async function reactionRole(message) {
 }
 
 async function addEmoji(message) {
-    if (!message.member.hasPermission('MANAGE_EMOJIS')) {
+    if (!message.member.permissions.has('MANAGE_EMOJIS')) {
       message.reply(`you don't have the correct permissions to manage emojis!`);
       return;
     }
@@ -393,7 +393,7 @@ async function ping(message) {
 }
 
 async function startLogs(message) {
-  if (!message.member.hasPermission("ADMINISTRATOR")) {
+  if (!message.member.permissions.has("ADMINISTRATOR")) {
     message.reply("you do not have admin permissions!");
     return;
   }
@@ -439,7 +439,7 @@ async function startLogs(message) {
 }
 
 async function kulboardCreate(message) {
-  if (!message.member.hasPermission("ADMINISTRATOR")) {
+  if (!message.member.permissions.has("ADMINISTRATOR")) {
     message.reply("you do not have admin permissions!");
     return;
   }
@@ -487,7 +487,7 @@ async function kulboardCreate(message) {
 }
 
 async function memberCountChannelCreate(message) {
-  if (!message.member.hasPermission("ADMINISTRATOR")) {
+  if (!message.member.permissions.has("ADMINISTRATOR")) {
     message.reply("you do not have admin permissions!");
     return;
   }
@@ -612,7 +612,7 @@ async function roleInfo(message) {
 }
 
 async function addRole(message) {
-  if (!message.member.hasPermission('ADMINISTRATOR')) {
+  if (!message.member.permissions.has('ADMINISTRATOR')) {
     message.reply("you do not have adequate permissions!")
     return;
   }
@@ -681,7 +681,7 @@ async function addRole(message) {
     verificationEmbed.react('<a:anim_check:827985495295655988>');
     verificationEmbed.react('<a:anim_cross:827990162113560576>');
     const filter = (reaction, user) => {
-      return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+      return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).permissions.has('ADMINISTRATOR') && !user.bot;
     };
     verificationEmbed.awaitReactions(filter, { max: 1 })
       .then(userReaction => {
@@ -696,7 +696,7 @@ async function addRole(message) {
 }
 
 async function ban(message) {
-  if (!message.member.hasPermission('BAN_MEMBERS')) {
+  if (!message.member.permissions.has('BAN_MEMBERS')) {
     message.reply('you do not have ban permissions!')
     return;
   }
@@ -770,7 +770,7 @@ async function ban(message) {
 }
 
 async function kick(message) {
-  if (!message.member.hasPermission('ADMINISTRATOR')) {
+  if (!message.member.permissions.has('ADMINISTRATOR')) {
     message.reply('you do not have admin privileges!')
     return;
   }
@@ -825,7 +825,7 @@ async function kick(message) {
       verificationEmbed.react('<a:anim_check:827985495295655988>');
       verificationEmbed.react('<a:anim_cross:827990162113560576>');
       const filter = (reaction, user) => {
-        return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+        return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).permissions.has('ADMINISTRATOR') && !user.bot;
       };
       verificationEmbed.awaitReactions(filter, { max: 1 })
         .then(userReaction => {
@@ -1014,7 +1014,7 @@ async function roleRequest(message) {
     verificationEmbed.react('<a:anim_check:827985495295655988>');
     verificationEmbed.react('<a:anim_cross:827990162113560576>');
     const filter = (reaction, user) => {
-      return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).hasPermission('ADMINISTRATOR') && !user.bot;
+      return ['anim_check', 'anim_cross'].includes(reaction.emoji.name) && message.guild.members.cache.get(user.id).permissions.has('ADMINISTRATOR') && !user.bot;
     };
     verificationEmbed.awaitReactions(filter, { max: 1 })
       .then(userReaction => {
@@ -1029,7 +1029,7 @@ async function roleRequest(message) {
 }
 
 async function bulkDelete(message) {
-  if (!message.member.hasPermission('ADMINISTRATOR')) {
+  if (!message.member.permissions.has('ADMINISTRATOR')) {
     message.reply("you do not have high enough permissions!");
     return;
   }
