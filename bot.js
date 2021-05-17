@@ -1069,7 +1069,7 @@ async function bulkDelete(message) {
 client.on('messageDelete', message => {
   const deleteEmbed = new Discord.MessageEmbed()
     .setTitle('Message Deleted')
-    .setAuthor(message.author ? message.author.tag : "Unknown", message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
+    .setAuthor(message.author ? message.author.tag : "Unknown", message.author ? message.author.displayAvatarURL({ dynamic: true, size: 1024 }) : client.defaultAvatarURL)
     .addField('Author', message.author ? message.author.tag : "Message not cached")
     .addField('Message', message.content ? message.content : "Message not cached")
     .addField('Channel', message.channel ? message.channel : "Message not cached")
@@ -1123,7 +1123,7 @@ client.on('messageUpdate', (originalMessage, editedMessage) => {
     const editEmbed = new Discord.MessageEmbed()
       .setTitle("Message Edited")
       .addField("Link", `[Click here!](${editedMessage.url})`)
-      .setAuthor(editedMessage.author ? editedMessage.author.tag : "Unknown", editedMessage.author.displayAvatarURL({ dynamic: true, size: 1024 }))
+      .setAuthor(editedMessage.author ? editedMessage.author.tag : "Unknown", editedMessage.author ? editedMessage.author.displayAvatarURL({ dynamic: true, size: 1024 }) : client.defaultAvatarURL)
       .addField("Author", editedMessage.author.tag)
       .setThumbnail(editedMessage.author.displayAvatarURL({ dynamic: true, size: 1024 }))
       .setFooter("ID: " + editedMessage.id)
