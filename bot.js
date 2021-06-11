@@ -3,7 +3,7 @@
 const Discord = require('discord.js');
 const MongoClient = require('mongodb').MongoClient;
 const client = new Discord.Client({
-  intents: ["GUILDS", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS", "DIRECT_MESSAGES", "DIRECT_MESSAGE_REACTIONS"],
+  intents: ["GUILD_PRESENCES",  "GUILD_MEMBERS", "GUILDS", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS", "DIRECT_MESSAGES", "DIRECT_MESSAGE_REACTIONS"],
   partials: ["MESSAGE", "CHANNEL", "REACTION"],
 });
 const fetch = require(`node-fetch`);
@@ -325,6 +325,7 @@ async function addEmoji(message) {
         return;
     }
 }
+
 async function aboutBot(message) {
   const uptimeDays = client.uptime / 86400000;
   let serverCount;
@@ -957,6 +958,7 @@ async function usersWith(message) {
 
 async function aboutServer(message) {
   await message.guild.members.fetch();
+  await message.guild.roles.fetch();
   const textChannelCount = message.guild.channels.cache.filter(c => c.type === 'text').size;
   const voiceChannelCount = message.guild.channels.cache.filter(c => c.type === 'voice').size;
   const categoryChannelCount = message.guild.channels.cache.filter(c => c.type === 'category').size;
@@ -974,7 +976,7 @@ async function aboutServer(message) {
     .addField("Verification Level", message.guild.verificationLevel)
     .addField("Channels", `Total: ${message.guild.channels.cache.size} ‖ Text: ${textChannelCount} • Voice: ${voiceChannelCount} • Categories: ${categoryChannelCount}`)
     .addField("Members", `Total: ${numHumans + numBots} ‖ Human: ${numHumans} • Bot: ${numBots}`)
-    .addField("Roles", numRoles)
+    .addField("Roles", `${numRoles}`)
     .addField("Created", `${new Date(message.guild.createdTimestamp).toLocaleString("en-US", {timeZoneName: "short"})}`)
     .addField("User Statuses", `🟦 • ${numOnline} online\n\n🟧 • ${numAway} away\n\n⬛ • ${numOffline} offline\n\n🟥 • ${numDND} DND`)
     .setThumbnail(message.guild.iconURL({ dynamic: true, size: 1024 }))
@@ -1072,8 +1074,8 @@ client.on('messageDelete', message => {
     .setAuthor(message.author ? message.author.tag : "Unknown", message.author ? message.author.displayAvatarURL({ dynamic: true, size: 1024 }) : client.defaultAvatarURL)
     .addField('Author', message.author ? message.author.tag : "Message not cached")
     .addField('Message', message.content ? message.content : "Message not cached")
-    .addField('Channel', message.channel ? message.channel : "Message not cached")
-    .setThumbnail(message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
+    .addField('Channel', message.channel ? "<#" + message.channel.id + ">" : "Message not cached")
+    .setThumbnail(message.author ? message.author.displayAvatarURL({ dynamic: true, size: 1024 }) : client.defaultAvatarURL)
     .setFooter("ID: " + message.id)
     .setTimestamp()
     .setColor('e7778b');
@@ -1225,7 +1227,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
         .addField("Link", `[Click here!](${message.url})`, true)
         .setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
         .addField(`# of 😎 Reactions`, `${numEmoji}`, true)
-        .addField("Channel", message.channel, true)
+        .addField("Channel", "<#" + message.channel.id + ">", true)
         .setThumbnail(message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
         .setFooter("Message ID: " + message.id)
         .setColor("00c5ff")
@@ -1346,7 +1348,7 @@ client.on('messageReactionRemove', async (messageReaction, user) => {
         .addField("Link", `[Click here!](${message.url})`, true)
         .setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
         .addField(`# of 😎 Reactions`, `${numEmoji}`, true)
-        .addField("Channel", message.channel, true)
+        .addField("Channel", "<#" + message.channel + ">", true)
         .setThumbnail(message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
         .setFooter("Message ID: " + message.id)
         .setColor("00c5ff")
