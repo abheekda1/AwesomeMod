@@ -318,10 +318,10 @@ async function addEmoji(message) {
     let splitMessage = message.content.split(" ");
     if (splitMessage.length > 2) {
         message.guild.emojis.create(splitMessage[1], splitMessage[2])
-        .then(emoji => message.reply(`created new emoji "${emoji.name}"`))
-        .catch(error => message.reply(error));
+        .then(emoji => message.reply(`Created new emoji "${emoji.name}"`))
+        .catch(message.reply(new Discord.MessageEmbed().setDescription("There seems to have been an error! Likely, the file size is too large. Please try the command with a file that is less than 256 KB.").setColor("fda172")));
     } else {
-        message.reply("the format should be `$addEmoji [URL] [name]`");
+        message.reply("The format should be `$addEmoji [URL] [name]`");
         return;
     }
 }
@@ -398,7 +398,7 @@ async function ping(message) {
 
 async function startLogs(message) {
   if (!message.member.permissions.has("ADMINISTRATOR")) {
-    message.reply("you do not have admin permissions!");
+    message.reply("You do not have admin permissions!");
     return;
   }
   collection.findOne({ guild_id: message.guild.id }, (error, result) => {
@@ -408,7 +408,7 @@ async function startLogs(message) {
     if (result.bot_logs_id) {
       botLogsChannel = result.bot_logs_id;
       if (message.guild.channels.cache.get(botLogsChannel)) {
-        message.reply('bot logs channel already exists!');
+        message.reply('Bot logs channel already exists!');
       } else {
         // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
         message.guild.channels.create('bot-logs', {
@@ -420,7 +420,7 @@ async function startLogs(message) {
           }]
         }).then(channel => {
           // Add the ID of the "#bot-logs" channel to the database
-          message.reply(`channel ${channel} created!`)
+          message.reply(`Channel ${channel} created!`)
           collection.updateOne({ guild_id: message.guild.id }, { $set: { "bot_logs_id": `${channel.id}` } });
         }).catch(console.error);
       }
@@ -435,7 +435,7 @@ async function startLogs(message) {
         }]
       }).then(channel => {
         // Add the ID of the "#bot-logs" channel to the database
-        message.reply(`channel ${channel} created!`)
+        message.reply(`Channel ${channel} created!`)
         collection.updateOne({ guild_id: message.guild.id }, { $set: { "bot_logs_id": `${channel.id}` } });
       }).catch(console.error);
     }
@@ -444,7 +444,7 @@ async function startLogs(message) {
 
 async function kulboardCreate(message) {
   if (!message.member.permissions.has("ADMINISTRATOR")) {
-    message.reply("you do not have admin permissions!");
+    message.reply("You do not have admin permissions!");
     return;
   }
   collection.findOne({ guild_id: message.guild.id }, (error, result) => {
@@ -454,7 +454,7 @@ async function kulboardCreate(message) {
     if (result.kulboard_id) {
       kulboardChannel = result.kulboard_id;
       if (message.guild.channels.cache.get(kulboardChannel)) {
-        message.reply('külboard channel already exists!');
+        message.reply('Külboard channel already exists!');
       } else {
         // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
         message.guild.channels.create('külboard', {
@@ -467,7 +467,7 @@ async function kulboardCreate(message) {
           }]
         }).then(channel => {
           // Add the ID of the "#bot-logs" channel to the database
-          message.reply(`channel ${channel} created!`)
+          message.reply(`Channel ${channel} created!`)
           collection.updateOne({ guild_id: message.guild.id }, { $set: { "kulboard_id": `${channel.id}` } });
         }).catch(console.error);
       }
@@ -483,7 +483,7 @@ async function kulboardCreate(message) {
         }]
       }).then(channel => {
         // Add the ID of the "#bot-logs" channel to the database
-        message.reply(`channel ${channel} created!`)
+        message.reply(`Channel ${channel} created!`)
         collection.updateOne({ guild_id: message.guild.id }, { $set: { "kulboard_id": `${channel.id}` } });
       }).catch(console.error);
     }
@@ -492,7 +492,7 @@ async function kulboardCreate(message) {
 
 async function memberCountChannelCreate(message) {
   if (!message.member.permissions.has("ADMINISTRATOR")) {
-    message.reply("you do not have admin permissions!");
+    message.reply("You do not have admin permissions!");
     return;
   }
   collection.findOne({ guild_id: message.guild.id }, async (error, result) => {
@@ -502,7 +502,7 @@ async function memberCountChannelCreate(message) {
     if (result.member_count_channel_id) {
       memberCountChannel = result.member_count_channel_id;
       if (message.guild.channels.cache.get(memberCountChannel)) {
-        message.reply('member count channel already exists!');
+        message.reply('Member count channel already exists!');
       } else {
         // Create "#bot-logs" text channel to track message deletes, edits, and channel creations
         await message.guild.members.fetch();
@@ -517,7 +517,7 @@ async function memberCountChannelCreate(message) {
           }]
         }).then(channel => {
           // Add the ID of the "#bot-logs" channel to the database
-          message.reply(`channel ${channel} created!`)
+          message.reply(`Channel ${channel} created!`)
           collection.updateOne({ guild_id: message.guild.id }, { $set: { "member_count_channel_id": `${channel.id}` } });
         }).catch(console.error);
       }
@@ -535,7 +535,7 @@ async function memberCountChannelCreate(message) {
         }]
       }).then(channel => {
         // Add the ID of the "#bot-logs" channel to the database
-        message.reply(`channel ${channel} created!`)
+        message.reply(`Channel ${channel} created!`)
         collection.updateOne({ guild_id: message.guild.id }, { $set: { "member_count_channel_id": `${channel.id}` } });
       }).catch(console.error);
     }
@@ -544,12 +544,12 @@ async function memberCountChannelCreate(message) {
 
 async function userInfo(message) {
   if (!message.content.split(" ")[1]) {
-    message.reply("query must contain at least 3 characters!")
+    message.reply("Query must contain at least 3 characters!")
     return;
   }
 
   if (message.content.split(" ")[1].length < 3) {
-    message.reply("query must contain at least 3 characters!")
+    message.reply("Query must contain at least 3 characters!")
     return;
   }
 
@@ -570,7 +570,7 @@ async function userInfo(message) {
   });
 
   if (members.array().length < 1) {
-    message.reply("no members found with that name!");
+    message.reply("No members found with that name!");
     return;
   }
 
@@ -590,12 +590,12 @@ async function userInfo(message) {
 
 async function roleInfo(message) {
   if (!message.content.split(" ")[1]) {
-    message.reply("role query must contain at least 3 characters!")
+    message.reply("Role query must contain at least 3 characters!")
     return;
   }
 
   if (message.content.split(" ")[1].length < 3) {
-    message.reply("role query must contain at least 3 characters!")
+    message.reply("Role query must contain at least 3 characters!")
     return;
   }
   const queriedRole = message.content.split(" ");
@@ -604,7 +604,7 @@ async function roleInfo(message) {
   let roleChannel;
 
   if (roles.array().length < 1) {
-    message.reply("no roles found with that name!");
+    message.reply("No roles found with that name!");
     return;
   }
 
@@ -625,17 +625,17 @@ async function roleInfo(message) {
 
 async function addRole(message) {
   if (!message.member.permissions.has('ADMINISTRATOR')) {
-    message.reply("you do not have adequate permissions!")
+    message.reply("You do not have adequate permissions!")
     return;
   }
 
   if (!message.content.split(" ")[1]) {
-    message.reply("role query must contain at least 3 characters!")
+    message.reply("Role query must contain at least 3 characters!")
     return;
   }
 
   if (message.content.split(" ")[1].length < 3) {
-    message.reply("role query must contain at least 3 characters!")
+    message.reply("Role query must contain at least 3 characters!")
     return;
   }
 
@@ -645,17 +645,17 @@ async function addRole(message) {
   let roleChannel;
 
   if (!message.content.split(" ")[2]) {
-    message.reply("user query must contain at least 3 characters!")
+    message.reply("User query must contain at least 3 characters!")
     return;
   }
 
   if (message.content.split(" ")[2].length < 3) {
-    message.reply("user query must contain at least 3 characters!")
+    message.reply("User query must contain at least 3 characters!")
     return;
   }
 
   if (roles.array().length < 1) {
-    message.reply("no roles found with that name!");
+    message.reply("No roles found with that name!");
     return;
   }
 
@@ -671,7 +671,7 @@ async function addRole(message) {
   });
 
   if (members.array().length < 1) {
-    message.reply("no members found with that name!");
+    message.reply("No members found with that name!");
     return;
   }
 
@@ -701,7 +701,7 @@ async function addRole(message) {
         if (reaction.emoji.name === 'anim_check') {
           member.roles.add(role).then(message.reply(`${member.user} has been given the **${role}** role!`)).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
         } else {
-          message.reply("I guess you won't be giving that role!");
+          message.reply("It seems you won't be giving that role!");
         }
       }).catch(console.error);
   }).catch(console.error);
@@ -709,17 +709,17 @@ async function addRole(message) {
 
 async function ban(message) {
   if (!message.member.permissions.has('BAN_MEMBERS')) {
-    message.reply('you do not have ban permissions!')
+    message.reply('You do not have ban permissions!')
     return;
   }
 
   if (!message.content.split(" ")[1]) {
-    message.reply("query must contain at least 3 characters!")
+    message.reply("Query must contain at least 3 characters!")
     return;
   }
 
   if (message.content.split(" ")[1].length < 3) {
-    message.reply("query must contain at least 3 characters!")
+    message.reply("Query must contain at least 3 characters!")
     return;
   }
 
@@ -740,19 +740,19 @@ async function ban(message) {
   });
 
   if (members.array().length < 1) {
-    message.reply("no members found with that name!");
+    message.reply("No members found with that name!");
     return;
   }
 
   const member = members.array()[0];
 
   if (member === message.member) {
-    message.reply("you can't ban yourself!");
+    message.reply("You can't ban yourself!");
     return;
   }
 
   if (member.roles.highest.comparePositionTo(message.member.roles.highest) > 0) {
-    message.reply("this member is above you!")
+    message.reply("This member is above you!")
   }
 
     let verificationEmbed = new Discord.MessageEmbed()
@@ -775,7 +775,7 @@ async function ban(message) {
           if (reaction.emoji.name === 'anim_check') {
             message.guild.members.ban(member.user).then(user => message.reply(`<@${user.id}> has been banned!`)).catch(() => message.channel.send(`Unfortunately, I don't have the ability to ban ${member.user.username}, likely because their role is higher than mine.`));
           } else {
-            message.reply(`phew! ${member}'s safe!`);
+            message.reply(`Phew! ${member}'s safe!`);
           }
         }).catch(console.error);
       }).catch(console.error);
@@ -783,17 +783,17 @@ async function ban(message) {
 
 async function kick(message) {
   if (!message.member.permissions.has('ADMINISTRATOR')) {
-    message.reply('you do not have admin privileges!')
+    message.reply('You do not have admin privileges!')
     return;
   }
 
   if (!message.content.split(" ")[1]) {
-    message.reply("query must contain at least 3 characters!")
+    message.reply("Query must contain at least 3 characters!")
     return;
   }
 
   if (message.content.split(" ")[1].length < 3) {
-    message.reply("query must contain at least 3 characters!")
+    message.reply("Query must contain at least 3 characters!")
     return;
   }
 
@@ -814,14 +814,14 @@ async function kick(message) {
   });
 
   if (members.array().length < 1) {
-    message.reply("no members found with that name!");
+    message.reply("No members found with that name!");
     return;
   }
 
   const member = members.array()[0];
 
   if (member === message.member) {
-    message.reply("you can't kick yourself!");
+    message.reply("You can't kick yourself!");
     return;
   }
 
@@ -845,7 +845,7 @@ async function kick(message) {
           if (reaction.emoji.name === 'anim_check') {
             member.kick().then(user => message.reply(`<@${user.id}> has been kicked!`)).catch(() => message.channel.send(`Unfortunately, I don't have the ability to kick ${member.user.username}, likely because their role is higher than mine.`));
           } else {
-            message.reply(`phew! ${member}'s safe!`);
+            message.reply(`Phew! ${member}'s safe!`);
           }
         }).catch(console.error);
       }).catch(console.error);
@@ -871,18 +871,18 @@ async function helpMessage(message, prefix) {
 async function usersWith(message) {
   const threshold = 20;
   if (message.content.split(" ").length < 2) {
-    message.reply("query must contain at least 3 characters!")
+    message.reply("Query must contain at least 3 characters!")
     return;
   }
   const queriedRole = message.content.split(" ");
   queriedRole.shift();
   if (queriedRole.join(" ").length < 3) {
-    message.reply("query must contain at least 3 characters!")
+    message.reply("Query must contain at least 3 characters!")
     return;
   }
   const roles = message.guild.roles.cache.filter(role => role.name.toLowerCase().includes(queriedRole.join(" ").toLowerCase()));
   if (!roles.array().length) {
-    message.reply("no roles found with that name!");
+    message.reply("No roles found with that name!");
     return;
   }
   const sortedRoles = roles.array().sort((a, b) => a.name.length - b.name.length);
@@ -989,12 +989,12 @@ async function aboutServer(message) {
 async function roleRequest(message) {
 
   if (!message.content.split(" ")[1]) {
-    message.reply("query must contain at least 3 characters!")
+    message.reply("Query must contain at least 3 characters!")
     return;
   }
 
   if (message.content.split(" ")[1].length < 3) {
-    message.reply("query must contain at least 3 characters!")
+    message.reply("Query must contain at least 3 characters!")
     return;
   }
 
@@ -1004,7 +1004,7 @@ async function roleRequest(message) {
   let roleChannel;
 
   if (roles.array().length < 1) {
-    message.reply("no roles found with that name!");
+    message.reply("No roles found with that name!");
     return;
   }
 
@@ -1012,7 +1012,7 @@ async function roleRequest(message) {
   const role = sortedRoles[0];
 
   if (message.member.roles.cache.has(role.id)) {
-    message.reply("you already have that role!");
+    message.reply("You already have that role!");
     return;
   }
 
@@ -1033,9 +1033,9 @@ async function roleRequest(message) {
       .then(userReaction => {
         const reaction = userReaction.first();
         if (reaction.emoji.name === 'anim_check') {
-          message.member.roles.add(role).then(message.reply("wow I guess you ARE worthy! ||mods must be real mistaken||")).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
+          message.member.roles.add(role).then(message.reply("Wow I guess you ARE worthy! ||mods must be real mistaken||")).catch(() => { message.reply("It seems I don't have permissions to give that role, as it's likely above me :(") });
         } else {
-          message.reply("I guess you won't be getting that role!");
+          message.reply("It seems you won't be getting that role!");
         }
       }).catch(console.error);
   }).catch(console.error);
@@ -1043,23 +1043,23 @@ async function roleRequest(message) {
 
 async function bulkDelete(message) {
   if (!message.member.permissions.has('ADMINISTRATOR')) {
-    message.reply("you do not have high enough permissions!");
+    message.reply("You do not have high enough permissions!");
     return;
   }
   const amount = parseInt(message.content.split(" ")[1]);
 
   if (!amount) {
-    message.reply('please add the number of messages to be deleted!');
+    message.reply('Please add the number of messages to be deleted!');
     return;
   }
 
   if (!Number.isInteger(amount)) {
-    message.reply('the number is not an integer!');
+    message.reply('The number is not an integer!');
     return;
   }
 
   if (amount > 100 || amount < 1) {
-    message.reply('the number is invalid! It must be between 1 and 99 inclusive.');
+    message.reply('The number is invalid! It must be between 1 and 99 inclusive.');
     return;
   }
 
