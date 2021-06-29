@@ -615,7 +615,7 @@ async function roleInfo(message) {
     .setTitle(`Role \`${role.name}\` Info`)
     .setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
     .addField("Permissions", role.permissions.toArray().map(p => `\`${p}\``.toLowerCase()).join(' • '))
-    .addField("Mentionable", role.mentionable)
+    .addField("Mentionable", `${role.mentionable}`)
     .setFooter("Role ID: " + role.id)
     .setThumbnail(message.author.displayAvatarURL({ dynamic: true, size: 1024 }))
     .setTimestamp()
@@ -1098,7 +1098,7 @@ client.on('messageDeleteBulk', messages => {
   const messagesChannel = messages.array()[0].channel;
   const bulkDeleteEmbed = new Discord.MessageEmbed()
     .setTitle(`${numMessages} Messages Bulk Deleted`)
-    .addField(`Channel`, messagesChannel)
+    .addField(`Channel`, `<#${messagesChannel.id}>`)
     .setFooter("Channel ID: " + messagesChannel.id)
     .setTimestamp()
     .setColor('e7778b');
@@ -1166,7 +1166,7 @@ client.on('channelCreate', channel => {
   }
   const channelCreateEmbed = new Discord.MessageEmbed()
     .setTitle("Channel Created")
-    .addField("Name", channel)
+    .addField("Name", `<#${channel.id}>`)
     .addField("Type", channelType)
     .addField("Category", channelCategory)
     .setFooter("ID: " + channelID)
@@ -1432,7 +1432,7 @@ client.on('roleCreate', role => {
     .setTitle("Role Added")
     .addField("Name", role.name)
     .addField("Permissions", role.permissions.toArray().map(p => `\`${p}\``.toLowerCase()).join(' • '))
-    .addField("Mentionable", role.mentionable)
+    .addField("Mentionable", `${role.mentionable}`)
     .setFooter("Role ID: " + role.id)
     .setTimestamp()
     .setColor('00aaff');

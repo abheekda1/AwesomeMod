@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prod": "node index.js",
+    "prod": "pm2 start index.js",
     "test": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "index.js"
   },
   "author": "Abheek",
   "license": "Apache-2.0",
