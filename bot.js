@@ -11,7 +11,7 @@ const fetch = require(`node-fetch`);
 
 var database, collection;
 const DATABASE_NAME = process.env.DATABASE_NAME;
-const CONNECTION_URL = "localhost:27017";
+const CONNECTION_URL = process.env.CONNECTION_URL;
 const defaultPrefix = process.env.BOT_PREFIX;
 
 MongoClient.connect("mongodb://" + CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true }, (error, client) => {
