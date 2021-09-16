@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+require('dotenv').config()
 
 const Discord = require('discord.js');
 const MongoClient = require('mongodb').MongoClient;

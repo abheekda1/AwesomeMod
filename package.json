@@ -13,6 +13,7 @@
   "dependencies": {
     "csvtojson": "^2.0.10",
     "discord.js": "github:discordjs/discord.js",
+    "dotenv": "^10.0.0",
     "mongodb": "^3.6.5",
     "node-fetch": "^2.6.1",
     "nodemon": "^2.0.7"
